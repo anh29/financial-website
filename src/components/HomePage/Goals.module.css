@@ -101,6 +101,7 @@
   display: flex;
   align-items: center;
   font-weight: bold;
+  width: max-content;
 
   :first-child {
     margin-right: 10px;

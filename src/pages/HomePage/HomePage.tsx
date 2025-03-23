@@ -8,13 +8,13 @@ import ExpensesBreakdown from '../../components/HomePage/ExpensesBreakdown'
 const HomePage = () => {
   return (
     <div className={styles.homePage}>
-      <Goals />
-      <UpcomingBill />
       <RecentTransaction />
-      <div className={styles.statisticsAndExpenses}>
-        <Statistics />
-        <ExpensesBreakdown />
+      <div className={styles.goalsUpcomingBill}>
+        <Goals />
+        <UpcomingBill />
       </div>
+      <Statistics />
+      <ExpensesBreakdown />
     </div>
   )
 }
