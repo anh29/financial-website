@@ -1,0 +1,71 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background-color: var(--light-gray); /* Light background for header */
+  color: #2c3e50; /* Dark text color */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: -webkit-fill-available; /* Adjust width to account for sidebar */
+  z-index: 1000;
+  transition: left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .header {
+    width: 100%;
+    left: 0;
+  }
+}
+
+.headerLeft h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.headerLeft span {
+  font-size: 1rem;
+  color: #7f8c8d; /* Gray for date */
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.headerRight input {
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--light-gray); /* Light border for input */
+  border-radius: 5px;
+  margin-right: 1.2rem;
+  transition: border-color 0.3s ease;
+}
+
+.headerRight input:focus {
+  border-color: var(--primary-color);
+}
+
+.notification {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 1.2rem;
+}
+
+.bell-icon {
+  font-size: 1.8rem;
+  color: #2c3e50; /* Dark icon color */
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+}
+
+.userProfile img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}

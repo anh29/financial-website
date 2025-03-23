@@ -1,0 +1,113 @@
+.goals {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.goals h2 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+.goals p {
+  margin: 0.5rem 0;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.goalChart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  flex-direction: column;
+
+  p {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+
+.chart {
+  width: 60%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #dfe6e9;
+  padding-bottom: 10px;
+}
+
+.targetSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f1f2f6;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+
+  p {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2c3e50;
+    padding: 0 1.5rem;
+  }
+}
+
+.editButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #00b894;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.achievements {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 50%;
+}
+
+.achievement {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-direction: column;
+  align-self: flex-start;
+
+  p {
+    margin: 5px 0;
+    font-size: 18px;
+  }
+}
+
+.achievementHeader {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+
+  :first-child {
+    margin-right: 10px;
+  }
+}
+
+.icon {
+  font-size: 1.5rem;
+  color: #00b894;
+}

@@ -1,0 +1,120 @@
+.recentTransaction {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.recentTransaction h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #34495e;
+}
+
+.recentTransaction .tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.recentTransaction .tab {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: #95a5a6;
+}
+
+.recentTransaction .tab.active {
+  color: #2ecc71;
+  border-bottom: 2px solid #2ecc71;
+}
+
+.recentTransaction ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recentTransaction li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.recentTransaction li:last-child {
+  border-bottom: none;
+}
+
+.recentTransaction li:not(:last-child) {
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.recentTransaction li div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.recentTransaction li p {
+  margin: 0;
+}
+
+.recentTransaction li p:first-child {
+  font-weight: bold;
+  color: #34495e;
+}
+
+.recentTransaction li p:last-child {
+  color: #95a5a6;
+}
+
+.recentTransaction li svg {
+  font-size: 1.5rem;
+  color: #00b894;
+}
+
+.recentTransaction .icon {
+  background-color: #ecf0f180;
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recentTransaction .information {
+  flex-grow: 1;
+  margin-left: 1rem;
+  gap: 8px;
+}
+
+.recentTransaction .information p:first-child {
+  font-size: 20px;
+  font-weight: bold;
+  color: #34495e;
+}
+
+.recentTransaction .information p:last-child {
+  font-size: 16px;
+  color: #95a5a6;
+}
+
+.recentTransaction .details {
+  text-align: right;
+  gap: 8px;
+}
+
+.recentTransaction .details p:first-child {
+  font-size: 20px;
+  font-weight: bold;
+  color: #34495e;
+}
+
+.recentTransaction .details p:last-child {
+  font-size: 16px;
+  color: #95a5a6;
+}
