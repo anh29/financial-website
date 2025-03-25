@@ -8,6 +8,15 @@
   transition: margin-left 0.3s ease;
 }
 
+.main-content.full-screen {
+  margin-left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .content {
   padding: 2rem;
 }

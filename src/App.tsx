@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import './App.css'
 import Sidebar from './components/Sidebar/Sidebar'
 import Header from './components/Header/Header'
@@ -8,22 +8,31 @@ import FinancialAdvicePage from './pages/FinancialAdvicePage/FinancialAdvicePage
 import FinancialStatementsPage from './pages/FinancialStatementsPage/FinancialStatementsPage'
 import IncomeExpensePage from './pages/IncomeExpensePage/IncomeExpensePage'
 import HomePage from './pages/HomePage/HomePage'
+import SignInPage from './pages/SignInPage/SignInPage'
+import SignupPage from './pages/SignupPage/SignupPage'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const location = useLocation()
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen)
   }
 
+  const isLoginPage = location.pathname === '/login' || location.pathname === '/signup'
+
   return (
     <div className='app-container'>
-      <button className='sidebar-toggle' onClick={toggleSidebar}>
-        ☰
-      </button>
-      <Sidebar className={sidebarOpen ? 'open' : ''} />
-      <div className='main-content'>
-        <Header />
+      {!isLoginPage && (
+        <>
+          <button className='sidebar-toggle' onClick={toggleSidebar}>
+            ☰
+          </button>
+          <Sidebar className={sidebarOpen ? 'open' : ''} />
+        </>
+      )}
+      <div className={`main-content ${isLoginPage ? 'full-screen' : ''}`}>
+        {!isLoginPage && <Header />}
         <div className='content' onClick={() => setSidebarOpen(false)}>
           <Routes>
             <Route path='/' element={<HomePage />} />
@@ -31,6 +40,8 @@ function App() {
             <Route path='/financial-statements' element={<FinancialStatementsPage />} />
             <Route path='/budget-suggestions' element={<BudgetSuggestionsPage />} />
             <Route path='/financial-advice' element={<FinancialAdvicePage />} />
+            <Route path='/signin' element={<SignInPage />} />
+            <Route path='/signup' element={<SignupPage />} />
           </Routes>
         </div>
       </div>
