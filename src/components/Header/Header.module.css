@@ -56,11 +56,12 @@
 
 .bell-icon {
   font-size: 1.8rem;
-  color: #2c3e50; /* Dark icon color */
+  color: #2c3e50;
 }
 
 .userProfile {
   display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -68,4 +69,17 @@
   width: 45px;
   height: 45px;
   border-radius: 50%;
+}
+
+.avatarStyle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff
 }
