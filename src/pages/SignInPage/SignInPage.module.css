@@ -21,7 +21,7 @@
 
 .signinForm {
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
   background: #ffffff;
   padding: 2rem;
   border-radius: 12px;
@@ -39,35 +39,6 @@
   color: #2c3e50;
   margin-bottom: 1.5rem;
   font-size: 1.75rem;
-}
-
-.inputGroup {
-  margin-bottom: 1.2rem;
-}
-
-.inputGroup label {
-  display: block;
-  justify-self: start;
-  font-size: 0.95rem;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-}
-
-.inputGroup input {
-  width: -webkit-fill-available;
-  padding: 0.8rem;
-  font-size: 1rem;
-  border: 1px solid #bdc3c7;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  background-color: #ffffff;
-  color: #000000;
-}
-
-.inputGroup input:focus {
-  border-color: #1abc9c;
-  box-shadow: 0 0 6px rgba(26, 188, 156, 0.4);
-  outline: none;
 }
 
 .passwordWrapper {
@@ -134,37 +105,6 @@
   font-weight: bold;
 }
 
-.signinButton {
-  width: 100%;
-  padding: 0.8rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-  background: #1abc9c;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  animation: pulse 1.5s infinite;
-}
-
-.signinButton:hover {
-  background: #16a085;
-}
-
-.signinButton:active {
-  transform: scale(0.97);
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.02);
-  }
-}
-
 .divider {
   text-align: center;
   margin: 1.5rem 0;
@@ -172,36 +112,11 @@
   color: #7f8c8d;
 }
 
-.googleButton {
-  width: 100%;
-  padding: 0.8rem;
-  font-size: 1rem;
-  background: #ffffff;
-  color: #2c3e50;
-  border: 1px solid #bdc3c7;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-  font-weight: bold;
-}
-
 .googleButton span {
   background: linear-gradient(90deg, #4285F4, #EA4335, #FBBC05, #34A853); /* Google logo colors */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-size: 1.5rem;
-}
-
-.googleButton:hover {
-  background: #ecf0f1;
-}
-
-.googleButton:active {
-  transform: scale(0.97);
 }
 
 .forgotPassword {
@@ -228,7 +143,6 @@
 }
 
 .switchLink a {
-  color: #1abc9c;
   text-decoration: none;
 }
 

@@ -7,6 +7,7 @@
 
   /* Updated color palette */
   --primary-color: #1abc9c;
+  --primary-color-blur: #85d5c5;
   --secondary-color: #34495e;
   --background-color: #f9f9f9;
   --text-color: #2c3e50;
@@ -109,7 +110,7 @@ button {
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
-  background-color: var(--primary-color);
+  background-color: var(--primary-color-blur);
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
@@ -159,9 +160,6 @@ input:focus, select:focus, textarea:focus {
   :root {
     color: var(--text-color);
     background-color: var(--background-color);
-  }
-  a:hover {
-    color: #2980b9;
   }
   button {
     background-color: #f9f9f9;

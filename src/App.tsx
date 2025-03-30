@@ -8,8 +8,8 @@ import FinancialAdvicePage from './pages/FinancialAdvicePage/FinancialAdvicePage
 import FinancialStatementsPage from './pages/FinancialStatementsPage/FinancialStatementsPage'
 import IncomeExpensePage from './pages/IncomeExpensePage/IncomeExpensePage'
 import HomePage from './pages/HomePage/HomePage'
-import SignInPage from './pages/SignInPage/SignInPage'
 import SignupPage from './pages/SignupPage/SignupPage'
+import SignInPage from './pages/SignInPage/SignInPage'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -19,7 +19,7 @@ function App() {
     setSidebarOpen(!sidebarOpen)
   }
 
-  const isLoginPage = location.pathname === '/login' || location.pathname === '/signup'
+  const isLoginPage = location.pathname === '/signin' || location.pathname === '/signup'
 
   return (
     <div className='app-container'>

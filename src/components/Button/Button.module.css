@@ -1,0 +1,35 @@
+
+.button {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: pulse 1.5s infinite;
+}
+
+.button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.button:hover {
+  background: #16a085;
+}
+
+.button:active {
+  transform: scale(0.97);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}

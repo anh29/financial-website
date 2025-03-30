@@ -1,12 +1,37 @@
 import React, { useState } from 'react'
 import styles from './SignInPage.module.css'
+import { useGoogleLogin } from '@react-oauth/google'
+import axios from 'axios'
+import FormInput from '../../components/FormInput/FormInput'
+import Button from '../../components/Button/Button'
 
 const SignInPage = () => {
-  const [showPassword, setShowPassword] = useState(false)
+  const [formData, setFormData] = useState({ email: '', password: '', remember: false })
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+        })
+        const { name, picture, email, email_verified } = userInfo.data
+
+        console.log('Google User Info:', userInfo)
+      } catch (error) {
+        console.error('Error fetching Google user info:', error)
+      }
+    }
+  })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value, type, checked } = e.target
+    setFormData({
+      ...formData,
+      [id]: type === 'checkbox' ? checked : value
+    })
   }
+
+  const isFormValid = formData.email && formData.password
 
   return (
     <div className={styles.signinPage}>
@@ -16,41 +41,31 @@ const SignInPage = () => {
       </div>
       <form className={styles.signinForm}>
         <h2>Sign In</h2>
-        <div className={styles.inputGroup}>
-          <label htmlFor='email'>Email Address</label>
-          <input
-            type='email'
-            id='email'
-            placeholder='e.g., johndoe@email.com'
-            required
-            autoComplete='email'
-            aria-label='Email Address'
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label htmlFor='password'>Password</label>
-          <div className={styles.passwordWrapper}>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              id='password'
-              placeholder='Enter your password'
-              required
-              autoComplete='current-password'
-              aria-label='Password'
-            />
-            <button
-              type='button'
-              className={styles.showPassword}
-              onClick={togglePasswordVisibility}
-              aria-label='Toggle password visibility'
-              title={showPassword ? 'Hide password' : 'Show password'}
-            >
-              {showPassword ? '🙈' : '👁'}
-            </button>
-          </div>
-        </div>
+        <FormInput
+          id='email'
+          label='Email Address'
+          type='email'
+          placeholder='e.g., johndoe@email.com'
+          value={formData.email}
+          onChange={handleInputChange}
+          required
+          autoComplete='email'
+          ariaLabel='Email Address'
+        />
+        <FormInput
+          id='password'
+          label='Password'
+          type='password'
+          placeholder='Enter your password'
+          value={formData.password}
+          onChange={handleInputChange}
+          required
+          autoComplete='current-password'
+          ariaLabel='Password'
+          showPasswordToggle={true}
+        />
         <div className={styles.rememberMe}>
-          <input type='checkbox' id='remember' />
+          <input type='checkbox' id='remember' checked={formData.remember} onChange={handleInputChange} />
           <label htmlFor='remember'>Remember me</label>
         </div>
         <div className={styles.forgotPassword}>
@@ -58,13 +73,13 @@ const SignInPage = () => {
             Forgot your password? <a href='/forgot-password'>Reset Password</a>
           </p>
         </div>
-        <button type='submit' className={styles.signinButton}>
+        <Button type='submit' className={styles.signinButton} disabled={!isFormValid}>
           Sign In
-        </button>
+        </Button>
         <div className={styles.divider}>or sign in with</div>
-        <button type='button' className={styles.googleButton}>
+        <Button type='button' className={styles.googleButton} onClick={handleGoogleLogin}>
           Continue with <span>Google</span>
-        </button>
+        </Button>
         <p className={styles.switchLink}>
           Don't have an account? <a href='/signup'>Sign up here</a>
         </p>
