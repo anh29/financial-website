@@ -1,10 +1,10 @@
 .homePage {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  padding: 2rem;
   background-color: #f5f5f5;
-  margin-top: 2rem;
+  margin: 1rem;
+  height: inherit;
 }
 
 .goalsUpcomingBill {
@@ -13,7 +13,10 @@
   gap: 2rem;
 }
 
-p, svg, h1, h2 {
+p,
+svg,
+h1,
+h2 {
   color: #000;
 }
 
@@ -34,24 +37,42 @@ p, svg, h1, h2 {
   color: #7f8c8d;
 }
 
-.totalBalance, .goals, .upcomingBill, .recentTransaction, .statistics, .expensesBreakdown {
+.totalBalance,
+.goals,
+.upcomingBill,
+.recentTransaction,
+.statistics,
+.expensesBreakdown {
   background-color: #ffffff;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.totalBalance h2, .goals h2, .upcomingBill h2, .recentTransaction h2, .statistics h2, .expensesBreakdown h2 {
+.totalBalance h2,
+.goals h2,
+.upcomingBill h2,
+.recentTransaction h2,
+.statistics h2,
+.expensesBreakdown h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.totalBalance p, .goals p, .upcomingBill p, .recentTransaction p, .expensesBreakdown p {
+.totalBalance p,
+.goals p,
+.upcomingBill p,
+.recentTransaction p,
+.expensesBreakdown p {
   margin: 0.5rem 0;
   color: #2c3e50; /* Dark text color for better readability */
 }
 
-.card, .goalChart, .bill, .recentTransaction ul, .expense {
+.card,
+.goalChart,
+.bill,
+.recentTransaction ul,
+.expense {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -69,7 +90,9 @@ p, svg, h1, h2 {
   font-size: 2rem;
 }
 
-.bill, .recentTransaction li, .expense {
+.bill,
+.recentTransaction li,
+.expense {
   background-color: #f9f9f9;
   padding: 1rem;
   border-radius: 8px;

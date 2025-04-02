@@ -1,42 +1,36 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Sidebar.module.css'
+import { FaHome, FaCog } from 'react-icons/fa'
 
-const Sidebar = ({ className }) => {
+interface SidebarProps {
+  className?: string
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ className }) => {
+  const menuItems = [
+    { path: '/', label: 'Homepage', icon: <FaHome /> },
+    { path: '/settings', label: 'Settings', icon: <FaCog /> },
+    { path: '/transactions', label: 'Transactions', icon: <FaCog /> },
+    { path: '/upcoming', label: 'Bills', icon: <FaCog /> },
+    { path: '/expenses', label: 'Expenses', icon: <FaCog /> },
+    { path: '/goal', label: 'Goal', icon: <FaCog /> }
+  ]
   return (
     <div className={`${styles.sidebar} ${className}`}>
       <h2>FINEbank.IO</h2>
       <nav>
         <ul>
-          <li>
-            <Link to='/'>Overview</Link>
-          </li>
-          <li>
-            <Link to='/balances'>Balances</Link>
-          </li>
-          <li>
-            <Link to='/transactions'>Transactions</Link>
-          </li>
-          <li>
-            <Link to='/bills'>Bills</Link>
-          </li>
-          <li>
-            <Link to='/expenses'>Expenses</Link>
-          </li>
-          <li>
-            <Link to='/goals'>Goals</Link>
-          </li>
-          <li>
-            <Link to='/settings'>Settings</Link>
-          </li>
+          {menuItems.map((item) => (
+            <li key={item.path} className={location.pathname === item.path ? styles.active : ''}>
+              <Link to={item.path}>
+                {item.icon} <span>{item.label}</span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
       <button className={styles.logout}>Logout</button>
-      <div className={styles.userProfile}>
-        <img src='/path/to/profile-pic.jpg' alt='User Profile' />
-        <span>Tanzir Rahman</span>
-        <Link to='/profile'>View profile</Link>
-      </div>
     </div>
   )
 }

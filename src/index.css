@@ -10,6 +10,7 @@
   --primary-color-blur: #85d5c5;
   --secondary-color: #34495e;
   --background-color: #f9f9f9;
+  --error-color: #e74c3c;
   --text-color: #2c3e50;
   --light-gray: #ecf0f1;
   --dark-gray: #7f8c8d;
@@ -54,6 +55,7 @@ footer, header, hgroup, menu, nav, section {
 
 body {
     line-height: 1;
+    height: 100vh;
 }
 
 ol, ul {
@@ -84,15 +86,6 @@ a:hover {
   color: #16a085;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  background-color: var(--background-color);
-}
-
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', sans-serif;
   color: var(--secondary-color);
@@ -101,6 +94,10 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
   font-size: 3rem;
   line-height: 1.2;
+}
+
+#root {
+  height: inherit;
 }
 
 button {

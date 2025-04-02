@@ -8,6 +8,10 @@ import BudgetSuggestionsPage from '../../pages/BudgetSuggestionsPage/BudgetSugge
 import FinancialAdvicePage from '../../pages/FinancialAdvicePage/FinancialAdvicePage'
 import SignInPage from '../../pages/SignInPage/SignInPage'
 import SignupPage from '../../pages/SignupPage/SignupPage'
+import TransactionPage from '../../pages/TransactionPage/TransactionPage'
+import UpcomingPage from '../../pages/UpcomingPage/UpcomingPage'
+import ExpensesPage from '../../pages/ExpensesPage/ExpensesPage'
+import GoalPage from '../../pages/GoalPage/GoalPage'
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -48,6 +52,38 @@ const AppRoutes: React.FC = () => (
       element={
         <PrivateRoute>
           <FinancialAdvicePage />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      path='/transactions'
+      element={
+        <PrivateRoute>
+          <TransactionPage />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      path='/upcoming'
+      element={
+        <PrivateRoute>
+          <UpcomingPage />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      path='/expenses'
+      element={
+        <PrivateRoute>
+          <ExpensesPage />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      path='/goal'
+      element={
+        <PrivateRoute>
+          <GoalPage />
         </PrivateRoute>
       }
     />

@@ -3,13 +3,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
-  background-color: var(--light-gray); /* Light background for header */
-  color: #2c3e50; /* Dark text color */
+  background-color: var(--light-gray);
+  color: #2c3e50;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: fixed;
-  top: 0;
-  width: -webkit-fill-available; /* Adjust width to account for sidebar */
-  z-index: 1000;
+  width: -webkit-fill-available;
+  z-index: 2;
   transition: left 0.3s ease;
 }
 
@@ -81,5 +80,5 @@
   justify-content: center;
   font-weight: bold;
   font-size: 16px;
-  color: #fff
+  color: #fff;
 }

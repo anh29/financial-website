@@ -1,0 +1,33 @@
+.billDetails {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.billDetails p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #34495e;
+}
+
+.billDetails .billDescription {
+  font-weight: bold;
+}
+
+.billDetails .billAmount {
+  color: #1abc9c;
+  font-weight: bold;
+}
+
+.billDetails .billLastCharge {
+  color: #95a5a6;
+}
+
+.confirmText {
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: #34495e;
+  text-align: center;
+}
