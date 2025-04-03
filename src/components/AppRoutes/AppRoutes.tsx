@@ -12,6 +12,7 @@ import TransactionPage from '../../pages/TransactionPage/TransactionPage'
 import UpcomingPage from '../../pages/UpcomingPage/UpcomingPage'
 import ExpensesPage from '../../pages/ExpensesPage/ExpensesPage'
 import GoalPage from '../../pages/GoalPage/GoalPage'
+import SettingsPage from '../../pages/SettingsPage/SettingsPage'
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -84,6 +85,14 @@ const AppRoutes: React.FC = () => (
       element={
         <PrivateRoute>
           <GoalPage />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      path='/settings'
+      element={
+        <PrivateRoute>
+          <SettingsPage />
         </PrivateRoute>
       }
     />
