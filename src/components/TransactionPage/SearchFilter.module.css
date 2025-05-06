@@ -1,0 +1,30 @@
+.searchFilter {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchFilter input,
+.searchFilter select {
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  font-size: 1rem;
+  background-color: #fff;
+}
+
+.searchFilter button {
+  background-color: #2ecc71;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.searchFilter button:hover {
+  background-color: #27ae60;
+}

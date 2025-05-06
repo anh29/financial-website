@@ -1,0 +1,9 @@
+.chartContainer {
+  text-align: center;
+}
+
+.chartContainer h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #34495e;
+}

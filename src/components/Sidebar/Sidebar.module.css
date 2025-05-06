@@ -1,21 +1,25 @@
 .sidebar {
   width: 250px;
-  height: calc(100vh - 4rem); /* Full height minus header */
-  background-color: var(--secondary-color);
+  height: calc(100vh - 4rem);
+  background: rgba(30, 30, 30, 0.8);
+  backdrop-filter: blur(10px);
   color: white;
   padding: 2rem;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background 0.3s ease;
   display: flex;
   flex-direction: column;
-  z-index: 2; /* Ensure sidebar is above other elements */
-  overflow-y: auto; /* Add scroll for overflow content */
+  z-index: 2;
+  overflow-y: auto;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar h2 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  margin-bottom: 2.5rem;
   color: var(--primary-color);
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
 .sidebar nav ul {
@@ -24,23 +28,58 @@
 }
 
 .sidebar nav ul li {
-  margin: 1.2rem 0;
+  margin: 1rem 0;
 }
 
 .sidebar nav ul li a {
   color: white;
   text-decoration: none;
-  font-size: 1.2rem;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 1.15rem;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
   display: flex;
+  align-items: center;
   gap: 1rem;
+  position: relative;
+
+  svg {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    color: #c5fff3;
+  }
+}
+
+.sidebar nav ul li a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background-color: var(--primary-color);
+  transition: height 0.3s ease;
+  border-radius: 2px;
 }
 
 .sidebar nav ul li a:hover {
-  background-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.sidebar nav ul li a:hover::before {
+  height: 100%;
+}
+
+.sidebar nav ul li.active a {
+  background: var(--primary-color);
   color: white;
+  font-weight: bold;
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.sidebar nav ul li.active a::before {
+  height: 100%;
+  background-color: #ffffff;
 }
 
 .logout {
@@ -48,40 +87,45 @@
   background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 0.8rem 1.5rem;
+  padding: 0.8rem 1.8rem;
   cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+  border-radius: 50px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  align-self: center;
+  font-size: 1.1rem;
 }
 
 .logout:hover {
   background-color: #16a085;
+  transform: scale(1.05);
 }
 
 .userProfile {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 
 .userProfile img {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  margin-bottom: 0.7rem;
-  border: 2px solid var(--primary-color);
+  margin-bottom: 1rem;
+  border: 3px solid var(--primary-color);
 }
 
 .userProfile span {
   color: white;
   font-size: 1.1rem;
+  font-weight: 500;
 }
 
 .userProfile a {
-  color: #1abc9c; /* Teal for profile link */
+  color: #1abc9c;
   text-decoration: none;
   font-size: 1rem;
+  margin-top: 0.5rem;
 }
 
 .userProfile a:hover {

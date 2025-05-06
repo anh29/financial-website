@@ -1,43 +1,54 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './RecentTransaction.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGamepad, faTshirt, faUtensils, faTaxi, faKeyboard } from '@fortawesome/free-solid-svg-icons'
-
-const transactionsData = [
-  { icon: faGamepad, name: 'GTR 5', category: 'Gadget & Gear', amount: '$160.00', date: '17 May 2023', type: 'all' },
-  {
-    icon: faTshirt,
-    name: 'Polo Shirt',
-    category: 'XL fashions',
-    amount: '$20.00',
-    date: '17 May 2023',
-    type: 'revenue'
-  },
-  {
-    icon: faUtensils,
-    name: 'Biriyani',
-    category: 'Hajir Biriyani',
-    amount: '$10.00',
-    date: '17 May 2023',
-    type: 'expense'
-  },
-  { icon: faTaxi, name: 'Taxi Fare', category: 'Uber', amount: '$12.00', date: '17 May 2023', type: 'expense' },
-  {
-    icon: faKeyboard,
-    name: 'Keyboard',
-    category: 'Gadget & Gear',
-    amount: '$22.00',
-    date: '17 May 2023',
-    type: 'revenue'
-  }
-]
+import { getCategoryInfo } from '../../../utils/categoryUtils'
+import { SERVER_URL } from '../../../utils/constants'
 
 const RecentTransaction = () => {
   const [activeTab, setActiveTab] = useState('all')
+  const [transactions, setTransactions] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const filteredTransactions = transactionsData.filter(
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const localStorageData = localStorage.getItem('user')
+        if (!localStorageData) {
+          setLoading(false)
+          setError('You need to log in to see your transactions')
+          return
+        }
+        const userData = JSON.parse(localStorageData || '')
+
+        const userId = userData.id
+        const response = await fetch(`${SERVER_URL}/marketplace/getLatestTransaction/user/${userId}`)
+        if (!response.ok) {
+          throw new Error('Failed to fetch transactions')
+        }
+        const data = await response.json()
+        setTransactions(data.data)
+        setLoading(false)
+      } catch (err) {
+        setError(err.message)
+        setLoading(false)
+      }
+    }
+
+    fetchTransactions()
+  }, [])
+
+  const filteredTransactions = transactions.filter(
     (transaction) => activeTab === 'all' || transaction.type === activeTab
   )
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>{error}</div>
+  }
 
   return (
     <div className={styles.recentTransaction}>
@@ -63,21 +74,25 @@ const RecentTransaction = () => {
         </div>
       </div>
       <ul>
-        {filteredTransactions.map((transaction, index) => (
-          <li key={index}>
-            <div className={styles.icon}>
-              <FontAwesomeIcon icon={transaction.icon} />
-            </div>
-            <div className={styles.information}>
-              <p>{transaction.name}</p>
-              <p>{transaction.category}</p>
-            </div>
-            <div className={styles.details}>
-              <p>{transaction.amount}</p>
-              <p>{transaction.date}</p>
-            </div>
-          </li>
-        ))}
+        {filteredTransactions.map((transaction) => {
+          const categoryInfo = getCategoryInfo(transaction.category)
+
+          return (
+            <li key={transaction.id}>
+              <div className={styles.icon}>
+                <FontAwesomeIcon icon={categoryInfo?.icon} />
+              </div>
+              <div className={styles.information}>
+                <p>{transaction.description}</p>
+                <p>{transaction.category}</p>
+              </div>
+              <div className={styles.details}>
+                <p>{transaction.amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                <p>{new Date(transaction._parsedDate).toLocaleDateString('vi-VN')}</p>
+              </div>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

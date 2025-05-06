@@ -1,64 +1,98 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './TransactionPage.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGamepad, faTshirt, faUtensils, faTicketAlt, faTaxi, faPizzaSlice, faKeyboard } from '@fortawesome/free-solid-svg-icons'
-
-const transactionsData = [
-  { icon: faGamepad, item: 'GTR 5', shop: 'Gadget & Gear', date: '17 May, 2023', method: 'Credit Card', amount: '$160.00' },
-  { icon: faTshirt, item: 'Polo shirt', shop: 'XL fashions', date: '17 May, 2023', method: 'Credit Card', amount: '$20.00' },
-  { icon: faUtensils, item: 'Biriyani', shop: 'Hajir Biriyani', date: '17 May, 2023', method: 'Credit Card', amount: '$12.00' },
-  { icon: faTicketAlt, item: 'Movie ticket', shop: 'Inox', date: '17 May, 2023', method: 'Credit Card', amount: '$15.00' },
-  { icon: faTaxi, item: 'Taxi fare', shop: 'Uber', date: '17 May, 2023', method: 'Credit Card', amount: '$10.00' },
-  { icon: faPizzaSlice, item: 'Pizza', shop: 'Pizza Hit', date: '17 May, 2023', method: 'Credit Card', amount: '$20.00' },
-  { icon: faKeyboard, item: 'Keyboard', shop: 'Gadget & Gear', date: '17 May, 2023', method: 'Credit Card', amount: '$30.00' }
-]
+import TransactionTable from '../../components/TransactionPage/TransactionTable'
+import ImportButton from '../../components/TransactionPage/ImportButton'
+import OCRUpload from '../../components/TransactionPage/OCRUpload'
+import SearchFilter from '../../components/TransactionPage/SearchFilter'
+import { SERVER_URL } from '../../utils/constants'
+import { expenseCategories, incomeCategories } from '../../utils/categoryUtils'
+import Log from '../../components/Log/Log'
 
 const TransactionPage = () => {
-  const [activeTab, setActiveTab] = useState('all')
+  const [transactions, setTransactions] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [logMessage, setLogMessage] = useState(null)
+  const [logStatus, setLogStatus] = useState<{
+    status: 'success' | 'error' | 'warning' | 'info'
+  }>({ status: 'info' })
 
-  const filteredTransactions = transactionsData.filter((transaction) =>
-    activeTab === 'all' ? true : activeTab === transaction.method.toLowerCase()
-  )
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const localStorageData = localStorage.getItem('user')
+        const userId = localStorageData ? JSON.parse(localStorageData).id : null
+        const response = await fetch(`${SERVER_URL}/crud/transactions/user/${userId}`)
+        if (!response.ok) throw new Error('Failed to fetch transactions')
+
+        const data = await response.json()
+        setTransactions(data.data)
+        setLoading(false)
+      } catch (err) {
+        setError(err.message)
+        setLoading(false)
+      }
+    }
+
+    fetchTransactions()
+  }, [])
+
+  const handleImport = async (newTransactions) => {
+    try {
+      const localStorageData = localStorage.getItem('user')
+      const userId = localStorageData ? JSON.parse(localStorageData).id : null
+
+      if (!userId) throw new Error('User not found in localStorage')
+
+      // Combine expense and income categories
+      const allCategories = [...expenseCategories, ...incomeCategories]
+
+      const transactionsWithUser = newTransactions.map((tx) => ({
+        ...tx,
+        category: allCategories.find((cat) => cat.key === tx.category)?.label,
+        userId
+      }))
+
+      const response = await fetch(`${SERVER_URL}/crud/transactions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(transactionsWithUser)
+      })
+
+      if (!response.ok) throw new Error('Failed to save transactions to the database.')
+
+      const result = await response.json()
+      setTransactions((prev) => [...result.data, ...prev])
+
+      setLogMessage('✅ Transactions imported successfully.')
+      setLogStatus('success')
+    } catch (error) {
+      setLogMessage('❌ Failed to import transactions.')
+      setLogStatus('error')
+    }
+  }
+
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error}</div>
 
   return (
     <div className={styles.transactionPage}>
-      <h1>Recent Transaction</h1>
-      <div className={styles.tabs}>
-        <button className={`${styles.tab} ${activeTab === 'all' ? styles.active : ''}`} onClick={() => setActiveTab('all')}>
-          All
-        </button>
-        <button className={`${styles.tab} ${activeTab === 'revenue' ? styles.active : ''}`} onClick={() => setActiveTab('revenue')}>
-          Revenue
-        </button>
-        <button className={`${styles.tab} ${activeTab === 'expenses' ? styles.active : ''}`} onClick={() => setActiveTab('expenses')}>
-          Expenses
-        </button>
+      <header className={styles.header}>
+        <h1>📊 Transaction Dashboard</h1>
+        <p>Import, view, and manage your financial transactions with ease.</p>
+      </header>
+
+      <div className={styles.controls}>
+        <SearchFilter />
+        <div className={styles.buttonGroup}>
+          <ImportButton onImport={handleImport} />
+          <OCRUpload onUpload={handleImport} />
+        </div>
       </div>
-      <table className={styles.transactionTable}>
-        <thead>
-          <tr>
-            <th>Items</th>
-            <th>Shop Name</th>
-            <th>Date</th>
-            <th>Payment Method</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTransactions.map((transaction, index) => (
-            <tr key={index}>
-              <td>
-                <FontAwesomeIcon icon={transaction.icon} className={styles.icon} /> {transaction.item}
-              </td>
-              <td>{transaction.shop}</td>
-              <td>{transaction.date}</td>
-              <td>{transaction.method}</td>
-              <td>{transaction.amount}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <button className={styles.loadMore}>Load More</button>
+
+      <TransactionTable newTransactions={transactions} />
+
+      {logMessage && <Log message={logMessage} status={logStatus} onClose={() => setLogMessage(null)} />}
     </div>
   )
 }

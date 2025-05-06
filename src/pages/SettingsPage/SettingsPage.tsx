@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './SettingsPage.module.css'
 import { useAuth } from '../../context/AuthContext'
 
@@ -7,23 +6,15 @@ const SettingsPage = () => {
 
   return (
     <div className={styles.settingsPage}>
-      <h1>Account & Settings</h1>
-      <p className={styles.timestamp}>4:55 pm 21 Jul 2023</p>
+      <header className={styles.header}>
+        <h1>Account & Settings</h1>
+      </header>
       <div className={styles.container}>
         <section className={styles.section}>
           <h2>Basic Details</h2>
           <div className={styles.profile}>
             <div className={styles.avatar}>
-              {user && (
-                <>
-                  {user.avatar ? (
-                    <>
-                      <img src={user.avatar} alt={user.username} style={{ width: '40px', borderRadius: '50%' }} />
-                      <button className={styles.changeButton}>Change</button>
-                    </>
-                  ) : null}
-                </>
-              )}
+              {user && user.avatar && <img src={user.avatar} alt={user.username} className={styles.avatarImage} />}
             </div>
             <form className={styles.detailsForm}>
               <label>

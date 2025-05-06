@@ -1,8 +1,20 @@
 .settingsPage {
   padding: 2rem;
-  background-color: #f9f9f9;
+  background-color: #f0f2f5;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.settingsPage .header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.settingsPage .header h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
 }
 
 .settingsPage h1 {
@@ -27,8 +39,8 @@
   margin-bottom: 2rem;
   background-color: #ffffff;
   padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .section h2 {
@@ -136,8 +148,6 @@ form {
 }
 
 label {
-  display: flex;
-  flex-direction: column;
   font-size: 1rem;
   color: #2c3e50;
 }
@@ -163,7 +173,7 @@ button {
 }
 
 button:hover {
-  background-color: #16a085;
+  background-color: #16a085; /* Unified hover color */
 }
 
 .deleteButton {

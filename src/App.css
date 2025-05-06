@@ -19,6 +19,9 @@
   padding-top: 1rem;
   margin-top: 5rem;
   height: calc(100vh - 6rem);
+}
+
+.scroll {
   overflow-y: scroll;
 }
 

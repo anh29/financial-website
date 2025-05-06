@@ -1,0 +1,49 @@
+.transactionTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+}
+
+.transactionTable th,
+.transactionTable td {
+  text-align: left;
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.transactionTable th {
+  background-color: #f7f9fb;
+  color: #34495e;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+.transactionTable .amountIncome {
+  color: #2e7d32; /* green */
+  font-weight: 600;
+}
+
+.transactionTable .amountExpense {
+  color: #c62828; /* red */
+  font-weight: 600;
+}
+
+.transactionTable .amountAmortized {
+  color: #ef6c00; /* orange */
+  font-weight: 600;
+}
+
+.transactionTable tr:hover {
+  background-color: #f1f8ff;
+  transition: background 0.2s ease;
+}
+
+.transactionTable td {
+  color: #5d6d7e;
+  font-size: 0.95rem;
+}

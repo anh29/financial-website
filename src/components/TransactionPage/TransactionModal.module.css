@@ -1,0 +1,228 @@
+/* Main modal container */
+.transactionModal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.transactionModal .modalContent {
+  background-color: #ffffff;
+  border-radius: 10px;
+  min-width: 40%;
+  padding: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
+
+  animation: scaleIn 0.3s ease-out forwards;
+  transition: all 0.4s ease;
+}
+
+.transactionModal .loadingSpinner {
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+}
+
+.transactionModal .errorText {
+  color: red;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.transactionModal .modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.transactionModal .modalHeader h2 {
+  font-size: 1.8em;
+  color: #333;
+}
+
+.transactionModal .closeButton {
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.transactionModal .closeButton:hover {
+  color: #dc3545;
+}
+
+.transactionModal .modalBody {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.transactionModal .transactionTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.transactionModal .transactionTable th,
+.transactionTable td {
+  padding: 12px 20px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 1.1em;
+}
+
+.transactionModal .transactionTable th {
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+.transactionModal .transactionTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.transactionModal .transactionTable tr:hover {
+  background-color: #eaeaea;
+}
+
+.transactionModal input[type='date'],
+.transactionModal input[type='number'],
+.transactionModal input[type='text'],
+.transactionModal select {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box;
+  background-color: white;
+  color: black;
+
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.transactionModal .expenseInput {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+.transactionModal .incomeInput {
+  border-color: #27ae60;
+  color: #27ae60;
+}
+
+.transactionModal button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+}
+
+.transactionModal .addButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  margin-right: 20px;
+}
+
+.transactionModal .saveButton {
+  background: linear-gradient(to right, #007bff, #0056b3);
+  font-weight: bold;
+  padding: 12px 30px;
+}
+
+.transactionModal .deleteButton {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+.transactionModal .saveButton:hover,
+.addButton:hover,
+.deleteButton:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+.transactionModal .addButton {
+  margin-right: 20px;
+}
+
+.transactionModal .modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .transactionModal .transactionTable th,
+  .transactionTable td {
+    padding: 10px;
+  }
+
+  .transactionModal .transactionTable {
+    font-size: 0.9em;
+  }
+
+  .transactionModal .modalHeader h2 {
+    font-size: 1.5em;
+  }
+}
+
+.transactionModal label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: #444;
+}
+
+.transactionModal .checkboxField {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.transactionModal input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.transactionModal .modalFooter button {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.transactionModal .cancelButton {
+  background-color: #f0f0f0;
+  color: #333;
+  margin-right: 10px;
+}
+
+.transactionModal .saveButton:hover {
+  background: linear-gradient(to right, #0056b3, #003f7f);
+}
+
+.transactionModal .cancelButton:hover {
+  background-color: #ddd;
+}

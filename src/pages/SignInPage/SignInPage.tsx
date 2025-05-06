@@ -4,7 +4,7 @@ import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import Button from '../../components/Button/Button'
-import { SERVER_URL, GOOGLE_INFO_API_KEY } from '../../utils/constants'
+import { SERVER_ENDPOINT, GOOGLE_INFO_API_KEY } from '../../utils/constants'
 import Log from '../../components/Log/Log'
 import { useAuth } from '../../context/AuthContext'
 
@@ -30,7 +30,7 @@ const SignInPage = () => {
       })
       const { name, picture, email, email_verified } = userInfo.data
 
-      const response = await axios.post(`${SERVER_URL}/createUser`, {
+      const response = await axios.post(SERVER_ENDPOINT.AUTH.SIGN_UP, {
         username: name,
         email,
         avatar: picture,
@@ -58,7 +58,7 @@ const SignInPage = () => {
     e.preventDefault()
     setLoading(true)
     try {
-      const response = await axios.post(`${SERVER_URL}/signin`, formData)
+      const response = await axios.post(SERVER_ENDPOINT.AUTH.SIGN_IN, formData)
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
     } catch (error) {
@@ -68,7 +68,7 @@ const SignInPage = () => {
     }
   }
 
-  const isFormValid = formData.email && formData.password
+  const isFormValid = formData.username && formData.password
 
   return (
     <div className={styles.signinPage}>
@@ -79,12 +79,12 @@ const SignInPage = () => {
       </div>
       <form className={styles.signinForm} onSubmit={handleSubmit}>
         <h2>Sign In</h2>
-        {['email', 'password'].map((field) => (
+        {['username', 'password'].map((field) => (
           <FormInput
             key={field}
             id={field}
             label={field.charAt(0).toUpperCase() + field.slice(1)}
-            type={field === 'password' ? 'password' : 'email'}
+            type={field === 'password' ? 'password' : 'text'}
             placeholder={`Enter your ${field}`}
             value={formData[field as keyof typeof formData]}
             onChange={handleInputChange}
@@ -108,7 +108,13 @@ const SignInPage = () => {
         </Button>
         <div className={styles.divider}>or sign in with</div>
         <Button type='button' className={styles.googleButton} onClick={handleGoogleLogin} disabled={loading}>
-          {loading ? 'Loading...' : <>Continue with <span>Google</span></>}
+          {loading ? (
+            'Loading...'
+          ) : (
+            <>
+              Continue with <span>Google</span>
+            </>
+          )}
         </Button>
         <p className={styles.switchLink}>
           Don't have an account? <a href='/signup'>Sign up here</a>

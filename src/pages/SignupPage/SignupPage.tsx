@@ -4,7 +4,7 @@ import FormInput from '../../components/FormInput/FormInput'
 import Button from '../../components/Button/Button'
 import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
-import { SERVER_URL, GOOGLE_INFO_API_KEY } from '../../utils/constants'
+import { GOOGLE_INFO_API_KEY, SERVER_ENDPOINT } from '../../utils/constants'
 import Log from '../../components/Log/Log'
 import { useAuth } from '../../context/AuthContext'
 
@@ -30,7 +30,7 @@ const SignupPage = () => {
       })
       const { name, picture, email, email_verified } = userInfo.data
 
-      const response = await axios.post(`${SERVER_URL}/createUser`, {
+      const response = await axios.post(SERVER_ENDPOINT.AUTH.CREATE_USER, {
         username: name,
         email,
         avatar: picture,
@@ -62,7 +62,7 @@ const SignupPage = () => {
     }
     setLoading(true)
     try {
-      const response = await axios.post(`${SERVER_URL}/createUser`, formData)
+      const response = await axios.post(SERVER_ENDPOINT.AUTH.CREATE_USER, formData)
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
     } catch (error) {
@@ -110,7 +110,13 @@ const SignupPage = () => {
         </Button>
         <div className={styles.divider}>or sign up with</div>
         <Button type='button' className={styles.googleButton} onClick={handleGoogleLogin} disabled={loading}>
-          {loading ? 'Loading...' : <>Continue with <span>Google</span></>}
+          {loading ? (
+            'Loading...'
+          ) : (
+            <>
+              Continue with <span>Google</span>
+            </>
+          )}
         </Button>
         <p className={styles.switchLink}>
           Already have an account? <a href='/signin'>Sign in here</a>

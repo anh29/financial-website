@@ -29,7 +29,7 @@ function App() {
       )}
       <div className={`main-content ${isLoginPage() ? 'full-screen' : ''}`}>
         {!isLoginPage() && <Header />}
-        <div className='content' onClick={() => setSidebarOpen(false)}>
+        <div className={`content ${isLoginPage() ? '' : 'scroll'}`} onClick={() => setSidebarOpen(false)}>
           <AppRoutes />
         </div>
       </div>
