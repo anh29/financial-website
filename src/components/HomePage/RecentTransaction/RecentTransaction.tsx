@@ -61,8 +61,8 @@ const RecentTransaction = () => {
           All
         </div>
         <div
-          className={`${styles.tab} ${activeTab === 'revenue' ? styles.active : ''}`}
-          onClick={() => setActiveTab('revenue')}
+          className={`${styles.tab} ${activeTab === 'income' ? styles.active : ''}`}
+          onClick={() => setActiveTab('income')}
         >
           Revenue
         </div>

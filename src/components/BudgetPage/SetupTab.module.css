@@ -1,0 +1,139 @@
+.setupTab .section {
+  margin-bottom: 20px;
+}
+
+.setupTab .label {
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.setupTab .totalInput {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+}
+
+.setupTab .summaryBox {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.setupTab .sectionTitle {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  color: #34495e;
+}
+
+.setupTab .allocationRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.setupTab .percentInput {
+  width: 60px;
+}
+
+.setupTab .warning {
+  color: red;
+  font-size: 0.8rem;
+  margin-left: 10px;
+}
+
+.setupTab .addButton {
+  padding: 10px 16px;
+  background-color: #00c48c;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.setupTab .addButton:hover {
+  background-color: #00a374;
+}
+
+.setupTab .suggestionList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.setupTab .suggestionButton {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.setupTab .suggestionButton:hover {
+  background-color: #e0e0e0;
+}
+
+.setupTab .allocationCard {
+  background: #f9fafb;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  border: 1px solid #e5e7eb;
+}
+
+.setupTab .inputGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.setupTab .inputGroup label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #374151;
+}
+
+.setupTab .inputGroup input {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.setupTab .inputWarning {
+  border-color: #dc2626 !important;
+  background-color: #fef2f2;
+  color: #991b1b;
+}
+
+@keyframes pulseWarning {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(220, 38, 38, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+}
+
+.setupTab .animatePulse {
+  animation: pulseWarning 1.2s ease-out;
+}
+
+.setupTab .allocationList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}

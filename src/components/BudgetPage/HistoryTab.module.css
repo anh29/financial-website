@@ -1,0 +1,92 @@
+.historyTab {
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.historyTab .sectionTitle {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.historyTab .monthSelector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.historyTab .monthSelector select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background-color: #b8e5d2;
+  color: black;
+}
+
+.historyTab .pastMonth {
+  margin-bottom: 40px;
+}
+
+.historyTab .headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.historyTab .summaryBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.historyTab .overBudget {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.historyTab .underBudget {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.historyTab .historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.historyTab .historyTable th,
+.historyTab .historyTable td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.historyTab .historyTable th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.historyTab .chartContainer {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.03);
+}
+
+.historyTab .chartContainer h5 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}

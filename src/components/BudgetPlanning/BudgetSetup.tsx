@@ -5,7 +5,7 @@ const BudgetSetup = () => {
   const [budgets, setBudgets] = useState([
     { category: 'Food', amount: 300 },
     { category: 'Transportation', amount: 200 },
-    { category: 'Shopping', amount: 400 },
+    { category: 'Shopping', amount: 400 }
   ])
 
   const handleBudgetChange = (index: number, amount: number) => {
@@ -22,7 +22,7 @@ const BudgetSetup = () => {
           <li key={index}>
             <span>{budget.category}:</span>
             <input
-              type="number"
+              type='number'
               value={budget.amount}
               onChange={(e) => handleBudgetChange(index, parseInt(e.target.value, 10))}
             />

@@ -9,14 +9,14 @@ const PlanComparison = () => {
       {
         label: 'Planned',
         data: [300, 200, 400, 100],
-        backgroundColor: '#3498db',
+        backgroundColor: '#3498db'
       },
       {
         label: 'Actual',
         data: [350, 250, 450, 150],
-        backgroundColor: '#e74c3c',
-      },
-    ],
+        backgroundColor: '#e74c3c'
+      }
+    ]
   }
 
   const options = {
@@ -24,9 +24,9 @@ const PlanComparison = () => {
     plugins: {
       legend: {
         display: true,
-        position: 'top',
-      },
-    },
+        position: 'top'
+      }
+    }
   }
 
   return (

@@ -1,15 +1,15 @@
 import React from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import styles from './Sidebar.module.css'
-import { 
-  FaHome, 
-  FaCog, 
-  FaExchangeAlt, 
-  FaFileInvoiceDollar, 
-  FaWallet, 
-  FaChartPie, 
-  FaChartBar, 
-  FaBullseye 
+import {
+  FaHome,
+  FaCog,
+  FaExchangeAlt,
+  FaFileInvoiceDollar,
+  FaWallet,
+  FaChartPie,
+  FaChartBar,
+  FaBullseye
 } from 'react-icons/fa'
 
 interface SidebarProps {
@@ -30,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
     { path: '/transactions', label: 'Transactions', icon: <FaExchangeAlt /> },
     { path: '/upcoming', label: 'Bills', icon: <FaFileInvoiceDollar /> },
     { path: '/expenses', label: 'Expenses', icon: <FaWallet /> },
-    { path: '/budget-planning', label: 'Planning', icon: <FaChartPie /> },
+    { path: '/budget', label: 'Budget', icon: <FaChartPie /> },
     { path: '/reports', label: 'Reports', icon: <FaChartBar /> },
     { path: '/goal', label: 'Goal', icon: <FaBullseye /> },
     { path: '/settings', label: 'Settings', icon: <FaCog /> }

@@ -14,7 +14,7 @@ import ExpensesPage from '../../pages/ExpensesPage/ExpensesPage'
 import GoalPage from '../../pages/GoalPage/GoalPage'
 import SettingsPage from '../../pages/SettingsPage/SettingsPage'
 import ReportsPage from '../../pages/ReportsPage/ReportsPage'
-import BudgetPlanningPage from '../../pages/BudgetPlanningPage/BudgetPlanningPage'
+import BudgetPage from '../../pages/BudgetPage/BudgetPage'
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -99,10 +99,10 @@ const AppRoutes: React.FC = () => (
       }
     />
     <Route
-      path='/budget-planning'
+      path='/budget'
       element={
         <PrivateRoute>
-          <BudgetPlanningPage />
+          <BudgetPage />
         </PrivateRoute>
       }
     />
