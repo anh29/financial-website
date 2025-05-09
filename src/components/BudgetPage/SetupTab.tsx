@@ -12,6 +12,8 @@ interface SetupTabProps {
   formatCurrency: (value: number) => string
   handleMonthlyBudgetChange: (value: number) => void
   monthlyBudget: number
+  handleSaveBudget: () => void
+  isBudgetSaved: boolean
 }
 
 const SetupTab: React.FC<SetupTabProps> = ({
@@ -24,7 +26,9 @@ const SetupTab: React.FC<SetupTabProps> = ({
   suggestedCategories,
   formatCurrency,
   handleMonthlyBudgetChange,
-  monthlyBudget
+  monthlyBudget,
+  handleSaveBudget,
+  isBudgetSaved
 }) => {
   const [animatedIndex, setAnimatedIndex] = useState<number | null>(null)
 
@@ -115,6 +119,14 @@ const SetupTab: React.FC<SetupTabProps> = ({
         <button className={styles.addButton} onClick={() => handleAddAllocation()}>
           + Thêm danh mục
         </button>
+      </div>
+
+      {/* Lưu ngân sách */}
+      <div className={styles.section}>
+        <button className={styles.saveButton} onClick={handleSaveBudget}>
+          💾 Lưu ngân sách
+        </button>
+        {isBudgetSaved && <p className={styles.saveConfirmation}>✅ Ngân sách đã được lưu thành công!</p>}
       </div>
 
       {/* Gợi ý danh mục */}

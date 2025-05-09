@@ -5,6 +5,8 @@ import SetupTab from '../../components/BudgetPage/SetupTab'
 import ExistingTab from '../../components/BudgetPage/ExistingTab'
 import HistoryTab from '../../components/BudgetPage/HistoryTab'
 import OverviewTab from '../../components/BudgetPage/OverviewTab'
+import { useAuth } from '../../context/AuthContext'
+import { SERVER_URL } from '../../utils/constants'
 
 const rawExistingBudgets = [
   { category: 'Tiết kiệm', amount: 5000000 },
@@ -46,17 +48,51 @@ const pastBudgetsMock = [
 ]
 
 const BudgetPage = () => {
+  const { user } = useAuth()
+
   const [activeTab, setActiveTab] = useState<'setup' | 'existing' | 'history' | 'overview' | 'comparison'>('setup')
   const [budgetAllocations, setBudgetAllocations] = useState([])
   const [existingBudgets, setExistingBudgets] = useState(rawExistingBudgets)
   const [pastBudgets] = useState(pastBudgetsMock)
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null)
+  const [savings, setSavings] = useState<number>(0)
+  const [isBudgetSaved, setIsBudgetSaved] = useState(false)
 
   const totalBudget = existingBudgets.reduce((sum, item) => sum + item.amount, 0)
   const [monthlyBudget, setMonthlyBudget] = useState<number>(0)
 
   const totalAllocated = budgetAllocations.reduce((sum, item) => sum + item.amount, 0)
-  const remaining = totalBudget - monthlyBudget
+  const remaining = totalBudget - monthlyBudget - savings
+
+  const handleSaveBudget = async () => {
+    try {
+      const userId = user?.id
+      const month = new Date().toISOString().slice(0, 7) // "2024-05"
+
+      const payload = budgetAllocations.map((item) => ({
+        user_id: userId,
+        month,
+        category: item.category,
+        amount: item.amount,
+        percent: item.percent || Math.round((item.amount / monthlyBudget) * 100),
+        type: 'allocation'
+      }))
+
+      const response = await fetch(`${SERVER_URL}/crud/budgets`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) throw new Error('Gửi dữ liệu thất bại')
+
+      setIsBudgetSaved(true)
+      setTimeout(() => setIsBudgetSaved(false), 3000)
+    } catch (error) {
+      console.error('Lỗi khi lưu ngân sách:', error)
+      alert('❌ Không thể lưu ngân sách. Vui lòng thử lại.')
+    }
+  }
 
   const handleExistingChange = (index, field, value) => {
     const updated = [...existingBudgets]
@@ -108,6 +144,10 @@ const BudgetPage = () => {
           formatCurrency={formatCurrency}
           handleMonthlyBudgetChange={handleMonthlyBudgetChange}
           monthlyBudget={monthlyBudget}
+          savings={savings}
+          handleSavingsChange={setSavings}
+          handleSaveBudget={handleSaveBudget}
+          isBudgetSaved={isBudgetSaved}
         />
       )}
 
