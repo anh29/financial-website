@@ -8,7 +8,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
   z-index: 1000;
   padding: 20px;
   animation: fadeIn 0.3s ease-out forwards;
@@ -16,176 +17,262 @@
 
 .transactionModal .modalContent {
   background-color: #ffffff;
-  border-radius: 10px;
-  min-width: 40%;
-  padding: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-  font-family: 'Roboto', sans-serif;
+  border-radius: 16px;
+  min-width: 45%;
+  max-width: 90%;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  font-family: 'Inter', 'Roboto', sans-serif;
   overflow: hidden;
-
   animation: scaleIn 0.3s ease-out forwards;
   transition: all 0.4s ease;
 }
 
 .transactionModal .loadingSpinner {
-  font-size: 12px;
-  color: #888;
+  font-size: 0.9rem;
+  color: #666;
   font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .transactionModal .errorText {
-  color: red;
-  font-size: 11px;
+  color: #ff4d4f;
+  font-size: 0.85rem;
   margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .transactionModal .modalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 15px;
-  margin-bottom: 20px;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .transactionModal .modalHeader h2 {
-  font-size: 1.8em;
-  color: #333;
+  font-size: 1.75rem;
+  color: #1a1a1a;
+  font-weight: 600;
+  margin: 0;
 }
 
 .transactionModal .closeButton {
   background: none;
   border: none;
-  font-size: 1.8em;
-  color: #333;
+  font-size: 1.75rem;
+  color: #666;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .transactionModal .closeButton:hover {
+  background-color: #f5f5f5;
   color: #dc3545;
 }
 
 .transactionModal .modalBody {
   overflow-y: auto;
-  max-height: 400px;
+  max-height: 60vh;
+  padding-right: 8px;
+}
+
+.transactionModal .modalBody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.transactionModal .modalBody::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.transactionModal .modalBody::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.transactionModal .modalBody::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
 .transactionModal .transactionTable {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   table-layout: fixed;
 }
 
 .transactionModal .transactionTable th,
 .transactionTable td {
-  padding: 12px 20px;
+  padding: 14px 16px;
   text-align: left;
   border-bottom: 1px solid #f0f0f0;
-  font-size: 1.1em;
+  font-size: 0.95rem;
 }
 
 .transactionModal .transactionTable th {
-  background-color: #f8f8f8;
-  color: #333;
+  background-color: #fafafa;
+  color: #1a1a1a;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
-.transactionModal .transactionTable tr:nth-child(even) {
-  background-color: #f9f9f9;
+.transactionModal .transactionTable tr {
+  transition: background-color 0.2s ease;
 }
 
 .transactionModal .transactionTable tr:hover {
-  background-color: #eaeaea;
+  background-color: #f8f9fa;
 }
 
 .transactionModal input[type='date'],
 .transactionModal input[type='number'],
 .transactionModal input[type='text'],
 .transactionModal select {
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1em;
+  width: 100%;
+  padding: 10px 12px;
+  margin: 4px 0;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
   box-sizing: border-box;
   background-color: white;
-  color: black;
-
-  transition: border-color 0.3s, box-shadow 0.3s;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
 }
+
+.transactionModal input[type='date']:focus,
+.transactionModal input[type='number']:focus,
+.transactionModal input[type='text']:focus,
+.transactionModal select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
 .transactionModal .expenseInput {
-  border-color: #e74c3c;
-  color: #e74c3c;
+  border-color: #ff4d4f;
+  color: #ff4d4f;
 }
 
 .transactionModal .incomeInput {
-  border-color: #27ae60;
-  color: #27ae60;
+  border-color: #52c41a;
+  color: #52c41a;
 }
 
 .transactionModal button {
   padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 1.1em;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  transition:
-    background-color 0.3s,
-    transform 0.2s;
+  transition: all 0.2s ease;
+  border: none;
 }
 
 .transactionModal .addButton {
-  background-color: #28a745;
+  background-color: #52c41a;
   color: white;
-  border: none;
-  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 8px rgba(82, 196, 26, 0.2);
 }
 
 .transactionModal .saveButton {
-  background: linear-gradient(to right, #007bff, #0056b3);
-  font-weight: bold;
-  padding: 12px 30px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  font-weight: 600;
+  padding: 12px 32px;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
 }
 
 .transactionModal .deleteButton {
-  background-color: #dc3545;
+  background-color: #ff4d4f;
   color: white;
-  border: none;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 6px rgba(255, 77, 79, 0.2);
 }
 
 .transactionModal .saveButton:hover,
 .addButton:hover,
 .deleteButton:hover {
-  opacity: 0.9;
-  transform: scale(1.05);
-}
-
-.transactionModal .addButton {
-  margin-right: 20px;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .transactionModal .modalFooter {
   display: flex;
   justify-content: flex-end;
-  margin-top: 20px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #eaeaea;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @media (max-width: 768px) {
-  .modalContent {
-    width: 100%;
-    padding: 10px;
+  .transactionModal .modalContent {
+    width: 95%;
+    padding: 16px;
   }
 
   .transactionModal .transactionTable th,
   .transactionTable td {
-    padding: 10px;
-  }
-
-  .transactionModal .transactionTable {
-    font-size: 0.9em;
+    padding: 12px;
+    font-size: 0.9rem;
   }
 
   .transactionModal .modalHeader h2 {
-    font-size: 1.5em;
+    font-size: 1.4rem;
+  }
+
+  .transactionModal .modalFooter {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .transactionModal .modalFooter button {
+    width: 100%;
   }
 }
 
@@ -225,4 +312,55 @@
 
 .transactionModal .cancelButton:hover {
   background-color: #ddd;
+}
+
+.transactionModal .errorMessage {
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  color: #ff4d4f;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transactionModal .spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.transactionModal button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.transactionModal input:disabled,
+.transactionModal select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.transactionModal .loadingSpinner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
 }

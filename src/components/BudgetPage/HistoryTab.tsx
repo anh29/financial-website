@@ -2,23 +2,12 @@ import React from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import styles from './HistoryTab.module.css'
+import { HistoryBudgets } from '../../types'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-interface BudgetItem {
-  category: string
-  amount: number
-}
-
-interface PastBudgetEntry {
-  month: string
-  total: number
-  allocations: BudgetItem[]
-  spent: Record<string, number>
-}
-
 interface HistoryTabProps {
-  pastBudgets: PastBudgetEntry[]
+  pastBudgets: HistoryBudgets[]
   selectedMonth: string | null
   setSelectedMonth: (month: string | null) => void
   formatCurrency: (value: number) => string
@@ -26,7 +15,6 @@ interface HistoryTabProps {
 
 const HistoryTab: React.FC<HistoryTabProps> = ({ pastBudgets, selectedMonth, setSelectedMonth, formatCurrency }) => {
   const filteredBudgets = selectedMonth ? pastBudgets.filter((b) => b.month === selectedMonth) : pastBudgets
-
   return (
     <div className={styles.historyTab}>
       <h3 className={styles.sectionTitle}>📅 Lịch sử ngân sách</h3>
@@ -47,7 +35,7 @@ const HistoryTab: React.FC<HistoryTabProps> = ({ pastBudgets, selectedMonth, set
         const spentTotal = Object.values(entry.spent).reduce((a, b) => a + b, 0)
 
         const chartData = {
-          labels: entry.allocations.map((a) => a.category),
+          labels: entry.allocations.map((a) => a.description),
           datasets: [
             {
               label: 'Phân bổ',
@@ -80,17 +68,17 @@ const HistoryTab: React.FC<HistoryTabProps> = ({ pastBudgets, selectedMonth, set
                 </tr>
               </thead>
               <tbody>
-                {entry.allocations.map((a) => {
-                  const actual = entry.spent[a.category] ?? 0
-                  const diff = actual - a.amount
+                {entry.allocations.map((a, index) => {
+                  const actual = entry.spent[a.description] ?? 0
+                  const diff = a.amount - actual
                   return (
-                    <tr key={a.category}>
-                      <td>{a.category}</td>
+                    <tr key={`allocation-${index}`}>
+                      <td>{a.description}</td>
                       <td>{formatCurrency(a.amount)}</td>
                       <td>{formatCurrency(actual)}</td>
                       <td
                         style={{
-                          color: diff > 0 ? 'red' : 'green',
+                          color: diff < 0 ? 'red' : 'green',
                           fontWeight: 500
                         }}
                       >
@@ -100,6 +88,23 @@ const HistoryTab: React.FC<HistoryTabProps> = ({ pastBudgets, selectedMonth, set
                     </tr>
                   )
                 })}
+                {Object.entries(entry.spent)
+                  .filter(([description]) => !entry.allocations.some((a) => a.description === description))
+                  .map(([description, actual], index) => (
+                    <tr key={`spent-${index}`}>
+                      <td>{description}</td>
+                      <td>{formatCurrency(0)}</td>
+                      <td>{formatCurrency(actual)}</td>
+                      <td
+                        style={{
+                          color: 'red',
+                          fontWeight: 500
+                        }}
+                      >
+                        -{formatCurrency(actual)}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
 

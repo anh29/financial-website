@@ -4,6 +4,6 @@ export const SERVER_URL = import.meta.env.VITE_SERVER_URL
 export const SERVER_ENDPOINT = {
   AUTH: {
     CREATE_USER: `${SERVER_URL}/auth/createUser`,
-    SIGN_IN: `${SERVER_URL}/auth/signin`,
-  },
-};
+    SIGN_IN: `${SERVER_URL}/auth/signin`
+  }
+}

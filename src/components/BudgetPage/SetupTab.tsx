@@ -1,19 +1,21 @@
 import React, { useState } from 'react'
-import styles from './SetupTab.module.css'
+import { BudgetAllocation } from '../../types'
+import styles from './SectionTab.module.css'
 
 interface SetupTabProps {
   totalBudget: number
   totalAllocated: number
   remaining: number
-  budgetAllocations: any[]
-  handleAllocationChange: (index: number, field: string, value: string | number, source?: string) => void
-  handleAddAllocation: (category?: string) => void
+  budgetAllocations: BudgetAllocation[]
   suggestedCategories: string[]
   formatCurrency: (value: number) => string
   handleMonthlyBudgetChange: (value: number) => void
   monthlyBudget: number
-  handleSaveBudget: () => void
+  handleSaveBudget: (newAllocation: BudgetAllocation[]) => void
   isBudgetSaved: boolean
+  savings: number
+  handleSavingsChange: (value: number) => void
+  remainingMonthlyBudget: number
 }
 
 const SetupTab: React.FC<SetupTabProps> = ({
@@ -21,19 +23,104 @@ const SetupTab: React.FC<SetupTabProps> = ({
   totalAllocated,
   remaining,
   budgetAllocations,
-  handleAllocationChange,
-  handleAddAllocation,
   suggestedCategories,
   formatCurrency,
   handleMonthlyBudgetChange,
   monthlyBudget,
   handleSaveBudget,
-  isBudgetSaved
+  isBudgetSaved,
+  remainingMonthlyBudget
 }) => {
   const [animatedIndex, setAnimatedIndex] = useState<number | null>(null)
+  const [allocations, setAllocations] = useState<BudgetAllocation[]>([])
+
+  const handleAdd = (description?: string) => {
+    const newAllocation: BudgetAllocation = {
+      monthly_budget_id: '',
+      description: description || '',
+      amount: 0
+    }
+    setAllocations((prev) => [...prev, newAllocation])
+  }
+
+  const handleAllocationChange = (index: number, field: keyof BudgetAllocation, value: string | number) => {
+    const updated = [...allocations]
+    if (field === 'amount') {
+      updated[index].amount = Number(value)
+    } else if (field === 'percent') {
+      const percent = Number(value)
+      updated[index].percent = percent
+      updated[index].amount = Math.round((monthlyBudget * percent) / 100)
+    } else {
+      updated[index][field] = value
+    }
+    setAllocations(updated)
+  }
+
+  const handleSave = () => {
+    handleSaveBudget(allocations)
+    setAllocations([])
+  }
+
+  const renderAllocationCard = (item: BudgetAllocation, index: number, isEditable: boolean) => {
+    const percent = monthlyBudget > 0 ? Math.round((item.amount / monthlyBudget) * 100) : 0
+    const warning = item.amount > monthlyBudget * 0.3
+
+    return (
+      <div key={index} className={`${styles.allocationCard} ${warning ? styles.warningCard : ''}`}>
+        <div className={styles.inputGroup}>
+          <label className={styles.inputLabel}>🏷 Mô tả:</label>
+          <input
+            type='text'
+            value={item.description}
+            onChange={(e) => isEditable && handleAllocationChange(index, 'description', e.target.value)}
+            placeholder='Ví dụ: Ăn uống'
+            className={styles.inputField}
+            readOnly={!isEditable}
+          />
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label className={styles.inputLabel}>💵 Số tiền:</label>
+          <input
+            type='number'
+            value={item.amount || ''}
+            onChange={(e) => {
+              if (isEditable) {
+                const newAmount = Number(e.target.value)
+                handleAllocationChange(index, 'amount', newAmount)
+
+                if (newAmount > monthlyBudget * 0.3) {
+                  setAnimatedIndex(index)
+                  setTimeout(() => setAnimatedIndex(null), 500)
+                }
+              }
+            }}
+            placeholder='0'
+            className={`${styles.inputField} ${warning ? styles.inputWarning : ''} ${
+              animatedIndex === index ? styles.animatePulse : ''
+            }`}
+            readOnly={!isEditable}
+          />
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label className={styles.inputLabel}>📊 Tỷ lệ ngân sách (%):</label>
+          <input
+            type='number'
+            value={percent || ''}
+            onChange={(e) => isEditable && handleAllocationChange(index, 'percent', e.target.value)}
+            placeholder='0'
+            className={styles.inputField}
+            readOnly={!isEditable}
+          />
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className={styles.setupTab}>
+    <div className={styles.sectionTab}>
       {/* Tổng ngân sách */}
       <div className={styles.section}>
         <div className={styles.budgetHeader}>
@@ -41,9 +128,6 @@ const SetupTab: React.FC<SetupTabProps> = ({
           <input type='number' className={styles.totalInput} value={totalBudget} readOnly />
         </div>
         <div className={styles.summaryBox}>
-          <span>
-            📦 Đã phân bổ: <strong>{formatCurrency(totalAllocated)}</strong>
-          </span>
           <span style={{ color: remaining < 0 ? '#e74c3c' : '#2ecc71' }}>
             {remaining < 0
               ? `⚠ Thiếu: ${formatCurrency(Math.abs(remaining))}`
@@ -61,88 +145,55 @@ const SetupTab: React.FC<SetupTabProps> = ({
           value={monthlyBudget}
           onChange={(e) => handleMonthlyBudgetChange(Number(e.target.value))}
         />
+        <div className={styles.summaryBox}>
+          <span>
+            📦 Đã phân bổ: <strong>{formatCurrency(totalAllocated)}</strong>
+          </span>
+          <span style={{ color: remainingMonthlyBudget < 0 ? '#e74c3c' : '#2ecc71' }}>
+            {remainingMonthlyBudget < 0
+              ? `⚠ Thiếu: ${formatCurrency(Math.abs(remainingMonthlyBudget))}`
+              : `🟢 Còn lại: ${formatCurrency(remainingMonthlyBudget)}`}
+          </span>
+        </div>
+      </div>
+
+      {/* Tạo mới */}
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>➕ Tạo mới danh mục</h3>
+        <div className={styles.list}>{allocations.map((item, index) => renderAllocationCard(item, index, true))}</div>
+        <div className={styles.buttonGroup}>
+          <button className={styles.addButton} onClick={() => handleAdd()}>
+            + Thêm danh mục
+          </button>
+          <button className={styles.saveButton} onClick={handleSave}>
+            💾 Lưu ngân sách
+          </button>
+        </div>
+        {isBudgetSaved && <p className={styles.saveConfirmation}>✅ Ngân sách đã được lưu thành công!</p>}
+
+        {/* Gợi ý danh mục */}
+        <div className={styles.subSection}>
+          <h3 className={styles.subSectionTitle}>✨ Gợi ý danh mục</h3>
+          <div className={styles.suggestionList}>
+            {suggestedCategories.map((cat) => (
+              <button
+                key={cat}
+                className={styles.suggestionButton}
+                onClick={() => handleAdd(cat)}
+                title='Nhấn để thêm nhanh'
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Phân bổ danh mục */}
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>📊 Phân bổ danh mục theo tháng</h3>
         <div className={styles.allocationList}>
-          {budgetAllocations.map((item, index) => {
-            const percent = monthlyBudget > 0 ? Math.round((item.amount / monthlyBudget) * 100) : 0
-            const warning = item.amount > monthlyBudget * 0.3
-            return (
-              <div key={index} className={styles.allocationCard}>
-                <div className={styles.inputGroup}>
-                  <label>🏷 Danh mục:</label>
-                  <input
-                    type='text'
-                    value={item.category}
-                    onChange={(e) => handleAllocationChange(index, 'category', e.target.value)}
-                    placeholder='Ví dụ: Ăn uống'
-                  />
-                </div>
-
-                <div className={styles.inputGroup}>
-                  <label>💵 Số tiền:</label>
-                  <input
-                    type='number'
-                    value={item.amount ? item.amount : ''}
-                    onChange={(e) => {
-                      const newAmount = Number(e.target.value)
-                      handleAllocationChange(index, 'amount', newAmount, 'amount')
-
-                      if (newAmount > monthlyBudget * 0.3) {
-                        setAnimatedIndex(index)
-                        setTimeout(() => setAnimatedIndex(null), 500)
-                      }
-                    }}
-                    placeholder='0'
-                    className={`${styles.input} ${warning ? styles.inputWarning : ''} ${
-                      animatedIndex === index ? styles.animatePulse : ''
-                    }`}
-                  />
-                </div>
-
-                <div className={styles.inputGroup}>
-                  <label>📊 Tỷ lệ ngân sách (%):</label>
-                  <input
-                    type='number'
-                    value={percent ? percent : ''}
-                    onChange={(e) => handleAllocationChange(index, 'percent', e.target.value, 'percent')}
-                    placeholder='0'
-                  />
-                </div>
-              </div>
-            )
-          })}
-        </div>
-        <button className={styles.addButton} onClick={() => handleAddAllocation()}>
-          + Thêm danh mục
-        </button>
-      </div>
-
-      {/* Lưu ngân sách */}
-      <div className={styles.section}>
-        <button className={styles.saveButton} onClick={handleSaveBudget}>
-          💾 Lưu ngân sách
-        </button>
-        {isBudgetSaved && <p className={styles.saveConfirmation}>✅ Ngân sách đã được lưu thành công!</p>}
-      </div>
-
-      {/* Gợi ý danh mục */}
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>✨ Gợi ý danh mục</h3>
-        <div className={styles.suggestionList}>
-          {suggestedCategories.map((cat) => (
-            <button
-              key={cat}
-              className={styles.suggestionButton}
-              onClick={() => handleAddAllocation(cat)}
-              title='Nhấn để thêm nhanh'
-            >
-              {cat}
-            </button>
-          ))}
+          {budgetAllocations.map((item, index) => renderAllocationCard(item, index, false))}
         </div>
       </div>
     </div>

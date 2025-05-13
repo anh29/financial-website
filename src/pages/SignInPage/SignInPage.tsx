@@ -4,9 +4,9 @@ import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import Button from '../../components/Button/Button'
-import { SERVER_ENDPOINT, GOOGLE_INFO_API_KEY } from '../../utils/constants'
 import Log from '../../components/Log/Log'
 import { useAuth } from '../../context/AuthContext'
+import { GOOGLE_INFO_API_KEY, SERVER_ENDPOINT } from '../../utils/constants'
 
 const SignInPage = () => {
   const { login } = useAuth()
@@ -30,7 +30,7 @@ const SignInPage = () => {
       })
       const { name, picture, email, email_verified } = userInfo.data
 
-      const response = await axios.post(SERVER_ENDPOINT.AUTH.SIGN_UP, {
+      const response = await axios.post(SERVER_ENDPOINT.AUTH.SIGN_IN, {
         username: name,
         email,
         avatar: picture,

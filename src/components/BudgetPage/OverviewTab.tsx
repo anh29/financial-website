@@ -12,27 +12,16 @@ import {
   Legend
 } from 'chart.js'
 import styles from './OverviewTab.module.css'
+import { HistoryBudgets } from '../../types'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, PointElement, LineElement, Tooltip, Legend)
 
 interface OverviewTabProps {
-  pastBudgets: {
-    month: string
-    total: number
-    allocations: { category: string; amount: number }[]
-    spent: Record<string, number>
-  }[]
-  formatCurrency: (value: number) => string
+  pastBudgets: HistoryBudgets[]
 }
 
-const OverviewTab: React.FC<OverviewTabProps> = ({ pastBudgets, formatCurrency }) => {
+const OverviewTab: React.FC<OverviewTabProps> = ({ pastBudgets }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  React.useEffect(() => {
-    setIsLoading(true)
-    setTimeout(() => setIsLoading(false), 1000)
-  }, [])
 
   const months = pastBudgets.map((b) => b.month)
   const totals = pastBudgets.map((b) => b.total)
@@ -74,7 +63,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ pastBudgets, formatCurrency }
 
   const availableCategories = useMemo(() => {
     const set = new Set<string>()
-    pastBudgets.forEach((entry) => entry.allocations.forEach((alloc) => set.add(alloc.category)))
+    pastBudgets.forEach((entry) => entry.allocations.forEach((alloc) => set.add(alloc.description)))
     return Array.from(set)
   }, [pastBudgets])
 
@@ -82,7 +71,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ pastBudgets, formatCurrency }
     if (!selectedCategory) return null
     const labels = pastBudgets.map((entry) => entry.month)
     const data = pastBudgets.map((entry) => {
-      const found = entry.allocations.find((a) => a.category === selectedCategory)
+      const found = entry.allocations.find((a) => a.description === selectedCategory) // Fixed property name
       return found ? found.amount : 0
     })
 

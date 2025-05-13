@@ -1,78 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styles from './TransactionPage.module.css'
 import TransactionTable from '../../components/TransactionPage/TransactionTable'
 import ImportButton from '../../components/TransactionPage/ImportButton'
 import OCRUpload from '../../components/TransactionPage/OCRUpload'
 import SearchFilter from '../../components/TransactionPage/SearchFilter'
-import { SERVER_URL } from '../../utils/constants'
-import { expenseCategories, incomeCategories } from '../../utils/categoryUtils'
 import Log from '../../components/Log/Log'
+import { useTransactions } from '../../hooks/useTransactions'
 
 const TransactionPage = () => {
-  const [transactions, setTransactions] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [logMessage, setLogMessage] = useState(null)
-  const [logStatus, setLogStatus] = useState<{
-    status: 'success' | 'error' | 'warning' | 'info'
-  }>({ status: 'info' })
+  const { transactions, isLoading, error, handleImport } = useTransactions()
+  const [logMessage, setLogMessage] = React.useState<string | null>(null)
+  const [logStatus, setLogStatus] = React.useState<'success' | 'error' | 'warning' | 'info'>('info')
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const localStorageData = localStorage.getItem('user')
-        const userId = localStorageData ? JSON.parse(localStorageData).id : null
-        const response = await fetch(`${SERVER_URL}/crud/transactions/user/${userId}`)
-        if (!response.ok) throw new Error('Failed to fetch transactions')
-
-        const data = await response.json()
-        setTransactions(data.data)
-        setLoading(false)
-      } catch (err) {
-        setError(err.message)
-        setLoading(false)
-      }
-    }
-
-    fetchTransactions()
-  }, [])
-
-  const handleImport = async (newTransactions) => {
-    try {
-      const localStorageData = localStorage.getItem('user')
-      const userId = localStorageData ? JSON.parse(localStorageData).id : null
-
-      if (!userId) throw new Error('User not found in localStorage')
-
-      // Combine expense and income categories
-      const allCategories = [...expenseCategories, ...incomeCategories]
-
-      const transactionsWithUser = newTransactions.map((tx) => ({
-        ...tx,
-        category: allCategories.find((cat) => cat.key === tx.category)?.label,
-        userId
-      }))
-
-      const response = await fetch(`${SERVER_URL}/crud/transactions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(transactionsWithUser)
-      })
-
-      if (!response.ok) throw new Error('Failed to save transactions to the database.')
-
-      const result = await response.json()
-      setTransactions((prev) => [...result.data, ...prev])
-
-      setLogMessage('✅ Transactions imported successfully.')
-      setLogStatus('success')
-    } catch (error) {
-      setLogMessage('❌ Failed to import transactions.')
-      setLogStatus('error')
-    }
+  const handleTransactionUpdate = () => {
+    setLogMessage('✅ Transaction updated successfully.')
+    setLogStatus('success')
   }
 
-  if (loading) return <div>Loading...</div>
+  if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
 
   return (
@@ -90,7 +35,7 @@ const TransactionPage = () => {
         </div>
       </div>
 
-      <TransactionTable newTransactions={transactions} />
+      <TransactionTable transactions={transactions} onTransactionUpdate={handleTransactionUpdate} />
 
       {logMessage && <Log message={logMessage} status={logStatus} onClose={() => setLogMessage(null)} />}
     </div>

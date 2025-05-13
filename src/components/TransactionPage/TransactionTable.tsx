@@ -1,62 +1,42 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import Card from '../common/Card'
+import EditTransactionModal from './EditTransactionModal'
+import { Transaction } from '../../types/transaction'
 import styles from './TransactionTable.module.css'
-import EditTransactionModal, { Transaction } from './EditTransactionModal'
-import { SERVER_URL } from '../../utils/constants'
-import Log from '../Log/Log'
 
-const TransactionTable = ({ newTransactions }: { newTransactions: Transaction[] }) => {
-  const [transactions, setTransactions] = useState<Transaction[]>([])
+interface TransactionTableProps {
+  transactions: Transaction[]
+  onTransactionUpdate?: (updatedTransactions: Transaction[]) => void
+}
 
-  useEffect(() => {
-    setTransactions(newTransactions)
-  }, [newTransactions])
-
+const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTransactionUpdate }) => {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null)
   const [isModalOpen, setModalOpen] = useState(false)
-  const [logMessage, setLogMessage] = useState<string | null>(null)
-  const [logStatus, setLogStatus] = useState<'success' | 'error' | 'info' | 'warning'>('info')
 
   const handleEditClick = (transaction: Transaction) => {
     setSelectedTransaction({ ...transaction })
     setModalOpen(true)
   }
 
-  const handleSave = async () => {
-    if (!selectedTransaction) return
+  const handleTransactionUpdate = (updatedTransaction: Transaction) => {
+    // Update the transactions array with the updated transaction
+    const updatedTransactions = transactions.map((transaction) =>
+      transaction.id === updatedTransaction.id ? updatedTransaction : transaction
+    )
 
-    try {
-      const response = await fetch(`${SERVER_URL}/crud/transactions`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...selectedTransaction,
-          amount: selectedTransaction.amount?.toString() || '',
-          amortized_days:
-            selectedTransaction.is_amortized && selectedTransaction.amortized_days
-              ? selectedTransaction.amortized_days.toString()
-              : undefined
-        })
-      })
-
-      if (!response.ok) throw new Error('Failed to save transaction')
-
-      setLogMessage('✅ Transaction saved successfully.')
-      setLogStatus('success')
-      setTransactions((prev) => prev.map((t) => (t.id === selectedTransaction.id ? selectedTransaction : t)))
-      setModalOpen(false)
-    } catch (err) {
-      console.error(err)
-      setLogMessage('❌ Failed to save transaction. Please try again.')
-      setLogStatus('error')
+    if (onTransactionUpdate) {
+      onTransactionUpdate(updatedTransactions)
     }
+
+    setSelectedTransaction(null)
+    setModalOpen(false)
   }
 
   const displayDate = (transaction: Transaction) =>
     transaction.date
       ? new Date(transaction.date).toLocaleDateString('vi-VN')
-      : new Date(transaction.created_at).toLocaleDateString('vi-VN')
+      : new Date(transaction.created_at || '').toLocaleDateString('vi-VN')
+
   const getAmountClass = (transaction: Transaction) => {
     if (transaction.is_amortized) return styles.amountAmortized
     if (transaction.type === 'income') return styles.amountIncome
@@ -65,47 +45,56 @@ const TransactionTable = ({ newTransactions }: { newTransactions: Transaction[] 
   }
 
   return (
-    <>
-      <table className={styles.transactionTable}>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Source</th>
-            <th>Edit</th>
-          </tr>
-        </thead>
-        <tbody className={styles.transactionTableBody}>
-          {transactions &&
-            transactions.map((transaction, index) => (
-              <tr key={index}>
-                <td>{displayDate(transaction)}</td>
-                <td className={getAmountClass(transaction)}>
-                  {transaction.amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                </td>
-                <td>{transaction.category}</td>
-                <td>{transaction.description}</td>
-                <td>{transaction.source || 'manual'}</td>
-                <td>
-                  <button onClick={() => handleEditClick(transaction)}>✏️</button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+    <Card className={styles.tableWrapper}>
+      <div className={styles.tableContainer}>
+        <table className={styles.transactionTable}>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Source</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody className={styles.transactionTableBody}>
+            {transactions &&
+              transactions.map((transaction) => (
+                <tr key={transaction.id}>
+                  <td>{displayDate(transaction)}</td>
+                  <td className={getAmountClass(transaction)}>
+                    {transaction.amount.toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND'
+                    })}
+                  </td>
+                  <td>{transaction.category}</td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.source || 'manual'}</td>
+                  <td>
+                    <button
+                      className={styles.editButton}
+                      onClick={() => handleEditClick(transaction)}
+                      aria-label='Edit transaction'
+                    >
+                      ✏️
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
 
       {isModalOpen && selectedTransaction && (
         <EditTransactionModal
           transaction={selectedTransaction}
           onClose={() => setModalOpen(false)}
-          onSave={handleSave}
+          onTransactionUpdated={handleTransactionUpdate}
         />
       )}
-
-      {logMessage && <Log message={logMessage} status={logStatus} onClose={() => setLogMessage(null)} />}
-    </>
+    </Card>
   )
 }
 
