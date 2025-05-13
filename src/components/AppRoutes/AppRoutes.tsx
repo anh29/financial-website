@@ -11,13 +11,43 @@ import SignupPage from '../../pages/SignupPage/SignupPage'
 import TransactionPage from '../../pages/TransactionPage/TransactionPage'
 import UpcomingPage from '../../pages/UpcomingPage/UpcomingPage'
 import ExpensesPage from '../../pages/ExpensesPage/ExpensesPage'
-import GoalPage from '../../pages/GoalPage/GoalPage'
 import SettingsPage from '../../pages/SettingsPage/SettingsPage'
 import ReportsPage from '../../pages/ReportsPage/ReportsPage'
 import BudgetPage from '../../pages/BudgetPage/BudgetPage'
+import Customer from '../../pages/Customer/Customer'
+import GoalPage from '../../pages/GoalPage/GoalPage'
+import DailyTracking from '../CustomerPage/Features/DailyTracking'
+import ValueAnalysis from '../CustomerPage/Features/ValueAnalysis'
+import SmartDecisions from '../CustomerPage/Features/SmartDecisions'
+import AIAlerts from '../CustomerPage/Features/AIAlerts'
+import ExpenseScore from '../CustomerPage/Features/ExpenseScore'
+import EmotionTags from '../CustomerPage/Features/EmotionTags'
+import DailyCost from '../CustomerPage/Features/DailyCost'
+import Support from '../CustomerPage/Support/Support'
+import SupportRoutes from '../../routes/SupportRoutes'
+import Blog from '../CustomerPage/Blog/Blog'
+import BlogDetail from '../CustomerPage/Blog/BlogDetail/BlogDetail'
+import CustomerLayout from '../CustomerPage/CustomerLayout/CustomerLayout'
 
 const AppRoutes: React.FC = () => (
   <Routes>
+    <Route
+      path='/customer'
+      element={
+        <CustomerLayout>
+          <Customer />
+        </CustomerLayout>
+      }
+    >
+      <Route path='features/daily-tracking' element={<DailyTracking />} />
+      <Route path='features/daily-cost' element={<DailyCost />} />
+      <Route path='features/value-analysis' element={<ValueAnalysis />} />
+      <Route path='features/smart-decisions' element={<SmartDecisions />} />
+      <Route path='features/ai-alerts' element={<AIAlerts />} />
+      <Route path='features/expense-score' element={<ExpenseScore />} />
+      <Route path='features/emotion-tags' element={<EmotionTags />} />
+      <Route path='support' element={<Support />} />
+    </Route>
     <Route
       path='/'
       element={
@@ -116,6 +146,30 @@ const AppRoutes: React.FC = () => (
     />
     <Route path='/signin' element={<SignInPage />} />
     <Route path='/signup' element={<SignupPage />} />
+    <Route
+      path='/customer/support/*'
+      element={
+        <CustomerLayout>
+          <SupportRoutes />
+        </CustomerLayout>
+      }
+    />
+    <Route
+      path='/customer/blog'
+      element={
+        <CustomerLayout>
+          <Blog />
+        </CustomerLayout>
+      }
+    />
+    <Route
+      path='/customer/blog/:id'
+      element={
+        <CustomerLayout>
+          <BlogDetail />
+        </CustomerLayout>
+      }
+    />
   </Routes>
 )
 

@@ -15,25 +15,18 @@ function App() {
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
-  const isLoginPage = () => ['/signin', '/signup'].includes(location.pathname)
+  const isIndividualPage = () => ['/signin', '/signup'].includes(location.pathname) || location.pathname.startsWith('/customer')
 
   const renderSidebarToggle = () => (
-    <button 
-      className='sidebar-toggle' 
-      onClick={toggleSidebar}
-      aria-label='Toggle sidebar'
-    >
+    <button className='sidebar-toggle' onClick={toggleSidebar} aria-label='Toggle sidebar'>
       ☰
     </button>
   )
 
   const renderMainContent = () => (
-    <div className={`main-content ${isLoginPage() ? 'full-screen' : ''}`}>
-      {!isLoginPage() && <Header />}
-      <div 
-        className={`content ${isLoginPage() ? '' : 'scroll'}`} 
-        onClick={() => setSidebarOpen(false)}
-      >
+    <div className={`main-content ${isIndividualPage() ? 'full-screen' : ''}`}>
+      {!isIndividualPage() && <Header />}
+      <div className={`content ${isIndividualPage() ? '' : 'scroll'}`} onClick={() => setSidebarOpen(false)}>
         <ErrorBoundary>
           {isLoading ? (
             <div className='loading-container'>
@@ -49,7 +42,7 @@ function App() {
 
   return (
     <div className='app-container'>
-      {!isLoginPage() && (
+      {!isIndividualPage() && (
         <>
           {renderSidebarToggle()}
           <Sidebar className={sidebarOpen ? 'open' : ''} />

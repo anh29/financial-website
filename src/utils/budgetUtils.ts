@@ -1,9 +1,15 @@
 import { SERVER_URL } from './constants'
 import { Budget, BudgetAllocation, HistoryBudgets } from '../types'
 
-const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null
+const getUser = () => {
+  const user = localStorage.getItem('user')
+  return user ? JSON.parse(user) : null
+}
 
 export const createBudget = async (budget: Budget[]): Promise<void> => {
+  const user = getUser()
+  if (!user) throw new Error('User not found')
+
   const body = budget.map((item) => ({
     userId: user.id,
     ...item
@@ -35,7 +41,7 @@ export const updateBudget = async (budget: Budget): Promise<void> => {
 
 export const createMonthlyBudget = async (budget: Budget[]): Promise<void> => {
   const body = budget.map((item) => ({
-    userId: user.id,
+    userId: getUser().id,
     ...item
   }))
   const response = await fetch(`${SERVER_URL}/crud/monthlyBudgets`, {
@@ -64,6 +70,9 @@ export const updateMonthlyBudget = async (budget: Budget): Promise<void> => {
 }
 
 export const fetchMonthlyBudgetsByUser = async (): Promise<{ message: string; data: Budget[] }> => {
+  const user = getUser()
+  if (!user) throw new Error('User not found')
+
   const response = await fetch(`${SERVER_URL}/crud/monthlyBudgets/user/${user.id}`)
 
   if (!response.ok) {
@@ -74,7 +83,7 @@ export const fetchMonthlyBudgetsByUser = async (): Promise<{ message: string; da
 }
 
 export const fetchBudgetAllocations = async (): Promise<{ message: string; data: Budget[] }> => {
-  const response = await fetch(`${SERVER_URL}/crud/budgets/user/${user.id}`)
+  const response = await fetch(`${SERVER_URL}/crud/budgets/user/${getUser().id}`)
 
   if (!response.ok) {
     throw new Error('Failed to fetch budget allocations')
@@ -84,7 +93,7 @@ export const fetchBudgetAllocations = async (): Promise<{ message: string; data:
 }
 export const saveBudgetAllocations = async (allocations: Budget[]): Promise<void> => {
   const body = allocations.map((allocation) => ({
-    userId: user.id,
+    userId: getUser().id,
     ...allocation
   }))
   const response = await fetch(`${SERVER_URL}/crud/budgets`, {
@@ -100,7 +109,7 @@ export const saveBudgetAllocations = async (allocations: Budget[]): Promise<void
 
 export const saveMonthlyBudget = async (monthlyBudget: { amount: number; month: string }[]): Promise<void> => {
   const body = monthlyBudget.map((budget) => ({
-    userId: user.id,
+    userId: getUser().id,
     ...budget
   }))
   const response = await fetch(`${SERVER_URL}/crud/monthlyBudgets`, {
@@ -116,7 +125,7 @@ export const saveMonthlyBudget = async (monthlyBudget: { amount: number; month: 
 
 export const saveMonthlyBudgetAllocation = async (allocation: BudgetAllocation[]): Promise<void> => {
   const body = allocation.map((item) => ({
-    userId: user.id,
+    userId: getUser().id,
     ...item
   }))
   const response = await fetch(`${SERVER_URL}/crud/monthlyBudgetAllocations`, {
@@ -132,7 +141,7 @@ export const saveMonthlyBudgetAllocation = async (allocation: BudgetAllocation[]
 
 export const fetchMonthlyBudgetWithAllocations = async (month: string): Promise<{ message: string; data: Budget }> => {
   const response = await fetch(
-    `${SERVER_URL}/marketplace/getMonthlyBudgetWithAllocations/user/${user.id}/month/${month}`
+    `${SERVER_URL}/marketplace/getMonthlyBudgetWithAllocations/user/${getUser().id}/month/${month}`
   )
 
   if (!response.ok) {
@@ -146,6 +155,9 @@ export const fetchBudgetsByUser = async (): Promise<{
   message: string
   data: { budgets: Budget[]; income: Budget }
 }> => {
+  const user = getUser()
+  if (!user) throw new Error('User not found')
+
   const response = await fetch(`${SERVER_URL}/marketplace/getUserIncomeAndBudgets/user/${user.id}`)
 
   if (!response.ok) {
@@ -156,7 +168,7 @@ export const fetchBudgetsByUser = async (): Promise<{
 }
 
 export const getHistoricalExpenditures = async (): Promise<{ message: string; data: HistoryBudgets[] }> => {
-  const response = await fetch(`${SERVER_URL}/marketplace/getHistoricalExpenditures/user/${user.id}`)
+  const response = await fetch(`${SERVER_URL}/marketplace/getHistoricalExpenditures/user/${getUser().id}`)
 
   if (!response.ok) {
     throw new Error('Failed to fetch historical expenditures')
