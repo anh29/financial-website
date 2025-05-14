@@ -1,3 +1,4 @@
+import { Card, Button, LoadingSpinner, Select, Badge } from '../../components/common'
 import styles from './ReportsPage.module.css'
 import IncomeVsExpenses from '../../components/Reports/IncomeVsExpenses'
 import BudgetVsActual from '../../components/Shared/BudgetVsActual'
@@ -9,22 +10,61 @@ import SpendingTrendLine from '../../components/Shared/SpendingTrendLine'
 import StackedCategoryTrends from '../../components/Shared/StackedCategoryTrends'
 import TopMerchantsBar from '../../components/Shared/TopMerchantsBar'
 import RadarChartSection from '../../components/Shared/RadarChartSection'
+import { useState } from 'react'
 
-const ReportsPage = () => {
+export const ReportsPage = () => {
+  const isLoading = false
+  const [reportType, setReportType] = useState('monthly')
+
   return (
     <div className={styles.reportsPage}>
-      <header className={styles.header}>
-        <h1>📊 Financial Reports Dashboard</h1>
-        <p className={styles.subheader}>Understand your spending, savings, and cash flow like never before.</p>
-      </header>
-
-      <section className={styles.section}>
-        <h2>💼 Overview</h2>
-        <div className={styles.grid2}>
-          <IncomeVsExpenses />
-          <BudgetVsActual />
+      <div className={styles.reportsHeader}>
+        <h1>Financial Reports</h1>
+        <div className={styles.reportControls}>
+          <Select
+            value={reportType}
+            onChange={(e) => setReportType(e.target.value)}
+            options={[
+              { value: 'weekly', label: 'Weekly' },
+              { value: 'monthly', label: 'Monthly' },
+              { value: 'yearly', label: 'Yearly' }
+            ]}
+          />
+          <Button variant='outline'>Export</Button>
         </div>
-      </section>
+      </div>
+
+      {isLoading ? (
+        <div className={styles.loadingContainer}>
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <div className={styles.reportsGrid}>
+          <Card className={styles.reportCard}>
+            <h2>Income Report</h2>
+            <Badge variant='success'>Updated</Badge>
+            <div className={styles.reportContent}>
+              <IncomeVsExpenses />
+            </div>
+          </Card>
+
+          <Card className={styles.reportCard}>
+            <h2>Expense Report</h2>
+            <Badge variant='warning'>Pending</Badge>
+            <div className={styles.reportContent}>{/* Report content */}</div>
+          </Card>
+
+          <Card className={styles.reportCard}>
+            <h2>Budget Analysis</h2>
+            <Badge variant='primary'>New</Badge>
+            <div className={styles.reportContent}>
+              <div className={styles.grid2}>
+                <BudgetVsActual />
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
 
       <section className={styles.section}>
         <h2>🧾 Spending</h2>

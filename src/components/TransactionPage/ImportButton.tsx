@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styles from './ImportButton.module.css'
 import TransactionModal from './TransactionModal'
+import { Transaction } from '../../types/transaction'
 
-const ImportButton = ({ onImport }: { onImport: (transactions: any[]) => void }) => {
+const ImportButton = ({ onImport }: { onImport: (newTransactions: Transaction[]) => void }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleOpenModal = () => {

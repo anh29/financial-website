@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Card from '../common/Card'
+import { Card } from '../common'
 import EditTransactionModal from './EditTransactionModal'
-import { Transaction } from '../../types/transaction'
 import styles from './TransactionTable.module.css'
+import { Transaction } from '../../types/transaction'
 
 interface TransactionTableProps {
   transactions: Transaction[]
@@ -14,7 +14,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTra
   const [isModalOpen, setModalOpen] = useState(false)
 
   const handleEditClick = (transaction: Transaction) => {
-    setSelectedTransaction({ ...transaction })
+    setSelectedTransaction(transaction)
     setModalOpen(true)
   }
 

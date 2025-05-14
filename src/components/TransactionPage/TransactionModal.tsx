@@ -2,19 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import styles from './TransactionModal.module.css'
 import { expenseCategories, incomeCategories } from '../../utils/categoryUtils'
 import { classifyTransaction } from '../../utils/transactionUtils'
-
-export interface Transaction {
-  date?: string
-  amount?: number
-  category?: string
-  description?: string
-  source?: string
-  type?: 'expense' | 'income'
-  isClassifying?: boolean
-  classificationError?: string
-  is_amortized?: boolean
-  amortized_days?: number
-}
+import { Transaction } from '../../types/transaction'
 
 const TransactionModal = ({
   onClose,
@@ -51,6 +39,7 @@ const TransactionModal = ({
     setTransactions([
       ...transactions,
       {
+        id: '', // Assign a unique ID
         date: new Date().toISOString().split('T')[0],
         amount: 0,
         category: expenseCategories[0].key,
@@ -58,7 +47,8 @@ const TransactionModal = ({
         source: 'manual',
         type: 'expense',
         isClassifying: false,
-        classificationError: ''
+        classificationError: '',
+        is_amortized: false
       }
     ])
   }
@@ -112,21 +102,19 @@ const TransactionModal = ({
   }
 
   const validateTransactions = (): boolean => {
-    const invalidTransactions = transactions.filter(
-      (t) => !t.date || !t.description || !t.amount || !t.category
-    )
-    
+    const invalidTransactions = transactions.filter((t) => !t.date || !t.description || !t.amount || !t.category)
+
     if (invalidTransactions.length > 0) {
       setError('Please fill in all required fields for each transaction')
       return false
     }
-    
+
     return true
   }
 
   const handleSaveAllTransactions = async () => {
     setError(null)
-    
+
     if (!validateTransactions()) {
       return
     }
@@ -148,13 +136,13 @@ const TransactionModal = ({
       <div className={styles.modalContent} ref={modalRef}>
         <div className={styles.modalHeader}>
           <h2>Review Transactions</h2>
-          <button className={styles.closeButton} onClick={onClose} aria-label="Close">
+          <button className={styles.closeButton} onClick={onClose} aria-label='Close'>
             &times;
           </button>
         </div>
-        
+
         {error && (
-          <div className={styles.errorMessage} role="alert">
+          <div className={styles.errorMessage} role='alert'>
             {error}
           </div>
         )}
@@ -176,31 +164,31 @@ const TransactionModal = ({
                 <tr key={index}>
                   <td>
                     <input
-                      type="date"
+                      type='date'
                       value={transaction.date}
                       onChange={(e) => handleInputChange(index, 'date', e)}
                       required
-                      aria-label="Transaction date"
+                      aria-label='Transaction date'
                     />
                   </td>
                   <td>
                     <input
-                      type="text"
+                      type='text'
                       value={transaction.description}
                       onChange={(e) => handleInputChange(index, 'description', e)}
-                      placeholder="Enter description"
+                      placeholder='Enter description'
                       required
-                      aria-label="Transaction description"
+                      aria-label='Transaction description'
                     />
                   </td>
                   <td>
                     <select
                       value={transaction.type}
                       onChange={(e) => handleInputChange(index, 'type', e)}
-                      aria-label="Transaction type"
+                      aria-label='Transaction type'
                     >
-                      <option value="expense">Expense</option>
-                      <option value="income">Income</option>
+                      <option value='expense'>Expense</option>
+                      <option value='income'>Income</option>
                     </select>
                   </td>
                   <td>
@@ -213,7 +201,7 @@ const TransactionModal = ({
                       <select
                         value={transaction.category}
                         onChange={(e) => handleInputChange(index, 'category', e)}
-                        aria-label="Transaction category"
+                        aria-label='Transaction category'
                       >
                         {(transaction.type === 'expense' ? expenseCategories : incomeCategories).map((category) => (
                           <option key={category.key} value={category.key}>
@@ -223,20 +211,20 @@ const TransactionModal = ({
                       </select>
                     )}
                     {transaction.classificationError && (
-                      <div className={styles.errorText} role="alert">
+                      <div className={styles.errorText} role='alert'>
                         {transaction.classificationError}
                       </div>
                     )}
                   </td>
                   <td>
                     <input
-                      type="number"
+                      type='number'
                       value={transaction.amount}
                       onChange={(e) => handleInputChange(index, 'amount', e)}
-                      min="0"
-                      step="0.01"
+                      min='0'
+                      step='0.01'
                       required
-                      aria-label="Transaction amount"
+                      aria-label='Transaction amount'
                       className={transaction.type === 'expense' ? styles.expenseInput : styles.incomeInput}
                     />
                   </td>
@@ -244,7 +232,7 @@ const TransactionModal = ({
                     <button
                       className={styles.deleteButton}
                       onClick={() => handleDeleteTransaction(index)}
-                      aria-label="Delete transaction"
+                      aria-label='Delete transaction'
                     >
                       Delete
                     </button>
@@ -256,18 +244,14 @@ const TransactionModal = ({
         </div>
 
         <div className={styles.modalFooter}>
-          <button
-            className={styles.addButton}
-            onClick={handleAddTransaction}
-            aria-label="Add new transaction"
-          >
+          <button className={styles.addButton} onClick={handleAddTransaction} aria-label='Add new transaction'>
             +
           </button>
           <button
             className={styles.saveButton}
             onClick={handleSaveAllTransactions}
             disabled={isSaving}
-            aria-label="Save all transactions"
+            aria-label='Save all transactions'
           >
             {isSaving ? 'Saving...' : 'Save All'}
           </button>

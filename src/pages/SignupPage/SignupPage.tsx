@@ -5,8 +5,9 @@ import Button from '../../components/Button/Button'
 import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import { GOOGLE_INFO_API_KEY, SERVER_ENDPOINT } from '../../utils/constants'
-import Log from '../../components/Log/Log'
+import Log from '../../components/common/Log/Log'
 import { useAuth } from '../../context/AuthContext'
+import { LoadingSpinner } from '../../components/common'
 
 const SignupPage = () => {
   const { login } = useAuth()
@@ -65,8 +66,8 @@ const SignupPage = () => {
       const response = await axios.post(SERVER_ENDPOINT.AUTH.CREATE_USER, formData)
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
-    } catch (error) {
-      setLogData({ message: error.response?.data?.error || 'An error occurred.', status: 'error' })
+    } catch {
+      setLogData({ message: 'An error occurred.', status: 'error' })
     } finally {
       setLoading(false)
     }
@@ -91,7 +92,7 @@ const SignupPage = () => {
             label={field === 'confirmPassword' ? 'Confirm Password' : field.charAt(0).toUpperCase() + field.slice(1)}
             type={field.includes('password') ? 'password' : 'text'}
             placeholder={`Enter your ${field}`}
-            value={formData[field as keyof typeof formData]}
+            value={formData[field as keyof typeof formData] as string}
             onChange={handleInputChange}
             required
             autoComplete={field}
@@ -106,12 +107,12 @@ const SignupPage = () => {
           </label>
         </div>
         <Button type='submit' className={styles.signupButton} disabled={!isFormValid || loading}>
-          {loading ? 'Loading...' : 'Sign Up'}
+          {loading ? <LoadingSpinner /> : 'Sign Up'}
         </Button>
         <div className={styles.divider}>or sign up with</div>
         <Button type='button' className={styles.googleButton} onClick={handleGoogleLogin} disabled={loading}>
           {loading ? (
-            'Loading...'
+            <LoadingSpinner />
           ) : (
             <>
               Continue with <span>Google</span>

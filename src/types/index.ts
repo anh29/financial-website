@@ -1,17 +1,10 @@
+import { Transaction } from './transaction'
+
 export interface User {
   id: string
   email: string
   name: string
   avatar?: string
-}
-
-export interface Transaction {
-  id: string
-  amount: number
-  type: 'income' | 'expense'
-  category: string
-  description: string
-  date: string
 }
 
 export interface Budget {
@@ -54,4 +47,14 @@ export interface AppState {
   theme: Theme
   isLoading: boolean
   error: string | null
+}
+
+export interface Goals {
+  id: string
+  amount: number
+  description: string
+  target_date: string
+  amortized_days: number
+  created_at: string
+  [key: string]: string | number
 }

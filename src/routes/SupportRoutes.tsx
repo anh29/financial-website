@@ -1,10 +1,10 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Support from '../components/CustomerPage/Support/Support'
-import FAQ from '../components/CustomerPage/Support/FAQ/FAQ'
-import UserGuide from '../components/CustomerPage/Support/UserGuide/UserGuide'
-import Feedback from '../components/CustomerPage/Support/Feedback/Feedback'
-import Contact from '../components/CustomerPage/Support/Contact/Contact'
+import Support from '../components/features/Support/Support'
+import { FAQ } from '../components/features/Support/FAQ/FAQ'
+import { Feedback } from '../components/features/Support/Feedback/Feedback'
+import { UserGuide } from '../components/features/Support/UserGuide/UserGuide'
+import { Contact } from '../components/features/Support/Contact/Contact'
 
 const SupportRoutes: React.FC = () => {
   return (

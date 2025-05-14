@@ -1,5 +1,5 @@
 import React from 'react'
-import Modal from '../../../common/Modal/Modal'
+import { Modal } from '../../../../components/common'
 import styles from './EditTarget.module.css'
 
 interface TargetDetails {
@@ -21,7 +21,7 @@ const EditTarget: React.FC<EditTargetProps> = ({ targetDetails, setTargetDetails
   }
 
   return (
-    <Modal onClose={closeModal} title='Edit Target Details'>
+    <Modal isOpen={true} onClose={closeModal} title='Edit Target Details'>
       <div className={styles.editTargetContent}>
         <p>Target Amount:</p>
         <input

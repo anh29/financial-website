@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styles from './SearchFilter.module.css'
 
 const SearchFilter = () => {
@@ -12,16 +12,16 @@ const SearchFilter = () => {
   return (
     <div className={styles.searchFilter}>
       <input
-        type="text"
-        placeholder="Search by keyword..."
+        type='text'
+        placeholder='Search by keyword...'
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <select value={category} onChange={(e) => setCategory(e.target.value)}>
-        <option value="">All Categories</option>
-        <option value="Food">Food</option>
-        <option value="Transportation">Transportation</option>
-        <option value="Shopping">Shopping</option>
+        <option value=''>All Categories</option>
+        <option value='Food'>Food</option>
+        <option value='Transportation'>Transportation</option>
+        <option value='Shopping'>Shopping</option>
       </select>
       <button onClick={handleSearch}>Search</button>
     </div>

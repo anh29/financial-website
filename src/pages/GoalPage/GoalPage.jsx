@@ -1,4 +1,3 @@
-// GoalPage.jsx
 import React, { useState } from 'react'
 import styles from './GoalPage.module.css'
 import { Line } from 'react-chartjs-2'

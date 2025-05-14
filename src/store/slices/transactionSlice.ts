@@ -1,5 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Transaction } from '../../types'
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { Transaction } from '../../types/transaction'
+import {
+  fetchTransactionsByUser,
+  createTransaction,
+  updateTransactionById as updateTransactionAPI,
+  deleteTransaction as deleteTransactionAPI,
+  importTransactions
+} from '../../services/features/transactionService'
 
 interface TransactionState {
   transactions: Transaction[]
@@ -12,6 +19,66 @@ const initialState: TransactionState = {
   isLoading: false,
   error: null
 }
+
+export const fetchTransactionsAsync = createAsyncThunk(
+  'transactions/fetchTransactions',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await fetchTransactionsByUser()
+      return data
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch transactions')
+    }
+  }
+)
+export const createTransactionAsync = createAsyncThunk(
+  'transactions/createTransaction',
+  async (transaction: Omit<Transaction, 'id'>, { rejectWithValue }) => {
+    try {
+      await createTransaction(transaction)
+      const { data } = await fetchTransactionsByUser()
+      return data
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to create transaction')
+    }
+  }
+)
+
+export const updateTransactionAsync = createAsyncThunk(
+  'transactions/updateTransaction',
+  async (transaction: Transaction, { rejectWithValue }) => {
+    try {
+      const { data } = await updateTransactionAPI(transaction)
+      return data
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to update transaction')
+    }
+  }
+)
+
+export const deleteTransactionAsync = createAsyncThunk(
+  'transactions/deleteTransaction',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await deleteTransactionAPI(id)
+      return id
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to delete transaction')
+    }
+  }
+)
+
+export const importTransactionsAsync = createAsyncThunk(
+  'transactions/importTransactions',
+  async (newTransactions: Transaction[], { rejectWithValue }) => {
+    try {
+      const { data } = await importTransactions(newTransactions)
+      return data
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to import transactions')
+    }
+  }
+)
 
 const transactionSlice = createSlice({
   name: 'transactions',
@@ -39,6 +106,33 @@ const transactionSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTransactionsAsync.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(importTransactionsAsync.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(importTransactionsAsync.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.transactions = action.payload
+      })
+      .addCase(importTransactionsAsync.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload as string
+      })
+      .addCase(fetchTransactionsAsync.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.transactions = action.payload
+      })
+      .addCase(createTransactionAsync.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.transactions = action.payload
+      })
   }
 })
 

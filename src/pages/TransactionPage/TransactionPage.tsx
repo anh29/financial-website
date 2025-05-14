@@ -1,23 +1,25 @@
-import React from 'react'
 import styles from './TransactionPage.module.css'
 import TransactionTable from '../../components/TransactionPage/TransactionTable'
 import ImportButton from '../../components/TransactionPage/ImportButton'
 import OCRUpload from '../../components/TransactionPage/OCRUpload'
 import SearchFilter from '../../components/TransactionPage/SearchFilter'
-import Log from '../../components/Log/Log'
-import { useTransactions } from '../../hooks/useTransactions'
+import { LoadingSpinner } from '../../components/common'
+import { useTransactions } from '../../hooks/features/useTransactions'
+import { useEffect, useState } from 'react'
+import { Transaction } from '../../types/transaction'
 
 const TransactionPage = () => {
-  const { transactions, isLoading, error, handleImport } = useTransactions()
-  const [logMessage, setLogMessage] = React.useState<string | null>(null)
-  const [logStatus, setLogStatus] = React.useState<'success' | 'error' | 'warning' | 'info'>('info')
+  const { transactions, isLoading, error, handleImport, fetchTransactions } = useTransactions()
+  const [updatedTransactions, setUpdatedTransactions] = useState<Transaction[]>(transactions)
 
-  const handleTransactionUpdate = () => {
-    setLogMessage('✅ Transaction updated successfully.')
-    setLogStatus('success')
+  useEffect(() => {
+    fetchTransactions() // Fetch transactions when the component mounts
+  }, [fetchTransactions])
+
+  const handleTransactionUpdate = (updatedTransactions: Transaction[]) => {
+    setUpdatedTransactions(updatedTransactions)
   }
 
-  if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
 
   return (
@@ -35,9 +37,11 @@ const TransactionPage = () => {
         </div>
       </div>
 
-      <TransactionTable transactions={transactions} onTransactionUpdate={handleTransactionUpdate} />
-
-      {logMessage && <Log message={logMessage} status={logStatus} onClose={() => setLogMessage(null)} />}
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && transactions.length === 0 && <p>No transactions found.</p>}
+      {!isLoading && transactions.length > 0 && (
+        <TransactionTable transactions={updatedTransactions} onTransactionUpdate={handleTransactionUpdate} />
+      )}
     </div>
   )
 }

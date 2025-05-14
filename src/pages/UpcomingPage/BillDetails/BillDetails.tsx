@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './BillDetails.module.css'
 import { Bill } from '../../../utils/billUtils'
-import Modal from '../../../components/common/Modal/Modal'
+import { Modal } from '../../../components/common'
 
 interface BillDetailsProps {
   selectedBill: Bill
@@ -10,7 +10,7 @@ interface BillDetailsProps {
 
 const BillDetails: React.FC<BillDetailsProps> = ({ selectedBill, handleCloseModal }) => {
   return (
-    <Modal onClose={handleCloseModal} title='Confirm Payment'>
+    <Modal isOpen={true} onClose={handleCloseModal} title='Confirm Payment'>
       <div className={styles.billDetails}>
         <p className={styles.billDescription}>
           <strong>Description:</strong> {selectedBill.description}

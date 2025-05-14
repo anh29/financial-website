@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import styles from './OCRUpload.module.css'
-import TransactionModal, { Transaction } from './TransactionModal'
+import TransactionModal from './TransactionModal'
 import { classifyTransaction } from '../../utils/transactionUtils'
+import { Transaction } from '../../types/transaction'
+import { expenseCategories } from '../../utils/categoryUtils'
 
 const OCRUpload = ({ onUpload }: { onUpload: (transactions: Transaction[]) => void }) => {
   const [ocrTransactions, setOcrTransactions] = useState<Transaction[]>([])
@@ -34,7 +36,7 @@ const OCRUpload = ({ onUpload }: { onUpload: (transactions: Transaction[]) => vo
         const items = result.receipts[0].items || []
 
         const classifiedTransactions: Transaction[] = await Promise.all(
-          items.map(async (item: any) => {
+          items.map(async (item: { description: string; amount: number }) => {
             const description = item.description || ''
             const amount = item.amount || 0
 
@@ -49,14 +51,14 @@ const OCRUpload = ({ onUpload }: { onUpload: (transactions: Transaction[]) => vo
                 type: 'expense',
                 category: predictedCategory
               }
-            } catch (error) {
+            } catch {
               return {
                 date: new Date().toISOString().split('T')[0],
                 amount,
                 description,
                 source: result.ocr_type || 'OCR',
                 type: 'expense',
-                category: 'unknown',
+                category: expenseCategories[0].key,
                 classificationError: '⚠ Failed to classify'
               }
             }

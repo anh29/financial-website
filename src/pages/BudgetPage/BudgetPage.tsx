@@ -5,8 +5,9 @@ import SetupTab from '../../components/BudgetPage/SetupTab'
 import ExistingTab from '../../components/BudgetPage/ExistingTab'
 import HistoryTab from '../../components/BudgetPage/HistoryTab'
 import OverviewTab from '../../components/BudgetPage/OverviewTab'
-import { useBudgets } from '../../hooks/useBudgets'
+import { useBudgets } from '../../hooks/features/useBudgets'
 import { Budget, BudgetAllocation } from '../../types'
+import { LoadingSpinner } from '../../components/common'
 
 const BudgetPage = () => {
   const {
@@ -97,10 +98,9 @@ const BudgetPage = () => {
   return (
     <div className={styles.budgetContainer}>
       <h1 className={styles.budgetTitle}>💰 Quản lý Ngân sách</h1>
-
       {isLoading ? (
         <div className={styles.loadingContainer}>
-          <p>Loading...</p>
+          <LoadingSpinner />
         </div>
       ) : (
         <>

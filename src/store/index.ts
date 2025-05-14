@@ -5,6 +5,7 @@ import transactionReducer from './slices/transactionSlice'
 import budgetReducer from './slices/budgetSlice'
 import notificationReducer from './slices/notificationSlice'
 import themeReducer from './slices/themeSlice'
+import goalReducer from './slices/goalSlice'
 
 export const store = configureStore({
   reducer: {
@@ -13,15 +14,16 @@ export const store = configureStore({
     budgets: budgetReducer,
     notifications: notificationReducer,
     theme: themeReducer,
+    goals: goalReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+      serializableCheck: false
+    })
 })
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
 export const useAppDispatch = () => useDispatch<AppDispatch>()
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector 
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

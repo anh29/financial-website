@@ -14,20 +14,20 @@ import ExpensesPage from '../../pages/ExpensesPage/ExpensesPage'
 import SettingsPage from '../../pages/SettingsPage/SettingsPage'
 import ReportsPage from '../../pages/ReportsPage/ReportsPage'
 import BudgetPage from '../../pages/BudgetPage/BudgetPage'
-import Customer from '../../pages/Customer/Customer'
 import GoalPage from '../../pages/GoalPage/GoalPage'
-import DailyTracking from '../CustomerPage/Features/DailyTracking'
-import ValueAnalysis from '../CustomerPage/Features/ValueAnalysis'
-import SmartDecisions from '../CustomerPage/Features/SmartDecisions'
-import AIAlerts from '../CustomerPage/Features/AIAlerts'
-import ExpenseScore from '../CustomerPage/Features/ExpenseScore'
-import EmotionTags from '../CustomerPage/Features/EmotionTags'
-import DailyCost from '../CustomerPage/Features/DailyCost'
-import Support from '../CustomerPage/Support/Support'
+import { CustomerLayout } from '../features/CustomerLayout/CustomerLayout'
 import SupportRoutes from '../../routes/SupportRoutes'
-import Blog from '../CustomerPage/Blog/Blog'
-import BlogDetail from '../CustomerPage/Blog/BlogDetail/BlogDetail'
-import CustomerLayout from '../CustomerPage/CustomerLayout/CustomerLayout'
+import ValueAnalysis from '../features/Features/ValueAnalysis'
+import DailyTracking from '../features/Features/DailyTracking'
+import DailyCost from '../features/Features/DailyCost'
+import ExpenseScore from '../features/Features/ExpenseScore'
+import SmartDecisions from '../features/Features/SmartDecisions'
+import AIAlerts from '../features/Features/AIAlerts'
+import EmotionTags from '../features/Features/EmotionTags'
+import Support from '../features/Support/Support'
+import { Blog } from '../features/Blog/Blog'
+import { BlogDetail } from '../features/Blog/BlogDetail/BlogDetail'
+import Customer from '../../pages/Customer/Customer'
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -166,7 +166,17 @@ const AppRoutes: React.FC = () => (
       path='/customer/blog/:id'
       element={
         <CustomerLayout>
-          <BlogDetail />
+          <BlogDetail
+            post={{
+              id: '1',
+              title: 'Blog 1',
+              content: 'Blog 1 content',
+              date: '2021-01-01',
+              category: 'Category 1',
+              author: 'Author 1',
+              image: 'https://via.placeholder.com/150'
+            }}
+          />
         </CustomerLayout>
       }
     />

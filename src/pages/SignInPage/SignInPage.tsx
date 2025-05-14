@@ -2,13 +2,12 @@ import React, { useState } from 'react'
 import styles from './SignInPage.module.css'
 import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
-import FormInput from '../../components/FormInput/FormInput'
-import Button from '../../components/Button/Button'
-import Log from '../../components/Log/Log'
+import { Button, Card, Form, Input, LoadingSpinner } from '../../components/common'
 import { useAuth } from '../../context/AuthContext'
 import { GOOGLE_INFO_API_KEY, SERVER_ENDPOINT } from '../../utils/constants'
+import Log from '../../components/common/Log/Log'
 
-const SignInPage = () => {
+const SignInPage: React.FC = () => {
   const { login } = useAuth()
   const [formData, setFormData] = useState({ email: '', password: '', remember: false })
   const [loading, setLoading] = useState(false)
@@ -39,19 +38,11 @@ const SignInPage = () => {
       })
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
-    } catch (error) {
+    } catch {
       setLogData({ message: 'Error fetching Google user info. Please try again.', status: 'error' })
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value, type, checked } = e.target
-    setFormData({
-      ...formData,
-      [id]: type === 'checkbox' ? checked : value
-    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,65 +52,51 @@ const SignInPage = () => {
       const response = await axios.post(SERVER_ENDPOINT.AUTH.SIGN_IN, formData)
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
-    } catch (error) {
-      setLogData({ message: error.response?.data?.error || 'An error occurred.', status: 'error' })
+    } catch {
+      setLogData({ message: 'An error occurred.', status: 'error' })
     } finally {
       setLoading(false)
     }
   }
 
-  const isFormValid = formData.username && formData.password
-
   return (
-    <div className={styles.signinPage}>
+    <div className={styles.signInPage}>
       {logData && <Log message={logData.message} status={logData.status} onClose={() => setLogData(null)} />}
-      <div className={styles.logo}>
-        <h1>Welcome Back to FINEbank.IO</h1>
-        <p>Sign in to access your account</p>
-      </div>
-      <form className={styles.signinForm} onSubmit={handleSubmit}>
-        <h2>Sign In</h2>
-        {['username', 'password'].map((field) => (
-          <FormInput
-            key={field}
-            id={field}
-            label={field.charAt(0).toUpperCase() + field.slice(1)}
-            type={field === 'password' ? 'password' : 'text'}
-            placeholder={`Enter your ${field}`}
-            value={formData[field as keyof typeof formData]}
-            onChange={handleInputChange}
+      <Card className={styles.signInCard}>
+        <h1>Sign In</h1>
+        <Form onSubmit={handleSubmit} className={styles.signInForm}>
+          <Input
+            label='Email'
+            type='email'
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            autoComplete={field}
-            ariaLabel={field}
-            showPasswordToggle={field === 'password'}
           />
-        ))}
-        <div className={styles.rememberMe}>
-          <input type='checkbox' id='remember' checked={formData.remember} onChange={handleInputChange} />
-          <label htmlFor='remember'>Remember me</label>
-        </div>
-        <div className={styles.forgotPassword}>
-          <p>
-            Forgot your password? <a href='/forgot-password'>Reset Password</a>
-          </p>
-        </div>
-        <Button type='submit' className={styles.signinButton} disabled={!isFormValid || loading}>
-          {loading ? 'Loading...' : 'Sign In'}
-        </Button>
-        <div className={styles.divider}>or sign in with</div>
-        <Button type='button' className={styles.googleButton} onClick={handleGoogleLogin} disabled={loading}>
-          {loading ? (
-            'Loading...'
-          ) : (
-            <>
-              Continue with <span>Google</span>
-            </>
-          )}
-        </Button>
-        <p className={styles.switchLink}>
-          Don't have an account? <a href='/signup'>Sign up here</a>
-        </p>
-      </form>
+          <Input
+            label='Password'
+            type='password'
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            required
+          />
+          <Button type='submit' fullWidth isLoading={loading}>
+            Sign In
+          </Button>
+        </Form>
+      </Card>
+      <div className={styles.divider}>or sign in with</div>
+      <Button type='button' className={styles.googleButton} onClick={() => handleGoogleLogin()} disabled={loading}>
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            Continue with <span>Google</span>
+          </>
+        )}
+      </Button>
+      <p className={styles.switchLink}>
+        Don't have an account? <a href='/signup'>Sign up here</a>
+      </p>
     </div>
   )
 }

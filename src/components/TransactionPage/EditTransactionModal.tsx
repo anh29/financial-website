@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
-import Form from '../common/Form'
-import { useTransactions } from '../../hooks/useTransactions'
 import { useNotifications } from '../../hooks/useNotifications'
 import { classifyTransaction } from '../../utils/transactionUtils'
 import { expenseCategories, incomeCategories } from '../../utils/categoryUtils'
-import type { Transaction } from '../../types/transaction'
+import { Modal, Button } from '../common'
+import { Transaction } from '../../types/transaction'
+import { useTransactions } from '../../hooks/features/useTransactions'
 import styles from './EditTransactionModal.module.css'
 
 interface EditTransactionModalProps {
@@ -19,7 +19,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
   const [isSubmitting, setIsSubmitting] = useState(false)
   const hasPredictedOnce = useRef(false)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
-  const { updateTransactionById } = useTransactions()
+  const { updateTransactionHandler } = useTransactions()
   const { showNotification } = useNotifications()
 
   useEffect(() => {
@@ -67,17 +67,16 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
     setCurrent(updated)
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     setIsSubmitting(true)
 
     try {
-      const updatedTransaction = await updateTransactionById(current)
+      await updateTransactionHandler(current)
       showNotification('Transaction updated successfully', 'success')
 
       // Call the callback with the updated transaction
       if (onTransactionUpdated) {
-        onTransactionUpdated(updatedTransaction)
+        onTransactionUpdated(current)
       }
 
       onClose()
@@ -88,110 +87,123 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
     }
   }
 
+  const footer = (
+    <>
+      <Button variant='outline' onClick={onClose} disabled={isSubmitting}>
+        Cancel
+      </Button>
+      <Button onClick={handleSubmit} isLoading={isSubmitting} disabled={isSubmitting}>
+        {isSubmitting ? 'Saving...' : 'Save Changes'}
+      </Button>
+    </>
+  )
+
   return (
-    <div className={styles.modal}>
-      <div className={styles.modalContent}>
-        <Form
-          title='Edit Transaction'
-          onSubmit={handleSubmit}
-          error={current.classificationError}
-          isLoading={current.isClassifying || isSubmitting}
-        >
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title='Edit Transaction'
+      size='medium'
+      loading={current.isClassifying}
+      footer={footer}
+      closeOnEsc={!isSubmitting}
+      closeOnOverlayClick={!isSubmitting}
+    >
+      <form
+        className={styles.form}
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleSubmit()
+        }}
+      >
+        {current.classificationError && (
+          <div className={styles.errorMessage}>
+            <span>⚠</span> {current.classificationError}
+          </div>
+        )}
+        <label>
+          Date:
+          <input
+            type='date'
+            name='date'
+            value={current.date ? new Date(current.date).toISOString().split('T')[0] : ''}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          />
+        </label>
+        <label>
+          Amount:
+          <input
+            type='number'
+            name='amount'
+            value={current.amount}
+            onChange={handleChange}
+            className={current.type === 'expense' ? styles.expenseInput : styles.incomeInput}
+            disabled={isSubmitting}
+          />
+        </label>
+        <label>
+          Type:
+          <select name='type' value={current.type} onChange={handleChange} disabled={isSubmitting}>
+            <option value='expense'>Expense</option>
+            <option value='income'>Income</option>
+          </select>
+        </label>
+        <label>
+          Category:
+          {current.isClassifying ? (
+            <span className={styles.loadingSpinner}>Classifying...</span>
+          ) : (
+            <select name='category' value={current.category} onChange={handleChange} disabled={isSubmitting}>
+              {(current.type === 'expense' ? expenseCategories : incomeCategories).map((cat) => (
+                <option key={cat.key} value={cat.key}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+          )}
+        </label>
+        <label>
+          Description:
+          <input
+            type='text'
+            name='description'
+            value={current.description}
+            onChange={handleChange}
+            onCompositionStart={() => setIsComposing(true)}
+            onCompositionEnd={() => setIsComposing(false)}
+            disabled={isSubmitting}
+          />
+        </label>
+        <label>
+          Source:
+          <input type='text' name='source' value={current.source} onChange={handleChange} disabled={isSubmitting} />
+        </label>
+        <label className={styles.checkboxField}>
+          Amortized:
+          <input
+            type='checkbox'
+            name='is_amortized'
+            checked={!!current.is_amortized}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          />
+        </label>
+        {current.is_amortized && (
           <label>
-            Date:
-            <input
-              type='date'
-              name='date'
-              value={current.date ? new Date(current.date).toISOString().split('T')[0] : ''}
-              onChange={handleChange}
-              disabled={isSubmitting}
-            />
-          </label>
-          <label>
-            Amount:
+            Amortized Days:
             <input
               type='number'
-              name='amount'
-              value={current.amount}
+              name='amortized_days'
+              value={current.amortized_days}
               onChange={handleChange}
-              className={current.type === 'expense' ? styles.expenseInput : styles.incomeInput}
+              min={1}
               disabled={isSubmitting}
             />
           </label>
-          <label>
-            Type:
-            <select name='type' value={current.type} onChange={handleChange} disabled={isSubmitting}>
-              <option value='expense'>Expense</option>
-              <option value='income'>Income</option>
-            </select>
-          </label>
-          <label>
-            Category:
-            {current.isClassifying ? (
-              <span className={styles.loadingSpinner}>Classifying...</span>
-            ) : (
-              <select name='category' value={current.category} onChange={handleChange} disabled={isSubmitting}>
-                {(current.type === 'expense' ? expenseCategories : incomeCategories).map((cat) => (
-                  <option key={cat.key} value={cat.key}>
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
-            )}
-          </label>
-          <label>
-            Description:
-            <input
-              type='text'
-              name='description'
-              value={current.description}
-              onChange={handleChange}
-              onCompositionStart={() => setIsComposing(true)}
-              onCompositionEnd={() => setIsComposing(false)}
-              disabled={isSubmitting}
-            />
-          </label>
-          <label>
-            Source:
-            <input type='text' name='source' value={current.source} onChange={handleChange} disabled={isSubmitting} />
-          </label>
-          <label className={styles.checkboxField}>
-            Amortized:
-            <input
-              type='checkbox'
-              name='is_amortized'
-              checked={!!current.is_amortized}
-              onChange={handleChange}
-              disabled={isSubmitting}
-            />
-          </label>
-          {current.is_amortized && (
-            <label>
-              Amortized Days:
-              <input
-                type='number'
-                name='amortized_days'
-                value={current.amortized_days}
-                onChange={handleChange}
-                min={1}
-                disabled={isSubmitting}
-              />
-            </label>
-          )}
-          <div className={styles.formActions}>
-            <button type='submit' className={styles.submitButton} disabled={isSubmitting}>
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
-            </button>
-            <button type='button' className={styles.cancelButton} onClick={onClose} disabled={isSubmitting}>
-              Cancel
-            </button>
-          </div>
-        </Form>
-        <button className={styles.modalClose} onClick={onClose} disabled={isSubmitting}>
-          &times;
-        </button>
-      </div>
-    </div>
+        )}
+      </form>
+    </Modal>
   )
 }
 

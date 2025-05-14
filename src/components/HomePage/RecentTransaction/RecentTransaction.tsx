@@ -3,6 +3,7 @@ import styles from './RecentTransaction.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getCategoryInfo } from '../../../utils/categoryUtils'
 import { SERVER_URL } from '../../../utils/constants'
+import { LoadingSpinner } from '../../common'
 
 const RecentTransaction = () => {
   const [activeTab, setActiveTab] = useState('all')
@@ -43,7 +44,7 @@ const RecentTransaction = () => {
   )
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingSpinner />
   }
 
   if (error) {
