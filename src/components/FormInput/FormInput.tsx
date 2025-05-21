@@ -33,7 +33,7 @@ const FormInput: React.FC<FormInputProps> = ({
   }
 
   return (
-    <div className={styles.inputGroup}>
+    <div className={styles.formInput}>
       <label htmlFor={id}>{label}</label>
       <div className={styles.inputWrapper}>
         <input

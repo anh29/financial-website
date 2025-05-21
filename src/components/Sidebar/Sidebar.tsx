@@ -37,23 +37,28 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   ]
 
   return (
-    <div className={`${styles.sidebar} ${className}`}>
-      <h2>FINEbank.IO</h2>
-      <nav>
-        <ul>
+    <aside className={`${styles.sidebar} ${className}`}>
+      <div className={styles.brand}>
+        <p>
+          Finance<span>Hub</span>
+        </p>
+      </div>
+      <nav className={styles.nav}>
+        <ul className={styles.menuList}>
           {menuItems.map((item) => (
-            <li key={item.path} className={location.pathname === item.path ? 'active' : ''}>
-              <Link to={item.path}>
-                {item.icon} <span>{item.label}</span>
+            <li key={item.path} className={location.pathname === item.path ? styles.active : ''}>
+              <Link to={item.path} className={styles.menuLink}>
+                <span className={styles.icon}>{item.icon}</span>
+                <span className={styles.label}>{item.label}</span>
               </Link>
             </li>
           ))}
         </ul>
       </nav>
-      <button className={styles.logout} onClick={handleLogout}>
+      <button className={styles.logoutBtn} onClick={handleLogout}>
         Logout
       </button>
-    </div>
+    </aside>
   )
 }
 

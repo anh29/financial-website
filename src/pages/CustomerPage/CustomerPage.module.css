@@ -1,0 +1,498 @@
+.customerPage {
+  font-family: 'Inter', sans-serif;
+  background: #f7fafd;
+  min-height: 100vh;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.customerPage.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero Section */
+.customerPage .hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(120deg,var(--primary-color) 0%, #3498db 100%);
+  border-radius: 2rem;
+  margin: 2rem auto 2.5rem auto;
+  max-width: 1200px;
+  padding: 4rem 3rem;
+  box-shadow: 0 20px 40px rgba(44, 62, 80, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.customerPage .heroLeft {
+  flex: 1 1 50%;
+  color: #fff;
+  z-index: 2;
+}
+
+.customerPage .heroTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.customerPage .highlight {
+  background: linear-gradient(120deg, #fff 0%, #e0f7fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 0 0.2em;
+}
+
+.customerPage .heroSubtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.95;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.customerPage .ctaGroup {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.customerPage .ctaButton {
+  background: #fff;
+  color:var(--primary-color);
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.customerPage .ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.customerPage .secondaryButton {
+  background: transparent;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.customerPage .secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.customerPage .ctaIcon {
+  transition: transform 0.3s ease;
+}
+
+.customerPage .ctaButton:hover .ctaIcon {
+  transform: translateX(4px);
+}
+
+.customerPage .heroRight {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 1;
+  position: relative;
+}
+
+.customerPage .illustrationWrapper {
+  position: relative;
+}
+
+.customerPage .illustration {
+  width: 400px;
+  max-width: 100%;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: perspective(1000px) rotateY(-5deg);
+  transition: transform 0.3s ease;
+}
+
+.customerPage .illustration:hover {
+  transform: perspective(1000px) rotateY(0deg);
+}
+
+.customerPage .floatingCard {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  background: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.customerPage .floatingIcon {
+  color:var(--primary-color);
+  font-size: 1.2rem;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Features Section */
+.customerPage .featuresSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 0 auto 4rem auto;
+  max-width: 1200px;
+  padding: 0 2rem;
+}
+
+.customerPage .featureCard {
+  background: #fff;
+  border-radius: 1.5rem;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.customerPage .featureCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.customerPage .featureCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.customerPage .featureCard:hover::before {
+  opacity: 1;
+}
+
+.customerPage .featureIcon {
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  transition: transform 0.3s ease;
+}
+
+.customerPage .featureCard:hover .featureIcon {
+  transform: scale(1.1);
+}
+
+.customerPage .featureCard h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.customerPage .featureCard p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Testimonials Section */
+.customerPage .testimonialsSection {
+  background: #fff;
+  border-radius: 2rem;
+  margin: 0 auto 4rem auto;
+  max-width: 1000px;
+  padding: 4rem 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.customerPage .testimonialsSection h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin-bottom: 3rem;
+}
+
+.customerPage .testimonialCarousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.customerPage .carouselNav {
+  background: #f8f9fa;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  color:var(--primary-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.customerPage .carouselNav:hover {
+  background:var(--primary-color);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.customerPage .testimonialCard {
+  background: #f8f9fa;
+  border-radius: 1.5rem;
+  padding: 3rem;
+  max-width: 600px;
+  margin: 0 1rem;
+  transition: transform 0.3s ease;
+}
+
+.customerPage .testimonialCard:hover {
+  transform: translateY(-5px);
+}
+
+.customerPage .testimonialContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.customerPage .testimonialAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+  border: 4px solidvar(--primary-color);
+}
+
+.customerPage .testimonialStars {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.customerPage .starIcon {
+  color: #f1c40f;
+  font-size: 1.2rem;
+}
+
+.customerPage .testimonialQuote {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.customerPage .testimonialAuthor h4 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.customerPage .testimonialAuthor span {
+  color: #7f8c8d;
+  font-size: 1rem;
+}
+
+/* CTA Section */
+.customerPage .ctaSection {
+  background: linear-gradient(120deg, #3498db 0%,var(--primary-color) 100%);
+  border-radius: 2rem;
+  margin: 0 auto 4rem auto;
+  max-width: 1000px;
+  padding: 4rem 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.customerPage .ctaContent {
+  position: relative;
+  z-index: 1;
+}
+
+.customerPage .ctaSection h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+}
+
+.customerPage .ctaSection p {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.customerPage .ctaButtonLarge {
+  background: #fff;
+  color: #3498db;
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding: 1.2rem 3rem;
+  border: none;
+  border-radius: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.customerPage .ctaButtonLarge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .heroLeft {
+    margin-bottom: 3rem;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroSubtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ctaGroup {
+    justify-content: center;
+  }
+
+  .illustration {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .featuresSection {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+
+  .testimonialsSection {
+    padding: 3rem 1rem;
+  }
+
+  .testimonialCard {
+    padding: 2rem;
+  }
+
+  .ctaSection {
+    padding: 3rem 1rem;
+  }
+
+  .ctaSection h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 2rem 1rem;
+    border-radius: 1rem;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .ctaGroup {
+    flex-direction: column;
+  }
+
+  .ctaButton, .secondaryButton {
+    width: 100%;
+  }
+
+  .testimonialCarousel {
+    gap: 1rem;
+  }
+
+  .carouselNav {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Add styles for feature pages */
+.customerPage .feature {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Update logo link styles */
+.customerPage .logo a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Add breadcrumb styles */
+.customerPage .breadcrumb {
+  padding: 1rem 2rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.customerPage .breadcrumb a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.customerPage .breadcrumb a:hover {
+  text-decoration: underline;
+}

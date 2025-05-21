@@ -1,13 +1,13 @@
-.app-container {
+.appContainer {
   display: flex;
 }
 
-.main-content {
+.appContainer .main-content {
   transition: margin-left 0.3s ease;
   width: -webkit-fill-available;
 }
 
-.main-content.full-screen {
+.appContainer .main-content.full-screen {
   margin-left: 0;
   width: 100%;
   display: flex;
@@ -15,27 +15,31 @@
   justify-content: center;
 }
 
-.content {
+.appContainer .content {
   padding-top: 1rem;
   margin-top: 5rem;
   height: calc(100vh - 6rem);
 }
 
-.scroll {
+.appContainer .scroll {
   overflow-y: scroll;
 }
 
-.logo {
+.appContainer .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
-.logo:hover {
+.appContainer .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
-.logo.react:hover {
+.appContainer .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.appContainer .individual-page {
+  width: inherit;
 }
 
 @keyframes logo-spin {
@@ -53,28 +57,28 @@
   }
 }
 
-.card {
+.appContainer .card {
   padding: 2em;
 }
 
-.read-the-docs {
+.appContainer .read-the-docs {
   color: #888;
 }
 
-.sidebar-toggle {
+.appContainer .sidebar-toggle {
   display: none;
 }
 
 @media (max-width: 768px) {
-  .main-content {
+  .appContainer .main-content {
     margin-left: 0;
   }
 
-  .content {
+  .appContainer .content {
     width: 100%; /* Full width */
   }
 
-  .sidebar-toggle {
+  .appContainer .sidebar-toggle {
     display: block;
     background-color: #1a1a1a;
     color: white;
@@ -85,7 +89,7 @@
   }
 }
 
-.loading-container {
+.appContainer .loading-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,7 +97,7 @@
   width: 100%;
 }
 
-.error-boundary {
+.appContainer .error-boundary {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -103,12 +107,12 @@
   min-height: 200px;
 }
 
-.error-boundary h2 {
+.appContainer .error-boundary h2 {
   color: #dc3545;
   margin-bottom: 1rem;
 }
 
-.error-boundary button {
+.appContainer .error-boundary button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   background-color: #007bff;
@@ -119,6 +123,6 @@
   transition: background-color 0.2s;
 }
 
-.error-boundary button:hover {
+.appContainer .error-boundary button:hover {
   background-color: #0056b3;
 }

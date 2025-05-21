@@ -8,7 +8,7 @@ const Header = ({ className }: { className?: string }) => {
   const { user } = useAuth()
 
   return (
-    <header className={`${styles.header} ${className}`}>
+    <header className={`${styles.headerContainer} ${className}`}>
       <div className={styles.headerLeft}>
         <h1>Hello {user && user.username}</h1>
         <span>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import PrivateRoute from '../PrivateRoute/PrivateRoute'
 import HomePage from '../../pages/HomePage/HomePage'
 import IncomeExpensePage from '../../pages/IncomeExpensePage/IncomeExpensePage'
@@ -7,27 +7,26 @@ import FinancialStatementsPage from '../../pages/FinancialStatementsPage/Financi
 import BudgetSuggestionsPage from '../../pages/BudgetSuggestionsPage/BudgetSuggestionsPage'
 import FinancialAdvicePage from '../../pages/FinancialAdvicePage/FinancialAdvicePage'
 import SignInPage from '../../pages/SignInPage/SignInPage'
-import SignupPage from '../../pages/SignupPage/SignupPage'
+import SignupPage from '../../pages/SignUpPage/SignUpPage'
 import TransactionPage from '../../pages/TransactionPage/TransactionPage'
 import UpcomingPage from '../../pages/UpcomingPage/UpcomingPage'
 import ExpensesPage from '../../pages/ExpensesPage/ExpensesPage'
 import SettingsPage from '../../pages/SettingsPage/SettingsPage'
 import ReportsPage from '../../pages/ReportsPage/ReportsPage'
 import BudgetPage from '../../pages/BudgetPage/BudgetPage'
+import { CustomerLayout } from '../CustomerComponents/CustomerLayout/CustomerLayout'
+import ValueAnalysis from '../CustomerComponents/FeaturesSection/ValueAnalysis'
+import DailyTracking from '../CustomerComponents/FeaturesSection/DailyTracking'
+import DailyCost from '../CustomerComponents/FeaturesSection/DailyCost'
+import ExpenseScore from '../CustomerComponents/FeaturesSection/ExpenseScore'
+import SmartDecisions from '../CustomerComponents/FeaturesSection/SmartDecisions'
+import AIAlerts from '../CustomerComponents/FeaturesSection/AIAlerts'
+import EmotionTags from '../CustomerComponents/FeaturesSection/EmotionTags'
+import CustomerPage from '../../pages/CustomerPage/CustomerPage'
 import GoalPage from '../../pages/GoalPage/GoalPage'
-import { CustomerLayout } from '../features/CustomerLayout/CustomerLayout'
-import SupportRoutes from '../../routes/SupportRoutes'
-import ValueAnalysis from '../features/Features/ValueAnalysis'
-import DailyTracking from '../features/Features/DailyTracking'
-import DailyCost from '../features/Features/DailyCost'
-import ExpenseScore from '../features/Features/ExpenseScore'
-import SmartDecisions from '../features/Features/SmartDecisions'
-import AIAlerts from '../features/Features/AIAlerts'
-import EmotionTags from '../features/Features/EmotionTags'
-import Support from '../features/Support/Support'
-import { Blog } from '../features/Blog/Blog'
-import { BlogDetail } from '../features/Blog/BlogDetail/BlogDetail'
-import Customer from '../../pages/Customer/Customer'
+import FeaturesPage from '../CustomerComponents/FeaturesSection/FeaturesPage'
+import BlogPage from '../CustomerComponents/BlogSection/BlogPage'
+import SupportPage from '../CustomerComponents/SupportSection/SupportPage'
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -35,18 +34,21 @@ const AppRoutes: React.FC = () => (
       path='/customer'
       element={
         <CustomerLayout>
-          <Customer />
+          <CustomerPage />
         </CustomerLayout>
       }
     >
-      <Route path='features/daily-tracking' element={<DailyTracking />} />
-      <Route path='features/daily-cost' element={<DailyCost />} />
-      <Route path='features/value-analysis' element={<ValueAnalysis />} />
-      <Route path='features/smart-decisions' element={<SmartDecisions />} />
-      <Route path='features/ai-alerts' element={<AIAlerts />} />
-      <Route path='features/expense-score' element={<ExpenseScore />} />
-      <Route path='features/emotion-tags' element={<EmotionTags />} />
-      <Route path='support' element={<Support />} />
+      <Route path='features' element={<FeaturesPage />}>
+        <Route path='daily-tracking' element={<DailyTracking />} />
+        <Route path='daily-cost' element={<DailyCost />} />
+        <Route path='value-analysis' element={<ValueAnalysis />} />
+        <Route path='smart-decisions' element={<SmartDecisions />} />
+        <Route path='ai-alerts' element={<AIAlerts />} />
+        <Route path='expense-score' element={<ExpenseScore />} />
+        <Route path='emotion-tags' element={<EmotionTags />} />
+      </Route>
+      <Route path='blog' element={<BlogPage />} />
+      <Route path='support' element={<SupportPage />} />
     </Route>
     <Route
       path='/'
@@ -146,40 +148,7 @@ const AppRoutes: React.FC = () => (
     />
     <Route path='/signin' element={<SignInPage />} />
     <Route path='/signup' element={<SignupPage />} />
-    <Route
-      path='/customer/support/*'
-      element={
-        <CustomerLayout>
-          <SupportRoutes />
-        </CustomerLayout>
-      }
-    />
-    <Route
-      path='/customer/blog'
-      element={
-        <CustomerLayout>
-          <Blog />
-        </CustomerLayout>
-      }
-    />
-    <Route
-      path='/customer/blog/:id'
-      element={
-        <CustomerLayout>
-          <BlogDetail
-            post={{
-              id: '1',
-              title: 'Blog 1',
-              content: 'Blog 1 content',
-              date: '2021-01-01',
-              category: 'Category 1',
-              author: 'Author 1',
-              image: 'https://via.placeholder.com/150'
-            }}
-          />
-        </CustomerLayout>
-      }
-    />
+    <Route path='*' element={<Navigate to='/customer' replace />} />
   </Routes>
 )
 

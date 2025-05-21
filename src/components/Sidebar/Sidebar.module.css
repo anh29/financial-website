@@ -82,7 +82,23 @@
   background-color: #ffffff;
 }
 
-.logout {
+.sidebar .brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.sidebar .brand p {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.sidebar .brand p span {
+  color:var(--primary-color);
+}
+
+.sidebar .logout {
   margin-top: auto;
   background-color: var(--primary-color);
   color: white;
@@ -95,19 +111,19 @@
   font-size: 1.1rem;
 }
 
-.logout:hover {
+.sidebar .logout:hover {
   background-color: #16a085;
   transform: scale(1.05);
 }
 
-.userProfile {
+.sidebar .userProfile {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
 }
 
-.userProfile img {
+.sidebar .userProfile img {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -115,20 +131,20 @@
   border: 3px solid var(--primary-color);
 }
 
-.userProfile span {
+.sidebar .userProfile span {
   color: white;
   font-size: 1.1rem;
   font-weight: 500;
 }
 
-.userProfile a {
-  color: #1abc9c;
+.sidebar .userProfile a {
+  color:var(--primary-color);
   text-decoration: none;
   font-size: 1rem;
   margin-top: 0.5rem;
 }
 
-.userProfile a:hover {
+.sidebar .userProfile a:hover {
   text-decoration: underline;
 }
 

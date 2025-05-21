@@ -17,7 +17,7 @@
 }
 
 .billDetails .billAmount {
-  color: #1abc9c;
+  color:var(--primary-color);
   font-weight: bold;
 }
 
@@ -25,7 +25,7 @@
   color: #95a5a6;
 }
 
-.confirmText {
+.billDetails .confirmText {
   margin: 1rem 0;
   font-size: 1rem;
   color: #34495e;

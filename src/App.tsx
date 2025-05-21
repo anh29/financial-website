@@ -26,7 +26,10 @@ function App() {
   const renderMainContent = () => (
     <div className={`main-content ${isIndividualPage() ? 'full-screen' : ''}`}>
       {!isIndividualPage() && <Header />}
-      <div className={`content ${isIndividualPage() ? '' : 'scroll'}`} onClick={() => setSidebarOpen(false)}>
+      <div
+        className={`${isIndividualPage() ? 'individual-page' : 'content scroll'}`}
+        onClick={() => setSidebarOpen(false)}
+      >
         {isLoading ? (
           <div className='loading-container'>
             <LoadingSpinner />
@@ -39,7 +42,7 @@ function App() {
   )
 
   return (
-    <div className='app-container'>
+    <div className='appContainer'>
       {!isIndividualPage() && (
         <>
           {renderSidebarToggle()}

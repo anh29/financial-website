@@ -1,68 +1,95 @@
-.button {
+.button .primaryContainer {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-  outline: none;
 }
 
-.primary {
+.button .primaryContainer .primary {
   background-color: #3b82f6;
   color: white;
 }
 
-.primary:hover {
+.button .primaryContainer .primary:hover {
   background-color: #2563eb;
 }
 
-.secondary {
+.button .secondaryContainer {
+  display: inline-flex;
+}
+
+.button .secondaryContainer .secondary {
   background-color: #e5e7eb;
   color: #1f2937;
 }
 
-.secondary:hover {
+.button .secondaryContainer .secondary:hover {
   background-color: #d1d5db;
 }
 
-.outline {
+.button .outlineContainer {
+  display: inline-flex;
+}
+
+.button .outlineContainer .outline {
   background-color: transparent;
   border: 1px solid #3b82f6;
   color: #3b82f6;
 }
 
-.outline:hover {
+.button .outlineContainer .outline:hover {
   background-color: #f0f7ff;
 }
 
-.small {
+.button .smallContainer {
+  display: inline-flex;
+}
+
+.button .smallContainer .small {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
 }
 
-.medium {
+.button .mediumContainer {
+  display: inline-flex;
+}
+
+.button .mediumContainer .medium {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
 }
 
-.large {
+.button .largeContainer {
+  display: inline-flex;
+}
+
+.button .largeContainer .large {
   padding: 1rem 2rem;
   font-size: 1.125rem;
 }
 
-.fullWidth {
+.button .fullWidthContainer {
+  display: inline-flex;
   width: 100%;
 }
 
-.loading {
+.button .fullWidthContainer .fullWidth {
+  width: 100%;
+}
+
+.button .loadingContainer {
+  display: inline-flex;
+  position: relative;
+}
+
+.button .loadingContainer .loading {
   position: relative;
   color: transparent;
 }
 
-.spinner {
+.button .spinnerContainer {
+  position: absolute;
+  display: inline-flex;
+}
+
+.button .spinnerContainer .spinner {
   position: absolute;
   width: 1rem;
   height: 1rem;

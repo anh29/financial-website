@@ -19,7 +19,9 @@ const Log: React.FC<LogProps> = ({ message, status, onClose }) => {
     return () => clearTimeout(timer)
   }, [onClose])
 
-  return <div className={`${styles.log} ${styles[status]} ${visible ? styles.show : styles.hide}`}>{message}</div>
+  return (
+    <div className={`${styles.logContainer} ${styles[status]} ${visible ? styles.show : styles.hide}`}>{message}</div>
+  )
 }
 
 export default Log

@@ -26,13 +26,13 @@ const OCRUpload = ({ onUpload }: { onUpload: (transactions: any[]) => void }) =>
     <div className={styles.ocrUpload}>
       <h2>Upload Invoice</h2>
       <div className={styles.uploadContainer}>
-        <label htmlFor="ocr-upload" className={styles.uploadLabel}>
+        <label htmlFor='ocr-upload' className={styles.uploadLabel}>
           Drag & Drop or Click to Upload
         </label>
         <input
-          type="file"
-          id="ocr-upload"
-          accept="image/*,application/pdf"
+          type='file'
+          id='ocr-upload'
+          accept='image/*,application/pdf'
           onChange={handleUpload}
           className={styles.uploadInput}
         />
@@ -40,7 +40,7 @@ const OCRUpload = ({ onUpload }: { onUpload: (transactions: any[]) => void }) =>
       {preview && (
         <div className={styles.preview}>
           <h3>Preview</h3>
-          <img src={preview} alt="Uploaded Preview" className={styles.previewImage} />
+          <img src={preview} alt='Uploaded Preview' className={styles.previewImage} />
         </div>
       )}
     </div>

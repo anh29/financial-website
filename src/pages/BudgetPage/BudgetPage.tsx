@@ -96,7 +96,7 @@ const BudgetPage = () => {
   }))
 
   return (
-    <div className={styles.budgetContainer}>
+    <div className={styles.budgetPage}>
       <h1 className={styles.budgetTitle}>💰 Quản lý Ngân sách</h1>
       {isLoading ? (
         <div className={styles.loadingContainer}>

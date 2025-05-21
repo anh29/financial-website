@@ -1,0 +1,88 @@
+.faq .faqContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.faq .faqContainer h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1e1e1e;
+}
+
+.faq .faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq .faqList .faqItem {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.faq .faqList .faqItem .faqQuestion {
+  width: 100%;
+  padding: 1rem;
+  background: white;
+  border: none;
+  text-align: left;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #1e1e1e;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq .faqList .faqItem .faqQuestion:hover {
+  background: #f9fafb;
+}
+
+.faq .faqList .faqItem .faqQuestion.open {
+  background: #f3f4f6;
+}
+
+.faq .faqList .faqItem .faqQuestion .icon {
+  transition: transform 0.3s ease;
+}
+
+.faq .faqList .faqItem .faqQuestion.open .icon {
+  transform: rotate(180deg);
+}
+
+.faq .faqList .faqItem .faqAnswer {
+  padding: 1rem;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+}
+
+.faq .faqList .faqItem .faqAnswer p {
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.faq .backButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 2rem;
+}
+
+.faq .backButton:hover {
+  background: #f3f4f6;
+  color: #1e1e1e;
+}
+
+.faq .backButton svg {
+  font-size: 1rem;
+} 

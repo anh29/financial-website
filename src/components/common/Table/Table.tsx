@@ -3,8 +3,8 @@ import styles from './Table.module.css'
 
 interface TableProps {
   columns: { key: string; header: string }[]
-  data: any[]
-  onRowClick?: (row: any) => void
+  data: { [key: string]: string | number }[]
+  onRowClick?: (row: { [key: string]: string | number }) => void
 }
 
 export const Table: React.FC<TableProps> = ({ columns, data, onRowClick }) => {
@@ -20,11 +20,7 @@ export const Table: React.FC<TableProps> = ({ columns, data, onRowClick }) => {
         </thead>
         <tbody>
           {data.map((row, index) => (
-            <tr
-              key={index}
-              onClick={() => onRowClick?.(row)}
-              className={onRowClick ? styles.clickable : ''}
-            >
+            <tr key={index} onClick={() => onRowClick?.(row)} className={onRowClick ? styles.clickable : ''}>
               {columns.map((column) => (
                 <td key={column.key}>{row[column.key]}</td>
               ))}
@@ -34,4 +30,4 @@ export const Table: React.FC<TableProps> = ({ columns, data, onRowClick }) => {
       </table>
     </div>
   )
-} 
+}

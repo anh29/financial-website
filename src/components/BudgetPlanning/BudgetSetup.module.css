@@ -1,0 +1,131 @@
+.budgetSetup {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.budgetSetup .header {
+  text-align: center;
+}
+
+.budgetSetup .header h2 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.budgetSetup .header p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+.budgetSetup .form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.budgetSetup .form .formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.budgetSetup .form .formGroup label {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.budgetSetup .form .formGroup input,
+.budgetSetup .form .formGroup select {
+  padding: 0.8rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.budgetSetup .form .formGroup input:focus,
+.budgetSetup .form .formGroup select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.1);
+}
+
+.budgetSetup .form .error {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.budgetSetup .form .helperText {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.budgetSetup .form .actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.budgetSetup .form .actions button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.budgetSetup .form .actions .submitButton {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.budgetSetup .form .actions .submitButton:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.budgetSetup .form .actions .cancelButton {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.budgetSetup .form .actions .cancelButton:hover {
+  background-color: #c0392b;
+}
+
+.budgetSetup .loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.budgetSetup .loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.budgetSetup .loading .text {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

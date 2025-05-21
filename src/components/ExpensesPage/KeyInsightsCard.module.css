@@ -1,0 +1,67 @@
+.keyInsightsCard {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  border-left: 4px solid #1abc9c;
+}
+
+.keyInsightsCard .cardHeader {
+  margin-bottom: 1.5rem;
+}
+
+.keyInsightsCard .cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1f36;
+  margin: 0;
+}
+
+.keyInsightsCard .chartContainer {
+  flex: 1;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.keyInsightsCard .insights {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.keyInsightsCard .insightItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.keyInsightsCard .insightItem:not(:last-child) {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.keyInsightsCard .insightLabel {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.keyInsightsCard .insightValue {
+  color: #1a1f36;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .keyInsightsCard {
+    padding: 1rem;
+  }
+  
+  .keyInsightsCard .chartContainer {
+    min-height: 250px;
+  }
+} 

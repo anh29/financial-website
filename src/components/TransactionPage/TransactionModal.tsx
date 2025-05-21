@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './TransactionModal.module.css'
 import { expenseCategories, incomeCategories } from '../../utils/categoryUtils'
-import { classifyTransaction } from '../../utils/transactionUtils'
 import { Transaction } from '../../types/transaction'
+import { classifyTransaction } from '../../services/features/transactionService'
 
 const TransactionModal = ({
   onClose,
@@ -80,10 +80,10 @@ const TransactionModal = ({
 
       descriptionDebounceRef.current = setTimeout(async () => {
         try {
-          const predictedCategory = await classifyTransaction({
+          const { predictedCategory } = await classifyTransaction({
             description: updated[index].description
           })
-          updated[index].category = predictedCategory
+          updated[index].category = predictedCategory.key
           hasPredicted.current[index] = true
         } catch (error) {
           updated[index].classificationError = '⚠ Classification failed'

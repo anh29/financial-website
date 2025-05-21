@@ -9,7 +9,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const Input: React.FC<InputProps> = ({ label, error, helperText, className, ...props }) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.inputContainer}>
       {label && <label className={styles.label}>{label}</label>}
       <input className={`${styles.input} ${error ? styles.error : ''} ${className || ''}`} {...props} />
       {(error || helperText) && (

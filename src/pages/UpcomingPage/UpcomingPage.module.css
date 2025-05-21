@@ -94,7 +94,7 @@
 
 .upcomingPage .amountCell {
   font-weight: bold;
-  color: #1abc9c;
+  color:var(--primary-color);
   text-align: center;
 }
 
@@ -144,14 +144,14 @@
 .upcomingPage .amount {
   font-weight: bold;
   font-size: 1.5rem;
-  color: #1abc9c;
+  color:var(--primary-color);
   text-align: center;
 }
 
 .upcomingPage .payNowButton {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background-color: #1abc9c;
+  background-color:var(--primary-color);
   color: #ffffff;
   border: none;
   border-radius: 4px;
@@ -172,7 +172,7 @@
 
 .upcomingPage .totalAmount {
   text-align: center;
-  color: #1abc9c;
+  color:var(--primary-color);
 }
 
 .upcomingPage .modal {
@@ -241,7 +241,7 @@
 
 .upcomingPage .confirmButton {
   padding: 0.5rem 1rem;
-  background-color: #1abc9c;
+  background-color:var(--primary-color);
   color: #ffffff;
   border: none;
   border-radius: 4px;

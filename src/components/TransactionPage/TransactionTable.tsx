@@ -6,16 +6,30 @@ import { Transaction } from '../../types/transaction'
 
 interface TransactionTableProps {
   transactions: Transaction[]
+  updatedTransactions: Transaction[]
   onTransactionUpdate?: (updatedTransactions: Transaction[]) => void
 }
 
-const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTransactionUpdate }) => {
+const TransactionTable: React.FC<TransactionTableProps> = ({
+  transactions,
+  updatedTransactions,
+  onTransactionUpdate
+}) => {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null)
   const [isModalOpen, setModalOpen] = useState(false)
+  const transactionMap = new Map<string, Transaction>()
+  transactions.forEach((tx) => transactionMap.set(tx.id, tx))
+  updatedTransactions.forEach((tx) => transactionMap.set(tx.id, tx)) // updated takes precedence
+  const totalTransactions = Array.from(transactionMap.values())
 
   const handleEditClick = (transaction: Transaction) => {
     setSelectedTransaction(transaction)
     setModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setModalOpen(false)
+    setSelectedTransaction(null)
   }
 
   const handleTransactionUpdate = (updatedTransaction: Transaction) => {
@@ -28,8 +42,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTra
       onTransactionUpdate(updatedTransactions)
     }
 
-    setSelectedTransaction(null)
-    setModalOpen(false)
+    handleCloseModal()
   }
 
   const displayDate = (transaction: Transaction) =>
@@ -59,8 +72,8 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTra
             </tr>
           </thead>
           <tbody className={styles.transactionTableBody}>
-            {transactions &&
-              transactions.map((transaction) => (
+            {totalTransactions &&
+              totalTransactions.map((transaction) => (
                 <tr key={transaction.id}>
                   <td>{displayDate(transaction)}</td>
                   <td className={getAmountClass(transaction)}>
@@ -90,7 +103,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTra
       {isModalOpen && selectedTransaction && (
         <EditTransactionModal
           transaction={selectedTransaction}
-          onClose={() => setModalOpen(false)}
+          onClose={handleCloseModal}
           onTransactionUpdated={handleTransactionUpdate}
         />
       )}

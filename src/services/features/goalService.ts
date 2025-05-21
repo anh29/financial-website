@@ -1,4 +1,4 @@
-import { Goals } from '../../types'
+import { Goals } from '../../types/goals'
 import { SERVER_URL } from '../../utils/constants'
 import { getUser } from '../../utils/userUtils'
 
@@ -61,18 +61,16 @@ const goalAPI = {
     await handleResponse(response)
   },
 
-  fetchAll: async (): Promise<Goals[]> => {
-    const response = await fetch(`${SERVER_URL}/crud/goals`)
-    return handleResponse<Goals[]>(response)
-  },
-
   fetchById: async (goalId: string): Promise<Goals> => {
     const response = await fetch(`${SERVER_URL}/crud/goals/${goalId}`)
     return handleResponse<Goals>(response)
   },
 
-  fetchByUserId: async (userId: string): Promise<Goals[]> => {
-    const response = await fetch(`${SERVER_URL}/crud/goals?userId=${userId}`)
+  fetchByUserId: async (): Promise<Goals[]> => {
+    const user = getUser()
+    if (!user) throw new APIError('User not found')
+
+    const response = await fetch(`${SERVER_URL}/crud/goals/user/${user.id}`)
     return handleResponse<Goals[]>(response)
   }
 }
@@ -81,7 +79,6 @@ export const {
   create: createGoal,
   update: updateGoal,
   delete: deleteGoal,
-  fetchAll: fetchGoals,
   fetchById: fetchGoalById,
   fetchByUserId: fetchGoalsByUserId
 } = goalAPI

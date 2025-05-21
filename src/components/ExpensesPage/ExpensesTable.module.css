@@ -1,0 +1,168 @@
+.tableExpensesSection {
+  margin-bottom: 2.5rem;
+}
+.tableExpensesSection .tableControls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(44, 62, 80, 0.07);
+  padding: 0.5rem 1.2rem;
+}
+.tableExpensesSection .tableSearch,
+.tableSelect {
+  padding: 0.5rem 1.2rem;
+  border: 1.5px solid #e3eaf2;
+  background: #f7fbff;
+  font-size: 1rem;
+  transition:
+    border 0.18s,
+    box-shadow 0.18s;
+  box-shadow: none;
+}
+.tableExpensesSection .tableSearch:focus,
+.tableSelect:focus {
+  border: 1.5px solid #1abc9c;
+  box-shadow: 0 0 0 2px #1abc9c22;
+  outline: none;
+}
+.tableExpensesSection .exportButton {
+  background: #fff;
+  color: #1abc9c;
+  border: 1.5px solid #1abc9c;
+  padding: 0.6rem 1.3rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    background 0.18s,
+    color 0.18s,
+    box-shadow 0.18s;
+  box-shadow: 0 1px 4px rgba(44, 62, 80, 0.07);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.tableExpensesSection .exportButton:hover {
+  background: #1abc9c;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.13);
+}
+.tableExpensesSection .expenseTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 1px 6px rgba(44, 62, 80, 0.07);
+  overflow: hidden;
+}
+.tableExpensesSection .expenseTable th,
+.expenseTable td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid #e3eaf2;
+  font-size: 1rem;
+}
+.tableExpensesSection .expenseTable th {
+  background: linear-gradient(90deg, #eaf6ff 0%, #f7fbff 100%);
+  color: #1abc9c;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.tableExpensesSection .expenseTable tr:nth-child(even) {
+  background: #f7fbff;
+}
+.tableExpensesSection .expenseTable tr:hover {
+  background: #eaf6ff;
+}
+.tableExpensesSection .tableAction {
+  background: #f7fbff;
+  color: #1abc9c;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 1rem;
+  margin-right: 4px;
+  cursor: pointer;
+  transition:
+    background 0.18s,
+    color 0.18s,
+    transform 0.18s;
+  box-shadow: none;
+}
+.tableExpensesSection .tableAction:hover {
+  background: #1abc9c;
+  color: #fff;
+  transform: scale(1.08);
+}
+.tableExpensesSection .tagBadge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #1abc9c 0%, #38f9d7 100%);
+  margin-right: 6px;
+  margin-bottom: 2px;
+}
+.tableExpensesSection .smartBadge {
+  display: inline-block;
+  background: linear-gradient(90deg, #10b981 0%, #38f9d7 100%);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 3px 12px;
+  margin-left: 6px;
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.13);
+}
+
+.tableExpensesSection .smartAllocatedRow {
+  border-left: 4px solid #10b981;
+  background: linear-gradient(90deg, #f0fdfa 0%, #f7fbff 100%);
+}
+
+.tableExpensesSection .dailyAllocationRow td {
+  background: #f7fbff;
+  padding: 0;
+  border: none;
+}
+
+.tableExpensesSection .dailyAllocationBox {
+  padding: 1.2rem 2rem;
+  background: #eafaf1;
+  border-radius: 12px;
+  margin: 0.5rem 0 1rem 0;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.07);
+}
+
+.tableExpensesSection .dailyAllocationTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+.tableExpensesSection .dailyAllocationTable th,
+.tableExpensesSection .dailyAllocationTable td {
+  padding: 8px 14px;
+  border-bottom: 1px solid #d1fae5;
+  text-align: left;
+  font-size: 0.98rem;
+}
+.tableExpensesSection .dailyAllocationTable th {
+  background: #bbf7d0;
+  color: #047857;
+  font-weight: 700;
+}
+.tableExpensesSection .dailyAllocationTable tr:last-child td {
+  border-bottom: none;
+}

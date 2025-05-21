@@ -1,0 +1,301 @@
+.featuresPage {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featuresPage .featureHero {
+  text-align: center;
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 100%);
+  border-radius: 1rem;
+  margin-bottom: 3rem;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.featuresPage .featureHero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin-bottom: 1rem;
+}
+
+.featuresPage .subtitle {
+  font-size: 1.25rem;
+  color: #4b5563;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Category Navigation */
+.featuresPage .categoryNav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.featuresPage .categoryButton {
+  padding: 0.8rem 1.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 2rem;
+  background: white;
+  color: #2c3e50;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.featuresPage .categoryButton:hover {
+  border-color:var(--primary-color);
+  color:var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.featuresPage .categoryButton.active {
+  background:var(--primary-color);
+  color: white;
+  border-color:var(--primary-color);
+}
+
+.featuresPage .featureContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.featuresPage .featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.featuresPage .featureCard {
+  padding: 2rem;
+  border-radius: 1rem;
+  color: white;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.5s ease-out;
+}
+
+.featuresPage .featureCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.featuresPage .featureCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.featuresPage .featureCard:hover::before {
+  opacity: 1;
+}
+
+.featuresPage .featureCard:hover .featureIcon {
+  transform: scale(1.1);
+}
+
+.featuresPage .featureCard h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.featuresPage .featureCard p {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+}
+
+.featuresPage .featureCard:hover .featureLink {
+  transform: translateX(5px);
+}
+
+.featuresPage .featureLink {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.featuresPage .ctaSection {
+  text-align: center;
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 1rem;
+  margin-top: 3rem;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.featuresPage .ctaSection h2 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.featuresPage .ctaSection p {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+}
+
+.featuresPage .ctaButton {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.featuresPage .ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.featuresPage .featureItem {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.featuresPage .featureItem:hover {
+  transform: translateY(-5px);
+}
+
+.featuresPage .featureIcon {
+  font-size: 2.5rem;
+  color: #3b82f6;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.featuresPage .featureItem h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #1e40af;
+}
+
+.featuresPage .featureItem p {
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.featuresPage .featureDemo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.featuresPage .demoImage {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: #f3f4f6;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.featuresPage .demoPlaceholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #9ca3af;
+}
+
+.featuresPage .demoText {
+  padding: 2rem;
+}
+
+.featuresPage .demoText h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin-bottom: 1rem;
+}
+
+.featuresPage .demoText p {
+  color: #6b7280;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.featuresPage .demoButton {
+  background: #3b82f6;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.featuresPage .demoButton:hover {
+  background: #2563eb;
+}
+
+@media (max-width: 768px) {
+  .featuresPage .featureDemo {
+    grid-template-columns: 1fr;
+  }
+  
+  .featuresPage .featureHero h1 {
+    font-size: 2rem;
+  }
+  
+  .featuresPage .featureGrid {
+    grid-template-columns: 1fr;
+  }
+} 

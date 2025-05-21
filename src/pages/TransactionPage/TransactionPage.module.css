@@ -8,23 +8,23 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-.header {
+.transactionPage .header {
   text-align: center;
   margin-bottom: 2.5rem;
 }
 
-.header h1 {
+.transactionPage .header h1 {
   font-size: 2.75rem;
   color: #2c3e50;
   margin-bottom: 0.5rem;
 }
 
-.header p {
+.transactionPage .header p {
   color: #7f8c8d;
   font-size: 1.125rem;
 }
 
-.controls {
+.transactionPage .controls {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -33,7 +33,7 @@
   margin-bottom: 2rem;
 }
 
-.buttonGroup {
+.transactionPage .buttonGroup {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;

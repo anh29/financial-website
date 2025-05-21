@@ -104,7 +104,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className={`${styles.overlay} ${isOpen ? styles.show : ''}`}
+      className={`${styles.modal} ${isOpen ? styles.show : ''}`}
       onClick={handleOverlayClick}
       role='dialog'
       aria-modal='true'
@@ -112,7 +112,7 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <div
         ref={modalRef}
-        className={`${styles.modal} ${styles[size]} ${className || ''}`}
+        className={`${styles.modalContent} ${styles[size]} ${className || ''}`}
         onClick={(e) => e.stopPropagation()}
         tabIndex={-1}
       >

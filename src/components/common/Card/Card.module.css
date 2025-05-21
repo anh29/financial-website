@@ -4,34 +4,34 @@
   transition: all 0.2s ease;
 }
 
-.none {
+.card .none {
   padding: 0;
 }
 
-.small {
+.card .small {
   padding: 1rem;
 }
 
-.medium {
+.card .medium {
   padding: 1.5rem;
 }
 
-.large {
+.card .large {
   padding: 2rem;
 }
 
-.shadow-none {
+.card .shadow-none {
   box-shadow: none;
 }
 
-.shadow-small {
+.card .shadow-small {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.shadow-medium {
+.card .shadow-medium {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.shadow-large {
+.card .shadow-large {
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 } 

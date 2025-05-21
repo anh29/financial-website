@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import styles from './SignupPage.module.css'
-import FormInput from '../../components/FormInput/FormInput'
-import Button from '../../components/Button/Button'
+import styles from './SignUpPage.module.css'
 import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import { GOOGLE_INFO_API_KEY, SERVER_ENDPOINT } from '../../utils/constants'
-import Log from '../../components/common/Log/Log'
 import { useAuth } from '../../context/AuthContext'
 import { LoadingSpinner } from '../../components/common'
+import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa'
 
 const SignupPage = () => {
   const { login } = useAuth()
@@ -16,6 +14,8 @@ const SignupPage = () => {
   const [logData, setLogData] = useState<{ message: string; status: 'success' | 'error' | 'warning' | 'info' } | null>(
     null
   )
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -77,52 +77,108 @@ const SignupPage = () => {
     formData.username && formData.email && formData.password && formData.confirmPassword && formData.terms
 
   return (
-    <div className={styles.signupPage}>
-      {logData && <Log message={logData.message} status={logData.status} onClose={() => setLogData(null)} />}
-      <div className={styles.logo}>
-        <h1>Welcome to FINEbank.IO</h1>
-        <p>Join us and take control of your finances</p>
-      </div>
-      <form className={styles.signupForm} onSubmit={handleSubmit}>
-        <h2>Create your account</h2>
-        {['username', 'email', 'password', 'confirmPassword'].map((field) => (
-          <FormInput
-            key={field}
-            id={field}
-            label={field === 'confirmPassword' ? 'Confirm Password' : field.charAt(0).toUpperCase() + field.slice(1)}
-            type={field.includes('password') ? 'password' : 'text'}
-            placeholder={`Enter your ${field}`}
-            value={formData[field as keyof typeof formData] as string}
-            onChange={handleInputChange}
-            required
-            autoComplete={field}
-            ariaLabel={field}
-            showPasswordToggle={field.includes('password')}
-          />
-        ))}
-        <div className={styles.terms}>
-          <input type='checkbox' id='terms' required checked={formData.terms} onChange={handleInputChange} />
-          <label htmlFor='terms'>
-            By continuing, you agree to our <a href='/terms-of-service'>Terms of Service</a>.
-          </label>
+    <div className={styles.signUpPage}>
+      <div className={styles.card}>
+        <div className={styles.logoArea}>
+          <svg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'>
+            <circle cx='20' cy='20' r='20' fill='#1abc9c' />
+            <text x='50%' y='55%' textAnchor='middle' fill='#fff' fontSize='18' fontWeight='bold' dy='.3em'>
+              F
+            </text>
+          </svg>
+          <p>
+            Finance<span>Hub</span>
+          </p>
         </div>
-        <Button type='submit' className={styles.signupButton} disabled={!isFormValid || loading}>
-          {loading ? <LoadingSpinner /> : 'Sign Up'}
-        </Button>
+        <div className={styles.heading}>Create your account</div>
+        <div className={styles.subtitle}>Join us and take control of your finances</div>
+        {logData && <div className={`${styles.feedback} ${styles[logData.status]}`}>{logData.message}</div>}
+        <form onSubmit={handleSubmit} className={styles.form} autoComplete='on'>
+          <div className={styles.inputWrapper}>
+            <input
+              id='username'
+              type='text'
+              placeholder='Username'
+              value={formData.username}
+              onChange={handleInputChange}
+              required
+              autoComplete='username'
+              aria-label='Username'
+            />
+          </div>
+          <div className={styles.inputWrapper}>
+            <input
+              id='email'
+              type='email'
+              placeholder='Email'
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              autoComplete='email'
+              aria-label='Email'
+            />
+          </div>
+          <div className={styles.inputWrapper}>
+            <input
+              id='password'
+              type={showPassword ? 'text' : 'password'}
+              placeholder='Password'
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+              autoComplete='new-password'
+              aria-label='Password'
+            />
+            <button
+              type='button'
+              className={styles.passwordToggle}
+              onClick={() => setShowPassword((v) => !v)}
+              tabIndex={0}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          <div className={styles.inputWrapper}>
+            <input
+              id='confirmPassword'
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder='Confirm Password'
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              required
+              autoComplete='new-password'
+              aria-label='Confirm Password'
+            />
+            <button
+              type='button'
+              className={styles.passwordToggle}
+              onClick={() => setShowConfirmPassword((v) => !v)}
+              tabIndex={0}
+              aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+            >
+              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          <div className={styles.terms}>
+            <input type='checkbox' id='terms' required checked={formData.terms} onChange={handleInputChange} />
+            <label htmlFor='terms'>
+              By continuing, you agree to our <a href='/terms-of-service'>Terms of Service</a>.
+            </label>
+          </div>
+          <button type='submit' className={styles.signupButton} disabled={!isFormValid || loading}>
+            {loading ? <LoadingSpinner /> : 'Sign Up'}
+          </button>
+        </form>
         <div className={styles.divider}>or sign up with</div>
-        <Button type='button' className={styles.googleButton} onClick={handleGoogleLogin} disabled={loading}>
-          {loading ? (
-            <LoadingSpinner />
-          ) : (
-            <>
-              Continue with <span>Google</span>
-            </>
-          )}
-        </Button>
-        <p className={styles.switchLink}>
+        <button type='button' className={styles.googleButton} onClick={() => handleGoogleLogin()} disabled={loading}>
+          <FaGoogle style={{ fontSize: '1.2rem' }} />
+          <span>Continue with Google</span>
+        </button>
+        <div className={styles.switchLink}>
           Already have an account? <a href='/signin'>Sign in here</a>
-        </p>
-      </form>
+        </div>
+      </div>
     </div>
   )
 }

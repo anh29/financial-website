@@ -1,8 +1,47 @@
-.inputGroup {
+.formInput {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.formInput label {
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.formInput input {
+  padding: 0.8rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.formInput input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.1);
+}
+
+.formInput .error {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.formInput .helperText {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.formInput .inputGroup {
   margin-bottom: 1.2rem;
 }
 
-.inputGroup label {
+.formInput .inputGroup label {
   display: block;
   justify-self: start;
   font-size: 0.95rem;
@@ -11,7 +50,7 @@
   justify-self: start;
 }
 
-.inputGroup input {
+.formInput .inputGroup input {
   width: -webkit-fill-available;
   padding: 0.8rem;
   font-size: 1rem;
@@ -22,24 +61,24 @@
   color: #000000;
 }
 
-.inputGroup input:focus {
-  border-color: #1abc9c;
+.formInput .inputGroup input:focus {
+  border-color:var(--primary-color);
   box-shadow: 0 0 6px rgba(26, 188, 156, 0.4);
   outline: none;
 }
 
-.inputWrapper {
+.formInput .inputGroup .inputWrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.inputWrapper input {
+.formInput .inputGroup .inputWrapper input {
   flex: 1;
   padding-right: 2.5rem;
 }
 
-.togglePassword {
+.formInput .inputGroup .inputWrapper .togglePassword {
   position: absolute;
   right: 10px;
   background: none;
@@ -50,7 +89,7 @@
   padding: 0;
 }
 
-.togglePassword:hover {
+.formInput .inputGroup .inputWrapper .togglePassword:hover {
   background-color: transparent;
   padding: 0 5px;
   transform: none;

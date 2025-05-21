@@ -15,6 +15,17 @@
   --light-gray: #ecf0f1;
   --dark-gray: #7f8c8d;
 
+  /* Calendar Heatmap Colors */
+  --color-empty: #f8fff9;
+  --color-low: #f6b9b9;
+  --color-medium: #f06969;
+  --color-high: #e60000;
+  --color-very-high: #c80000;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --gradient-primary: linear-gradient(135deg, #1abc9c 0%, #3498db 100%);
+
   color-scheme: light dark;
   color: var(--text-color);
   background-color: var(--background-color);
@@ -115,10 +126,6 @@ button {
 button:hover {
   transform: translateY(-2px);
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
 
 input, select, textarea {
   font-family: inherit;
@@ -153,10 +160,6 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    color: var(--text-color);
-    background-color: var(--background-color);
-  }
   button {
     background-color: #f9f9f9;
   }

@@ -77,3 +77,35 @@ export const importTransactions = async (newTransactions: Transaction[]) => {
 
   return await response.json()
 }
+
+export const classifyTransaction = async ({
+  description
+}: {
+  description?: string
+}): Promise<{ predictedCategory: { label: string; key: string } }> => {
+  const response = await fetch(`${SERVER_URL}/smart/category`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ description })
+  })
+
+  if (!response.ok) throw new Error('Failed to classify category')
+
+  return await response.json()
+}
+
+export const predictUsageDuration = async (transaction: { amount: number; category: string }) => {
+  const user = await getUser()
+  if (!user) throw new Error('User not found')
+
+  const response = await fetch(`${SERVER_URL}/smart/predictUsageDuration`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...transaction, userId: user.id })
+  })
+
+  if (!response.ok) throw new Error('Failed to predict usage duration')
+
+  const { data } = await response.json()
+  return data
+}

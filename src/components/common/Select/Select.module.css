@@ -1,16 +1,16 @@
-.container {
+.selectContainer {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.label {
+.selectContainer .label {
   font-size: 0.875rem;
   font-weight: 500;
   color: #374151;
 }
 
-.select {
+.selectContainer .select {
   padding: 0.75rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
@@ -19,17 +19,17 @@
   transition: all 0.2s ease;
 }
 
-.select:focus {
+.selectContainer .select:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.error {
+.selectContainer .error {
   border-color: #ef4444;
 }
 
-.errorText {
+.selectContainer .errorText {
   font-size: 0.75rem;
   color: #ef4444;
 } 

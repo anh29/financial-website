@@ -1,0 +1,380 @@
+.overviewExpensesSection {
+  margin-bottom: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.overviewExpensesSection .summaryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.overviewExpensesSection .summaryHeader h2 {
+  font-size: 1.75rem;
+  color: #2d3748;
+  margin: 0;
+  font-weight: 600;
+}
+
+.overviewExpensesSection .summaryPeriod {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #4a5568;
+  font-size: 1rem;
+  background: #f7fafc;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.overviewExpensesSection .topRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  align-items: flex-start;
+}
+
+.overviewExpensesSection .calendarSection {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.overviewExpensesSection .chartSection {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+}
+
+.overviewExpensesSection .chartHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.overviewExpensesSection .chartHeader h3 {
+  font-size: 1.25rem;
+  color: #2d3748;
+  margin: 0;
+  font-weight: 600;
+}
+
+.overviewExpensesSection .chartContainer {
+  height: 420px;
+  width: 420px;
+  position: relative;
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.overviewExpensesSection .chartContent {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overviewExpensesSection .chartLegend {
+  margin-top: 2rem;
+  padding-top: 1rem;
+}
+
+.overviewExpensesSection .budgetWarning {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #fff5f5;
+  border-radius: 8px;
+  color: #c53030;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.overviewExpensesSection .insightsSection {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.overviewExpensesSection .insightsHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.overviewExpensesSection .insightsHeader h3 {
+  font-size: 1.25rem;
+  color: #2d3748;
+  margin: 0;
+  font-weight: 600;
+}
+
+.overviewExpensesSection .insightsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.overviewExpensesSection .insightCard {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #f7fafc;
+  border-radius: 12px;
+  transition: transform 0.2s;
+}
+
+.overviewExpensesSection .insightCard:hover {
+  transform: translateY(-2px);
+}
+
+.overviewExpensesSection .insightIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.overviewExpensesSection .insightIcon svg {
+  font-size: 1.5rem;
+  color: #4a5568;
+}
+
+.overviewExpensesSection .insightContent {
+  flex: 1;
+}
+
+.overviewExpensesSection .insightContent h4 {
+  font-size: 1.1rem;
+  color: #2d3748;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.overviewExpensesSection .insightContent p {
+  font-size: 0.95rem;
+  color: #4a5568;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.overviewExpensesSection .insightHighlight {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+@media (max-width: 1024px) {
+  .topRow {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .calendarSection {
+    justify-content: flex-start;
+  }
+  .chartContainer {
+    height: 250px;
+  }
+  .summaryCardsRow {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .overviewExpensesSection {
+    padding: 1.5rem;
+  }
+
+  .summaryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .insightsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cardValue {
+    font-size: 1.75rem;
+  }
+}
+
+.overviewExpensesSection .detailedAnalytics {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-top: 2rem;
+}
+
+.overviewExpensesSection .analyticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.overviewExpensesSection .analyticsTitle {
+  font-size: 1.5rem;
+  color: #1a365d;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.overviewExpensesSection .analyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.overviewExpensesSection .analyticsCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.overviewExpensesSection .analyticsCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.overviewExpensesSection .cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.overviewExpensesSection .cardTitle {
+  font-size: 1rem;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.overviewExpensesSection .cardValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0.5rem 0;
+}
+
+.overviewExpensesSection .cardChange {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.overviewExpensesSection .positiveChange {
+  color: #38a169;
+}
+
+.overviewExpensesSection .negativeChange {
+  color: #e53e3e;
+}
+
+.overviewExpensesSection .trendIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.overviewExpensesSection .insightsList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.overviewExpensesSection .insightItem {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.overviewExpensesSection .insightIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.overviewExpensesSection .insightContent {
+  flex: 1;
+}
+
+.overviewExpensesSection .insightTitle {
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin-bottom: 0.25rem;
+}
+
+.overviewExpensesSection .insightValue {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+@media (max-width: 1024px) {
+  .analyticsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .insightsList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .analyticsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .detailedAnalytics {
+    padding: 1.5rem;
+  }
+  
+  .analyticsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

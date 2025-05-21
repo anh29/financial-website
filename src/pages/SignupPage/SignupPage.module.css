@@ -1,91 +1,201 @@
-.signupPage {
+.signUpPage {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(120deg, #f7fafc 0%, #e3f6f5 100%);
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   padding: 2rem;
 }
 
-.logo h1 {
-  font-size: 3rem;
-  color: #1abc9c;
-  margin-bottom: 1rem;
-}
-
-.logo p {
-  font-size: 1.2rem;
-  color: #7f8c8d;
-  margin-bottom: 2rem;
-}
-
-.signupForm {
+.signUpPage .card {
   width: 100%;
-  max-width: 400px;
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
-}
-
-.signupForm:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.signupForm h2 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-  font-size: 1.75rem;
-}
-
-.passwordWrapper {
+  max-width: 420px;
+  background: #fff;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.10);
   display: flex;
+  flex-direction: column;
   align-items: center;
+  animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1);
   position: relative;
 }
 
-.passwordWrapper input {
-  flex: 1;
-  padding-right: 2.5rem;
-  background-color: #ffffff;
+.signUpPage .logoArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.2rem;
 }
 
-.showPassword {
+.signUpPage .logoArea img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 0.5rem;
+}
+
+.signUpPage .logoArea p {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 0.2rem;
+}
+
+.signUpPage .logoArea p span {
+  color:var(--primary-color);
+}
+
+.signUpPage .heading {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #232b38;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+  text-align: center;
+}
+
+.signUpPage .subtitle {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.signUpPage .form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.signUpPage .inputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.signUpPage .inputWrapper input {
+  width: -webkit-fill-available;
+  padding: 0.9rem 1rem;
+  border-radius: 0.7rem;
+  border: 1.5px solid #e0e0e0;
+  font-size: 1rem;
+  background: #f7fafc;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.signUpPage .inputWrapper input:focus {
+  border-color:var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.12);
+  outline: none;
+}
+
+.signUpPage .passwordToggle {
   position: absolute;
-  right: 10px;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0px 4px;
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  padding: 0 4px;
+  transition: color 0.2s;
 }
 
-.terms {
+.signUpPage .passwordToggle:hover {
+  color:var(--primary-color);
+}
+
+.signUpPage .signupButton,
+.signUpPage .googleButton {
+  width: 100%;
+  padding: 1rem 0;
+  border-radius: 0.7rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.signUpPage .signupButton {
+  background: linear-gradient(90deg,var(--primary-color) 0%, #16a085 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(26, 188, 156, 0.08);
+}
+
+.signUpPage .signupButton:hover {
+  background: linear-gradient(90deg, #16a085 0%,var(--primary-color) 100%);
+  box-shadow: 0 4px 16px rgba(26, 188, 156, 0.13);
+  transform: translateY(-2px);
+}
+
+.signUpPage .googleButton {
+  background: #fff;
+  color: #444;
+  border: 1.5px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.07);
+}
+
+.signUpPage .googleButton span {
+  background: linear-gradient(90deg, #4285F4, #EA4335, #FBBC05, #34A853);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.signUpPage .googleButton:hover {
+  border-color: #4285F4;
+  box-shadow: 0 4px 16px rgba(66, 133, 244, 0.13);
+  color: #4285F4;
+}
+
+.signUpPage .terms {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.97rem;
   color: #2c3e50;
   margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
+  width: max-content;
 }
 
-.terms input {
+.signUpPage .terms label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.97rem;
+  color: #2c3e50;
+}
+
+.signUpPage .terms input {
   width: 1rem;
   height: 1rem;
   cursor: pointer;
   background-color: #ffffff;
   border: 1px solid #bdc3c7;
   appearance: none;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
-.terms input:checked {
-  background-color: #1abc9c;
+.signUpPage .terms input:checked {
+  background-color:var(--primary-color);
   border-color: #16a085;
   color: white;
   font-size: 0.8rem;
@@ -93,11 +203,7 @@
   line-height: 1rem;
 }
 
-.terms a {
-  font-size: 1rem;
-}
-
-.terms input:checked::before {
+.signUpPage .terms input:checked::before {
   content: '✔';
   position: absolute;
   top: 50%;
@@ -108,31 +214,103 @@
   font-weight: bold;
 }
 
-.divider {
+.signUpPage .terms a {
+  color:var(--primary-color);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.signUpPage .terms a:hover {
+  color: #16a085;
+  text-decoration: underline;
+}
+
+.signUpPage .divider {
   text-align: center;
-  margin: 1.5rem 0;
-  font-size: 0.9rem;
-  color: #7f8c8d;
+  margin: 1.5rem 0 1rem 0;
+  font-size: 1rem;
+  color: #b0b8c1;
+  position: relative;
 }
 
-.googleButton span {
-  background: linear-gradient(90deg, #4285F4, #EA4335, #FBBC05, #34A853); /* Google logo colors */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 1.5rem;
+.signUpPage .divider::before,
+.signUpPage .divider::after {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  background: #e0e0e0;
+  vertical-align: middle;
+  margin: 0 10px;
 }
 
-.switchLink {
+.signUpPage .switchLink {
   text-align: center;
   margin-top: 2rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #7f8c8d;
 }
 
-.switchLink a {
+.signUpPage .switchLink a {
+  color:var(--primary-color);
   text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
 }
 
-.switchLink a:hover {
+.signUpPage .switchLink a:hover {
+  color: #16a085;
   text-decoration: underline;
+}
+
+.signUpPage .feedback {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 0.7rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  animation: shake 0.3s;
+}
+
+.signUpPage .feedback.error {
+  background: #ffeaea;
+  color: #e74c3c;
+  border: 1.5px solid #e74c3c;
+}
+
+.signUpPage .feedback.success {
+  background: #eafaf1;
+  color: #27ae60;
+  border: 1.5px solid #27ae60;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+    border-radius: 1rem;
+  }
+  .heading {
+    font-size: 1.5rem;
+  }
+  .googleButton {
+    font-size: 1rem;
+  }
 }

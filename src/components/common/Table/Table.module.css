@@ -3,7 +3,7 @@
   overflow-x: auto;
 }
 
-.table {
+.tableContainer .table {
   width: 100%;
   border-collapse: collapse;
   background: white;
@@ -11,27 +11,27 @@
   overflow: hidden;
 }
 
-.table th,
-.table td {
+.tableContainer .table th,
+.tableContainer .table td {
   padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #e5e7eb;
 }
 
-.table th {
+.tableContainer .table th {
   background-color: #f9fafb;
   font-weight: 600;
   color: #374151;
 }
 
-.table tbody tr:hover {
+.tableContainer .table tbody tr:hover {
   background-color: #f3f4f6;
 }
 
-.clickable {
+.tableContainer .clickable {
   cursor: pointer;
 }
 
-.clickable:hover {
+.tableContainer .clickable:hover {
   background-color: #f3f4f6;
 } 

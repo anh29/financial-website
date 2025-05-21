@@ -1,13 +1,7 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { Goals } from '../../types'
-import {
-  createGoal as createGoalAPI,
-  updateGoal as updateGoalAPI,
-  deleteGoal as deleteGoalAPI,
-  fetchGoals as fetchGoalsAPI
-} from '../../services/features/goalService'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Goals } from '../../types/goals'
+import { goalThunks } from '../thunks/goalThunks'
 
-// Separate types into a types file
 interface GoalState {
   goals: Goals[]
   isLoading: boolean
@@ -18,43 +12,6 @@ const initialState: GoalState = {
   goals: [],
   isLoading: false,
   error: null
-}
-
-// Move thunks to a separate file for better organization
-export const goalThunks = {
-  fetchGoals: createAsyncThunk('goals/fetchGoals', async (_, { rejectWithValue }) => {
-    try {
-      return await fetchGoalsAPI()
-    } catch (error: unknown) {
-      return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred')
-    }
-  }),
-
-  createGoal: createAsyncThunk('goals/createGoal', async (goal: Goals, { rejectWithValue }) => {
-    try {
-      const createdGoal = await createGoalAPI([goal])
-      return createdGoal[0]
-    } catch (error: unknown) {
-      return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred')
-    }
-  }),
-
-  updateGoal: createAsyncThunk('goals/updateGoal', async (goal: Goals, { rejectWithValue }) => {
-    try {
-      return await updateGoalAPI(goal)
-    } catch (error: unknown) {
-      return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred')
-    }
-  }),
-
-  deleteGoal: createAsyncThunk('goals/deleteGoal', async (goalId: string, { rejectWithValue }) => {
-    try {
-      await deleteGoalAPI(goalId)
-      return goalId
-    } catch (error: unknown) {
-      return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred')
-    }
-  })
 }
 
 // Separate reducers into a separate file

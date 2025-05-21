@@ -1,4 +1,4 @@
-.header {
+.headerContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,28 +13,28 @@
 }
 
 @media (max-width: 768px) {
-  .header {
+  .headerContainer {
     width: 100%;
     left: 0;
   }
 }
 
-.headerLeft h1 {
+.headerContainer .headerLeft h1 {
   margin: 0;
   font-size: 1.8rem;
 }
 
-.headerLeft span {
+.headerContainer .headerLeft span {
   font-size: 1rem;
   color: #7f8c8d; /* Gray for date */
 }
 
-.headerRight {
+.headerContainer .headerRight {
   display: flex;
   align-items: center;
 }
 
-.headerRight input {
+.headerContainer .headerRight input {
   padding: 0.7rem 1rem;
   border: 1px solid var(--light-gray); /* Light border for input */
   border-radius: 5px;
@@ -42,35 +42,35 @@
   transition: border-color 0.3s ease;
 }
 
-.headerRight input:focus {
+.headerContainer .headerRight input:focus {
   border-color: var(--primary-color);
 }
 
-.notification {
+.headerContainer .headerRight .notification {
   background: none;
   border: none;
   cursor: pointer;
   margin-right: 1.2rem;
 }
 
-.bell-icon {
+.headerContainer .headerRight .bell-icon {
   font-size: 1.8rem;
   color: #2c3e50;
 }
 
-.userProfile {
+.headerContainer .headerRight .userProfile {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.userProfile img {
+.headerContainer .headerRight .userProfile img {
   width: 45px;
   height: 45px;
   border-radius: 50%;
 }
 
-.avatarStyle {
+.headerContainer .headerRight .avatarStyle {
   width: 40px;
   height: 40px;
   border-radius: 50%;

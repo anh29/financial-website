@@ -1,0 +1,215 @@
+.dayDetailModal {
+  padding: 0.5rem;
+}
+
+.dayDetailModal .dayDetailHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dayDetailModal .dayDetailHeader h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1f36;
+  margin: 0 0 0.5rem;
+  background: linear-gradient(135deg, #1abc9c 0%, #3498db 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dayDetailModal .totalAmount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1abc9c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.dayDetailModal .totalAmount span {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.dayDetailModal .expensesList {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0 1rem;
+}
+
+.dayDetailModal .expensesList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dayDetailModal .expensesList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.dayDetailModal .expensesList::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.dayDetailModal .expensesList::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dayDetailModal .noExpenses {
+  text-align: center;
+  padding: 2rem;
+  color: #64748b;
+}
+
+.dayDetailModal .emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.dayDetailModal .expenseItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 16px;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dayDetailModal .expenseItem:hover {
+  transform: translateX(4px);
+}
+
+.dayDetailModal .expenseIcon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.dayDetailModal .expenseInfo {
+  flex: 1;
+}
+
+.dayDetailModal .expenseCategory {
+  font-weight: 600;
+  color: #1a1f36;
+  margin-bottom: 0.2rem;
+}
+
+.dayDetailModal .expenseDetails {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.dayDetailModal .expenseTags {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.dayDetailModal .tag {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  background: #f1f5f9;
+  color: #64748b;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.dayDetailModal .expenseAmount {
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  min-width: 100px;
+  text-align: center;
+}
+
+.dayDetailModal .expenseAmount.low {
+  color: #10b981;
+  background: #d1fae5;
+}
+
+.dayDetailModal .expenseAmount.medium {
+  color: #f59e0b;
+  background: #fef3c7;
+}
+
+.dayDetailModal .expenseAmount.high {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+.dayDetailModal .dayStats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dayDetailModal .statItem {
+  text-align: center;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 16px;
+}
+
+.dayDetailModal .statItem span {
+  font-size: 0.85rem;
+  color: #64748b;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.dayDetailModal .statItem strong {
+  font-size: 1.1rem;
+  color: #1a1f36;
+  font-weight: 700;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .dayDetailModal {
+    padding: 0;
+  }
+
+  .dayDetailHeader h3 {
+    font-size: 1.25rem;
+  }
+
+  .totalAmount {
+    font-size: 1.75rem;
+  }
+
+  .expensesList {
+    padding: 0 0.5rem;
+  }
+
+  .expenseItem {
+    padding: 0.75rem;
+  }
+
+  .expenseIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 1.25rem;
+  }
+
+  .expenseAmount {
+    min-width: 80px;
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+} 

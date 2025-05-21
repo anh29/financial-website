@@ -10,16 +10,16 @@ import { Transaction } from '../../types/transaction'
 
 const TransactionPage = () => {
   const { transactions, isLoading, error, handleImport, fetchTransactions } = useTransactions()
-  const [updatedTransactions, setUpdatedTransactions] = useState<Transaction[]>(transactions)
+  const [updatedTransactions, setUpdatedTransactions] = useState<Transaction[]>([])
 
   useEffect(() => {
     fetchTransactions() // Fetch transactions when the component mounts
   }, [fetchTransactions])
 
-  const handleTransactionUpdate = (updatedTransactions: Transaction[]) => {
-    setUpdatedTransactions(updatedTransactions)
+  const handleTransactionUpdate = (transactions: Transaction[]) => {
+    setUpdatedTransactions(transactions)
   }
-
+ 
   if (error) return <div>Error: {error}</div>
 
   return (
@@ -40,7 +40,11 @@ const TransactionPage = () => {
       {isLoading && <LoadingSpinner />}
       {!isLoading && transactions.length === 0 && <p>No transactions found.</p>}
       {!isLoading && transactions.length > 0 && (
-        <TransactionTable transactions={updatedTransactions} onTransactionUpdate={handleTransactionUpdate} />
+        <TransactionTable
+          transactions={transactions}
+          updatedTransactions={updatedTransactions}
+          onTransactionUpdate={handleTransactionUpdate}
+        />
       )}
     </div>
   )

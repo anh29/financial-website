@@ -1,0 +1,166 @@
+.analyticsDashboard {
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.analyticsDashboard .analyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.analyticsDashboard .analyticsCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.analyticsDashboard .analyticsCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.analyticsDashboard .fullWidth {
+  grid-column: 1 / -1;
+}
+
+.analyticsDashboard .cardHeader {
+  margin-bottom: 1.5rem;
+}
+
+.analyticsDashboard .cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #2d3748;
+}
+
+.analyticsDashboard .cardTitle h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.analyticsDashboard .cardTitle svg {
+  font-size: 1.25rem;
+  color: #4a5568;
+}
+
+.analyticsDashboard .trendIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  background: rgba(237, 242, 247, 0.5);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.analyticsDashboard .trendIndicator svg {
+  font-size: 1rem;
+}
+
+.analyticsDashboard .chartContainer {
+  flex: 1;
+  min-height: 300px;
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.analyticsDashboard .fullWidth .chartContainer {
+  min-height: 400px;
+}
+
+.analyticsDashboard .cardInsights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #edf2f7;
+}
+
+.analyticsDashboard .fullWidth .cardInsights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.analyticsDashboard .insight {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  background: rgba(237, 242, 247, 0.3);
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.analyticsDashboard .insight:hover {
+  background: rgba(237, 242, 247, 0.5);
+}
+
+.analyticsDashboard .insightLabel {
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.analyticsDashboard .insightValue {
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.analyticsDashboard .positive {
+  color: #38a169;
+}
+
+.analyticsDashboard .negative {
+  color: #e53e3e;
+}
+
+@media (max-width: 1200px) {
+  .analyticsDashboard .analyticsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .analyticsDashboard .fullWidth .cardInsights {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .analyticsDashboard .analyticsDashboard {
+    padding: 1.5rem;
+  }
+
+  .analyticsDashboard .analyticsCard {
+    padding: 1.25rem;
+  }
+
+  .analyticsDashboard .chartContainer {
+    min-height: 250px;
+  }
+
+  .analyticsDashboard .fullWidth .chartContainer {
+    min-height: 300px;
+  }
+
+  .analyticsDashboard .trendIndicator {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  .analyticsDashboard .cardTitle {
+    flex-wrap: wrap;
+  }
+}
+ 

@@ -7,20 +7,20 @@
   height: inherit;
 }
 
-.goalsUpcomingBill {
+.homePage .goalsUpcomingBill {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive layout for Goals and UpcomingBill */
   gap: 2rem;
 }
 
-p,
-svg,
-h1,
-h2 {
+.homePage p,
+.homePage svg,
+.homePage h1,
+.homePage h2 {
   color: #000;
 }
 
-.header {
+.homePage .header {
   grid-column: span 2;
   display: flex;
   justify-content: space-between;
@@ -28,99 +28,99 @@ h2 {
   margin-bottom: 2rem;
 }
 
-.header h1 {
+.homePage .header h1 {
   font-size: 2rem;
 }
 
-.header span {
+.homePage .header span {
   font-size: 1rem;
   color: #7f8c8d;
 }
 
-.totalBalance,
-.goals,
-.upcomingBill,
-.recentTransaction,
-.statistics,
-.expensesBreakdown {
+.homePage .totalBalance,
+.homePage .goals,
+.homePage .upcomingBill,
+.homePage .recentTransaction,
+.homePage .statistics,
+.homePage .expensesBreakdown {
   background-color: #ffffff;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.totalBalance h2,
-.goals h2,
-.upcomingBill h2,
-.recentTransaction h2,
-.statistics h2,
-.expensesBreakdown h2 {
+.homePage .totalBalance h2,
+.homePage .goals h2,
+.homePage .upcomingBill h2,
+.homePage .recentTransaction h2,
+.homePage .statistics h2,
+.homePage .expensesBreakdown h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.totalBalance p,
-.goals p,
-.upcomingBill p,
-.recentTransaction p,
-.expensesBreakdown p {
+.homePage .totalBalance p,
+.homePage .goals p,
+.homePage .upcomingBill p,
+.homePage .recentTransaction p,
+.homePage .expensesBreakdown p {
   margin: 0.5rem 0;
   color: #2c3e50; /* Dark text color for better readability */
 }
 
-.card,
-.goalChart,
-.bill,
-.recentTransaction ul,
-.expense {
+.homePage .card,
+.homePage .goalChart,
+.homePage .bill,
+.homePage .recentTransaction ul,
+.homePage .expense {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.card {
-  background-color: #1abc9c;
+.homePage .card {
+  background-color:var(--primary-color);
   color: white;
   padding: 1rem;
   border-radius: 8px;
 }
 
-.goalChart {
+.homePage .goalChart {
   justify-content: center;
   font-size: 2rem;
 }
 
-.bill,
-.recentTransaction li,
-.expense {
+.homePage .bill,
+.homePage .recentTransaction li,
+.homePage .expense {
   background-color: #f9f9f9;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 0.5rem;
 }
 
-.recentTransaction ul {
+.homePage .recentTransaction ul {
   list-style: none;
   padding: 0;
 }
 
-.recentTransaction li {
+.homePage .recentTransaction li {
   justify-content: space-between;
 }
 
-.statistics {
+.homePage .statistics {
   grid-column: span 2;
   display: flex;
   flex-direction: column;
   align-items: center; /* Center align for better UI */
 }
 
-.statistics canvas {
+.homePage .statistics canvas {
   width: 100% !important;
   height: 300px !important;
 }
 
-.expensesBreakdown {
+.homePage .expensesBreakdown {
   grid-column: span 2;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid for breakdown */

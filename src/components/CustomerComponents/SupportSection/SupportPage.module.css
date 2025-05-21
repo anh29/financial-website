@@ -1,0 +1,278 @@
+.supportPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Hero Section */
+.supportPage .hero {
+  text-align: center;
+  padding: 4rem 0;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.supportPage .hero h1 {
+  font-size: 3rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.supportPage .hero p {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Support Options Grid */
+.supportPage .supportOptions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.supportPage .supportCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: slideUp 0.5s ease-out;
+}
+
+.supportPage .supportCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.supportPage .icon {
+  font-size: 2.5rem;
+  color:var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.supportPage .supportCard h3 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.supportPage .supportCard p {
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+}
+
+.supportPage .actionButton {
+  background:var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.supportPage .actionButton:hover {
+  background: #16a085;
+  transform: translateY(-2px);
+}
+
+/* FAQ Section */
+.supportPage .faqSection {
+  margin: 4rem 0;
+}
+
+.supportPage .faqSection h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.supportPage .faqList {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.supportPage .faqItem {
+  background: white;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.supportPage .faqItem:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.supportPage .faqQuestion {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.supportPage .faqQuestion h3 {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.supportPage .faqAnswer {
+  padding: 0 1.5rem 1.5rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Contact Form Section */
+.supportPage .contactSection {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  margin: 4rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.supportPage .contactSection h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.supportPage .contactForm {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.supportPage .formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.supportPage .formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.supportPage .formGroup input,
+.supportPage .formGroup textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.supportPage .formGroup input:focus,
+.supportPage .formGroup textarea:focus {
+  outline: none;
+  border-color:var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+}
+
+.supportPage .submitButton {
+  background:var(--primary-color);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.supportPage .submitButton:hover {
+  background: #16a085;
+  transform: translateY(-2px);
+}
+
+/* Additional Info Section */
+.supportPage .additionalInfo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.supportPage .infoCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.supportPage .infoCard h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.supportPage .infoCard p {
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .supportPage .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .supportPage .supportOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .supportPage .contactSection {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .supportPage .hero h1 {
+    font-size: 2rem;
+  }
+
+  .supportPage .supportCard {
+    padding: 1.5rem;
+  }
+
+  .supportPage .faqQuestion h3 {
+    font-size: 1rem;
+  }
+
+  .supportPage .additionalInfo {
+    grid-template-columns: 1fr;
+  }
+} 

@@ -1,414 +1,408 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styles from './ExpensesPage.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faChartLine, faList, faFolderOpen, faHome } from '@fortawesome/free-solid-svg-icons'
 import {
-  faHouse,
-  faUtensils,
-  faBus,
-  faFilm,
-  faShoppingBag,
-  faEllipsisH,
-  faArrowUp,
-  faArrowDown
-} from '@fortawesome/free-solid-svg-icons'
-import { Pie, Bar, Line, Doughnut } from 'react-chartjs-2'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-import ExpensesBreakdown from './ExpensesBreakdown/ExpensesBreakdown'
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement
+} from 'chart.js'
+import { Tab } from '../../components/common/Tabs/Tabs'
+import OverviewSummary from '../../components/ExpensesPage/OverviewSummary'
+import ExpensesTable from '../../components/ExpensesPage/ExpensesTable'
+import CategoriesAccordion from '../../components/ExpensesPage/CategoriesAccordion'
+import { motion, AnimatePresence } from 'framer-motion'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useNavigate } from 'react-router-dom'
+import AnalyticsDashboard from '../../components/ExpensesPage/AnalyticsDashboard'
 
-ChartJS.register(ArcElement, Tooltip, Legend)
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement)
 
-const expensesData = [
+type DailyAllocation = {
+  date: string
+  amount: number
+}
+
+type Expense = {
+  id: string
+  category: string
+  amount: number
+  date: string
+  details: string
+  tags: string[]
+  note: string
+  change: number
+  direction: 'up' | 'down'
+  dailyAllocation?: DailyAllocation[] // Optional: for multi-day/multi-use expenses
+}
+
+const expensesData: Expense[] = [
   {
+    id: '1',
     category: 'Housing',
-    amount: 250.0,
-    details: [
-      'House Rent: $230',
-      'Parking: $20',
-      'House Rent: $230',
-      'Parking: $20',
-      'House Rent: $230',
-      'Parking: $20'
-    ],
+    amount: 250,
+    date: '2024-05-01',
+    details: 'House Rent: $230, Parking: $20',
+    tags: ['monthly'],
+    note: 'May rent',
     change: 15,
     direction: 'up'
   },
   {
+    id: '2',
     category: 'Food',
-    amount: 350.0,
-    details: ['Grocery: $230', 'Restaurant bill: $120'],
+    amount: 350,
+    date: '2024-05-02',
+    details: 'Grocery: $230, Restaurant bill: $120',
+    tags: [],
+    note: '',
     change: 8,
     direction: 'down'
   },
   {
+    id: '3',
     category: 'Transportation',
-    amount: 50.0,
-    details: ['Taxi Fare: $30', 'Metro Card bill: $20'],
+    amount: 50,
+    date: '2024-05-03',
+    details: 'Taxi Fare: $30, Metro Card bill: $20',
+    tags: [],
+    note: '',
     change: 12,
     direction: 'down'
   },
   {
+    id: '4',
     category: 'Entertainment',
-    amount: 80.0,
-    details: ['Movie ticket: $30', 'iTunes: $50'],
+    amount: 80,
+    date: '2024-05-04',
+    details: 'Movie ticket: $30, iTunes: $50',
+    tags: [],
+    note: '',
     change: 15,
     direction: 'up'
   },
-  { category: 'Shopping', amount: 420.0, details: ['Shirt: $230', 'Jeans: $190'], change: 25, direction: 'up' },
-  { category: 'Others', amount: 50.0, details: ['Donation: $30', 'Gift: $20'], change: 23, direction: 'up' }
+  {
+    id: '5',
+    category: 'Shopping',
+    amount: 420,
+    date: '2024-05-05',
+    details: 'Shirt: $230, Jeans: $190',
+    tags: [],
+    note: '',
+    change: 25,
+    direction: 'up'
+  },
+  {
+    id: '6',
+    category: 'Others',
+    amount: 50,
+    date: '2024-05-06',
+    details: 'Donation: $30, Gift: $20',
+    tags: ['charity'],
+    note: '',
+    change: 23,
+    direction: 'up'
+  },
+  {
+    id: '7',
+    category: 'Shopping',
+    amount: 300,
+    date: '2024-05-10',
+    details: '3-day conference pass',
+    tags: ['multi-day', 'smart-allocated'],
+    note: 'TechConf 2024 (May 10-12)',
+    change: 0,
+    direction: 'up',
+    dailyAllocation: [
+      { date: '2024-05-10', amount: 100 },
+      { date: '2024-05-11', amount: 100 },
+      { date: '2024-05-12', amount: 100 }
+    ]
+  }
 ]
 
-const categoryColors = {
-  Housing: '#1abc9c',
-  Food: '#3498db',
-  Transportation: '#9b59b6',
-  Entertainment: '#e74c3c',
-  Shopping: '#f1c40f',
-  Others: '#95a5a6'
-}
+const ExpensesPage: React.FC = () => {
+  const [search, setSearch] = useState('')
+  const [filterCategory, setFilterCategory] = useState('')
+  const [activeTab, setActiveTab] = useState<'overview' | 'analytics'>('overview')
+  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
+  const [calendarMonth, setCalendarMonth] = useState(4) // May (0-based month index)
+  const [calendarYear, setCalendarYear] = useState(2024) // Year of mock data
+  const [selectedDay, setSelectedDay] = useState<number | null>(null)
+  const [showDayModal, setShowDayModal] = useState(false)
 
-const weeklyData = {
-  Housing: [60, 70, 50, 70],
-  Food: [80, 90, 100, 80],
-  Transportation: [10, 15, 12, 13],
-  Entertainment: [20, 25, 15, 20],
-  Shopping: [100, 120, 110, 90],
-  Others: [10, 15, 12, 13]
-}
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ]
 
-const getComparisonData = (comparisonPeriod, viewMode) => {
-  let comparisonData
-  switch (comparisonPeriod) {
-    case 'Last Quarter':
-      comparisonData = lastQuarterData
-      break
-    case 'Last Year':
-      comparisonData = lastYearData
-      break
-    default:
-      comparisonData = lastMonthData
-  }
+  const filteredData = useMemo(() => {
+    return expensesData.filter(
+      (e) =>
+        (!search || e.details.toLowerCase().includes(search.toLowerCase())) &&
+        (!filterCategory || e.category === filterCategory)
+    )
+  }, [search, filterCategory])
 
-  const currentColors = expensesData.map((expense) => categoryColors[expense.category])
-  const comparisonColors = currentColors.map((color) => `${color}80`)
+  const totalExpenses = expensesData.reduce((sum, e) => sum + e.amount, 0)
+  const topCategory = expensesData.reduce((a, b) => (a.amount > b.amount ? a : b))
+  const averageDaily = totalExpenses / 30 // Assuming 30 days in a month`
 
-  if (viewMode === 'Weekly') {
-    return {
-      labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-      datasets: Object.keys(weeklyData).map((category) => ({
-        label: category,
-        data: weeklyData[category],
-        borderColor: categoryColors[category],
-        backgroundColor: `${categoryColors[category]}80`,
-        borderWidth: 2
-      }))
-    }
-  }
+  // Expenses for selected day
+  const dayExpenses = useMemo(() => {
+    if (selectedDay == null) return []
+    return expensesData.filter((e) => {
+      const date = new Date(e.date)
+      return date.getDate() === selectedDay && date.getMonth() === calendarMonth && date.getFullYear() === calendarYear
+    })
+  }, [selectedDay, calendarMonth, calendarYear, expensesData])
 
-  if (viewMode === 'Category') {
-    return {
-      labels: expensesData.map((expense) => expense.category),
+  // Compute analytics data
+  const analyticsData = useMemo(() => {
+    // Radar chart data (spending distribution by category)
+    const categoryTotals = expensesData.reduce(
+      (acc, expense) => {
+        acc[expense.category] = (acc[expense.category] || 0) + expense.amount
+        return acc
+      },
+      {} as Record<string, number>
+    )
+
+    const totalSpending = Object.values(categoryTotals).reduce((sum, amount) => sum + amount, 0)
+    const radarLabels = Object.keys(categoryTotals)
+    const radarValues = Object.values(categoryTotals).map((amount) => (amount / totalSpending) * 100)
+
+    // Find highest and lowest spending categories
+    const categoryPercentages = Object.entries(categoryTotals).map(([category, amount]) => ({
+      category,
+      percent: (amount / totalSpending) * 100
+    }))
+    const highest = categoryPercentages.reduce((a, b) => (a.percent > b.percent ? a : b))
+    const lowest = categoryPercentages.reduce((a, b) => (a.percent < b.percent ? a : b))
+
+    // Weekly spending data
+    const weeklyData = expensesData.reduce(
+      (acc, expense) => {
+        const date = new Date(expense.date)
+        const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' })
+        acc[dayOfWeek] = (acc[dayOfWeek] || 0) + expense.amount
+        return acc
+      },
+      {} as Record<string, number>
+    )
+
+    const weeklySpendingData = {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       datasets: [
         {
-          label: 'Current',
-          data: expensesData.map((expense) => expense.amount),
-          backgroundColor: currentColors,
-          borderColor: '#ffffff',
-          borderWidth: 2
-        },
-        {
-          label: comparisonPeriod,
-          data: comparisonData.map((expense) => expense.amount),
-          backgroundColor: comparisonColors,
-          borderColor: '#ffffff',
-          borderWidth: 2
+          label: 'Daily Spending',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => weeklyData[day] || 0)
         }
       ]
     }
-  } else {
-    const currentTotal = expensesData.reduce((sum, expense) => sum + expense.amount, 0)
-    const comparisonTotal = comparisonData.reduce((sum, expense) => sum + expense.amount, 0)
-    return {
-      labels: ['Total Expenses'],
+
+    // Weekly spending summary
+    const weeklySpendingSummary = {
+      total: Object.values(weeklyData).reduce((sum, amount) => sum + amount, 0),
+      average: Object.values(weeklyData).reduce((sum, amount) => sum + amount, 0) / 7,
+      highest: Math.max(...Object.values(weeklyData)),
+      lowest: Math.min(...Object.values(weeklyData))
+    }
+
+    // Trends data (last 6 months)
+    const trendsData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
       datasets: [
         {
-          label: 'Current',
-          data: [currentTotal],
-          backgroundColor: '#3498db',
-          borderColor: '#ffffff',
-          borderWidth: 2
-        },
-        {
-          label: comparisonPeriod,
-          data: [comparisonTotal],
-          backgroundColor: '#95a5a6',
-          borderColor: '#ffffff',
-          borderWidth: 2
+          label: 'Monthly Spending',
+          data: [3000, 3500, 3200, 3800, 3600, 4000] // This should be computed from real data
         }
       ]
     }
-  }
-}
 
-const chartOptions = (comparisonPeriod, viewMode) => ({
-  plugins: {
-    tooltip: {
-      callbacks: {
-        label: (tooltipItem) => {
-          const datasetIndex = tooltipItem.datasetIndex // Get the dataset index (0 for current, 1 for comparison)
-          const dataIndex = tooltipItem.dataIndex // Get the data index
-          const datasetLabel = tooltipItem.dataset.label // Get the dataset label (e.g., "Current" or "Last Month")
-          const amount =
-            datasetIndex === 0
-              ? expensesData[dataIndex].amount // Current dataset
-              : getComparisonData(comparisonPeriod, viewMode).datasets[1].data[dataIndex] // Pass viewMode
-          return `${datasetLabel}: $${amount.toFixed(2)}`
-        }
-      },
-      backgroundColor: '#ffffff',
-      titleColor: '#34495e',
-      bodyColor: '#34495e',
-      borderColor: '#ecf0f1',
-      borderWidth: 1
-    },
-    legend: {
-      display: true,
-      position: 'top',
-      align: 'end',
-      labels: {
-        font: {
-          size: 12
-        },
-        color: '#34495e'
+    // Period comparison
+    const periodComparison = {
+      current: totalSpending,
+      previous: totalSpending * 0.9, // This should be computed from real data
+      change: 10 // This should be computed from real data
+    }
+
+    // Calendar Heatmap Data (for selected month/year)
+    const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate()
+    const calendarHeatmapData = Array.from({ length: daysInMonth }, (_, i) => ({ day: i + 1, amount: 0 }))
+    expensesData.forEach((expense) => {
+      const date = new Date(expense.date)
+      if (date.getMonth() === calendarMonth && date.getFullYear() === calendarYear) {
+        calendarHeatmapData[date.getDate() - 1].amount += expense.amount
       }
-    }
-  },
-  responsive: true,
-  maintainAspectRatio: false,
-  scales: {
-    x: {
-      grid: {
-        display: false
+    })
+
+    return {
+      radarLabels,
+      radarValues,
+      highest: {
+        category: highest.category,
+        amount: categoryTotals[highest.category]
       },
-      ticks: {
-        color: '#7f8c8d'
-      }
-    },
-    y: {
-      grid: {
-        color: '#ecf0f1'
+      lowest: {
+        category: lowest.category,
+        amount: categoryTotals[lowest.category]
       },
-      ticks: {
-        color: '#7f8c8d'
-      }
+      weeklySpendingData,
+      weeklySpendingSummary,
+      trendsData,
+      periodComparison,
+      calendarHeatmapData
     }
-  },
-  elements: {
-    line: {
-      tension: 0.2
+  }, [expensesData, calendarMonth, calendarYear])
+
+  const handleTabChange = useCallback((tabId: string) => {
+    setIsLoading(true)
+    setActiveTab(tabId as 'overview' | 'analytics')
+    setTimeout(() => setIsLoading(false), 300)
+  }, [])
+
+  const handleExport = useCallback(() => {
+    const headers = ['Date,Category,Amount,Details']
+    const rows = filteredData.map((e) => `${e.date},${e.category},${e.amount},"${e.details}"`)
+    const csv = headers.concat(rows).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = 'expenses.csv'
+    a.click()
+  }, [filteredData])
+
+  const handleAddExpense = useCallback(() => {
+    navigate('/transactions')
+  }, [navigate])
+
+  const tabs: Tab[] = [
+    {
+      id: 'overview',
+      label: 'Overview',
+      icon: faHome,
+      content: (
+        <OverviewSummary
+          totalExpenses={totalExpenses}
+          topCategory={topCategory.category}
+          averageDaily={averageDaily}
+          categoryBreakdown={expensesData.map((e) => ({ category: e.category, amount: e.amount }))}
+          allExpenses={expensesData}
+          calendarMonth={calendarMonth}
+          calendarYear={calendarYear}
+          setCalendarMonth={setCalendarMonth}
+          setCalendarYear={setCalendarYear}
+          analyticsData={analyticsData}
+          showDayModal={showDayModal}
+          setShowDayModal={setShowDayModal}
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+          dayExpenses={dayExpenses}
+          monthNames={monthNames}
+          handleAddExpense={handleAddExpense}
+        />
+      )
     },
-    point: {
-      radius: 4,
-      backgroundColor: '#ffffff',
-      borderWidth: 2,
-      borderColor: '#3498db'
+    {
+      id: 'analytics',
+      label: 'Analytics',
+      icon: faChartLine,
+      content: <AnalyticsDashboard {...analyticsData} />
+    },
+    {
+      id: 'list',
+      label: 'Detail',
+      icon: faList,
+      content: (
+        <ExpensesTable
+          expenses={filteredData}
+          onSearch={setSearch}
+          onFilterCategory={setFilterCategory}
+          search={search}
+          filterCategory={filterCategory}
+          onExport={handleExport}
+        />
+      )
+    },
+    {
+      id: 'categories',
+      label: 'Monthly',
+      icon: faFolderOpen,
+      content: (
+        <CategoriesAccordion
+          groupedExpenses={filteredData.reduce<{ [date: string]: Expense[] }>((acc, curr) => {
+            acc[curr.date] = acc[curr.date] || []
+            acc[curr.date].push(curr)
+            return acc
+          }, {})}
+        />
+      )
     }
-  }
-})
-
-const iconMap = {
-  Housing: faHouse,
-  Food: faUtensils,
-  Transportation: faBus,
-  Entertainment: faFilm,
-  Shopping: faShoppingBag,
-  Others: faEllipsisH
-}
-
-const comparisonOptions = ['Last Month', 'Last Quarter', 'Last Year']
-
-const lastMonthData = [
-  { category: 'Housing', amount: 230.0 },
-  { category: 'Food', amount: 300.0 },
-  { category: 'Transportation', amount: 60.0 },
-  { category: 'Entertainment', amount: 70.0 },
-  { category: 'Shopping', amount: 400.0 },
-  { category: 'Others', amount: 40.0 }
-]
-
-const lastQuarterData = [
-  { category: 'Housing', amount: 240.0 },
-  { category: 'Food', amount: 320.0 },
-  { category: 'Transportation', amount: 55.0 },
-  { category: 'Entertainment', amount: 75.0 },
-  { category: 'Shopping', amount: 390.0 },
-  { category: 'Others', amount: 45.0 }
-]
-
-const lastYearData = [
-  { category: 'Housing', amount: 220.0 },
-  { category: 'Food', amount: 280.0 },
-  { category: 'Transportation', amount: 50.0 },
-  { category: 'Entertainment', amount: 60.0 },
-  { category: 'Shopping', amount: 350.0 },
-  { category: 'Others', amount: 30.0 }
-]
-
-const ExpensesPage = () => {
-  const [selectedExpense, setSelectedExpense] = useState(null)
-  const [chartType, setChartType] = useState('Pie')
-  const [comparisonPeriod, setComparisonPeriod] = useState('Last Month')
-  const [viewMode, setViewMode] = useState('Category')
-  const [isChartLoading, setIsChartLoading] = useState(false)
-
-  const handleComparisonChange = (event) => {
-    setComparisonPeriod(event.target.value)
-  }
-
-  const handleViewModeChange = (mode) => {
-    setViewMode(mode)
-  }
-
-  const handleCardClick = (expense) => {
-    setSelectedExpense(expense)
-  }
-
-  const closeModal = () => {
-    setSelectedExpense(null)
-  }
-
-  const handleChartTypeChange = (type) => {
-    setIsChartLoading(true)
-    setChartType(type)
-    setTimeout(() => setIsChartLoading(false), 500)
-  }
-
-  const renderChart = () => {
-    const data = getComparisonData(comparisonPeriod, viewMode)
-
-    if (chartType === 'Line' && viewMode === 'Weekly') {
-      data.datasets.forEach((dataset) => {
-        dataset.fill = false // Disable area fill for weekly line chart
-      })
-    }
-
-    if (chartType === 'Line') {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
-
-      // Create gradient for the current dataset
-      const currentGradientColors = expensesData.map((expense, index) => {
-        const nextIndex = (index + 1) % expensesData.length
-        const gradient = ctx.createLinearGradient(0, 0, 400, 0)
-        gradient.addColorStop(0, categoryColors[expense.category])
-        gradient.addColorStop(1, categoryColors[expensesData[nextIndex].category])
-        return gradient
-      })
-
-      // Create gradient for the comparison dataset (lighter colors)
-      const comparisonGradientColors = expensesData.map((expense, index) => {
-        const nextIndex = (index + 1) % expensesData.length
-        const gradient = ctx.createLinearGradient(0, 0, 400, 0)
-        gradient.addColorStop(0, `${categoryColors[expense.category]}80`) // Add transparency
-        gradient.addColorStop(1, `${categoryColors[expensesData[nextIndex].category]}80`) // Add transparency
-        return gradient
-      })
-
-      // Apply gradients to the datasets
-      data.datasets[0].borderColor = currentGradientColors
-      data.datasets[0].backgroundColor = 'rgba(52, 152, 219, 0.2)' // Light blue fill under the line
-      data.datasets[1].borderColor = comparisonGradientColors
-      data.datasets[1].backgroundColor = 'rgba(149, 165, 166, 0.2)' // Light gray fill under the line
-    }
-
-    switch (chartType) {
-      case 'Bar':
-        return <Bar data={data} options={chartOptions(comparisonPeriod, viewMode)} />
-      case 'Line':
-        return <Line data={data} options={chartOptions(comparisonPeriod, viewMode)} />
-      case 'Doughnut':
-        return <Doughnut data={data} options={chartOptions(comparisonPeriod, viewMode)} />
-      default:
-        return <Pie data={data} options={chartOptions(comparisonPeriod, viewMode)} />
-    }
-  }
+  ]
 
   return (
     <div className={styles.expensesPage}>
-      <header className={styles.header}>
+      <div className={styles.header}>
         <h1>Expenses</h1>
-        <p>Track and manage your expenses effectively.</p>
-      </header>
-      <section className={styles.expensesComparison}>
-        <h2>Expenses Comparison</h2>
-        <div className={styles.comparisonControls}>
-          <select className={styles.comparisonDropdown} value={comparisonPeriod} onChange={handleComparisonChange}>
-            {comparisonOptions.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className={styles.viewModeControls}>
+        <button className={styles.addButton} onClick={handleAddExpense}>
+          <FontAwesomeIcon icon={faPlus} /> Add Expense
+        </button>
+      </div>
+
+      <div className={styles.tabContainer}>
+        {tabs.map((tab) => (
           <button
-            className={`${styles.viewModeButton} ${viewMode === 'Category' ? styles.active : ''}`}
-            onClick={() => handleViewModeChange('Category')}
+            key={tab.id}
+            className={`${styles.tab} ${activeTab === tab.id ? styles.activeTab : ''}`}
+            onClick={() => handleTabChange(tab.id)}
           >
-            By Category
+            <FontAwesomeIcon icon={tab.icon} className={styles.tabIcon} />
+            <p className={styles.tabLabel}>{tab.label}</p>
           </button>
-          <button
-            className={`${styles.viewModeButton} ${viewMode === 'Total' ? styles.active : ''}`}
-            onClick={() => handleViewModeChange('Total')}
+        ))}
+      </div>
+
+      <AnimatePresence mode='wait'>
+        {isLoading ? (
+          <motion.div
+            key='loading'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className={styles.loadingContainer}
           >
-            Total Expenses
-          </button>
-          <button
-            className={`${styles.viewModeButton} ${viewMode === 'Weekly' ? styles.active : ''}`}
-            onClick={() => handleViewModeChange('Weekly')}
+            <div className={styles.loadingSpinner} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className={styles.tabContent}
           >
-            Weekly
-          </button>
-        </div>
-        <div className={styles.chartControls}>
-          <button
-            className={`${styles.chartButton} ${chartType === 'Pie' ? styles.active : ''}`}
-            onClick={() => handleChartTypeChange('Pie')}
-          >
-            Pie Chart
-          </button>
-          <button
-            className={`${styles.chartButton} ${chartType === 'Bar' ? styles.active : ''}`}
-            onClick={() => handleChartTypeChange('Bar')}
-          >
-            Bar Chart
-          </button>
-          <button
-            className={`${styles.chartButton} ${chartType === 'Line' ? styles.active : ''}`}
-            onClick={() => handleChartTypeChange('Line')}
-          >
-            Line Chart
-          </button>
-          <button
-            className={`${styles.chartButton} ${chartType === 'Doughnut' ? styles.active : ''}`}
-            onClick={() => handleChartTypeChange('Doughnut')}
-          >
-            Doughnut Chart
-          </button>
-        </div>
-        <div className={styles.chartContainer}>
-          {isChartLoading && (
-            <div className={styles.chartLoading}>
-              <div className={styles.spinner}></div>
-            </div>
-          )}
-          {!isChartLoading && renderChart()}
-        </div>
-      </section>
-      <ExpensesBreakdown
-        expensesData={expensesData}
-        selectedExpense={selectedExpense}
-        setSelectedExpense={setSelectedExpense}
-      />
+            {tabs.find((tab) => tab.id === activeTab)?.content}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

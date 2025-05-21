@@ -11,9 +11,9 @@ interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
 export const Form: React.FC<FormProps> = ({ title, onSubmit, children, error, className = '', ...props }) => {
   return (
     <form className={`${styles.form} ${className}`} onSubmit={onSubmit} {...props}>
-      {title && <h2 className='form-title'>{title}</h2>}
-      {error && <div className='form-error'>{error}</div>}
-      <div className='form-content'>{children}</div>
+      {title && <h2 className={styles.formTitle}>{title}</h2>}
+      {error && <div className={styles.formError}>{error}</div>}
+      <div className={styles.formContent}>{children}</div>
     </form>
   )
 }
