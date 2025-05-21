@@ -83,7 +83,7 @@ export const classifyTransaction = async ({
 }: {
   description?: string
 }): Promise<{ predictedCategory: { label: string; key: string } }> => {
-  const response = await fetch(`${SERVER_URL}/smart/category`, {
+  const response = await fetch(`${SERVER_URL}/marketplace/category`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ description })
@@ -98,7 +98,7 @@ export const predictUsageDuration = async (transaction: { amount: number; catego
   const user = await getUser()
   if (!user) throw new Error('User not found')
 
-  const response = await fetch(`${SERVER_URL}/smart/predictUsageDuration`, {
+  const response = await fetch(`${SERVER_URL}/marketplace/predictUsageDuration`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...transaction, userId: user.id })
