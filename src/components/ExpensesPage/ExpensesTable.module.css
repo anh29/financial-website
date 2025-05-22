@@ -104,32 +104,32 @@
 }
 .tableExpensesSection .tagBadge {
   display: inline-block;
-  padding: 3px 10px;
+  padding: 6px 12px;
   border-radius: 999px;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(90deg, #1abc9c 0%, #38f9d7 100%);
+  background: linear-gradient(90deg, #adffef 0%, #0e6251 120%);
   margin-right: 6px;
   margin-bottom: 2px;
 }
-.tableExpensesSection .smartBadge {
-  display: inline-block;
-  background: linear-gradient(90deg, #10b981 0%, #38f9d7 100%);
-  color: #fff;
-  font-size: 0.85rem;
+.tableExpensesSection .amortizedTag {
+  background: linear-gradient(90deg, #27d6b3 40%, #38f9d7 100%);
+  font-size: 1rem;
   font-weight: 700;
-  border-radius: 999px;
-  padding: 3px 12px;
-  margin-left: 6px;
-  margin-bottom: 2px;
-  letter-spacing: 0.5px;
-  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.13);
 }
 
 .tableExpensesSection .smartAllocatedRow {
   border-left: 4px solid #10b981;
   background: linear-gradient(90deg, #f0fdfa 0%, #f7fbff 100%);
+}
+
+.tableExpensesSection .smartAllocatedRow td:nth-child(5) {
+  text-align: center;
+}
+
+.tableExpensesSection .singleExpenseRow td:nth-child(5) {
+  text-align: end;
 }
 
 .tableExpensesSection .dailyAllocationRow td {
@@ -139,18 +139,45 @@
 }
 
 .tableExpensesSection .dailyAllocationBox {
-  padding: 1.2rem 2rem;
-  background: #eafaf1;
-  border-radius: 12px;
-  margin: 0.5rem 0 1rem 0;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.07);
+  padding: 1rem;
+  background-color: #f0fdfa;
+  border-radius: 8px;
+  margin: 0.5rem 0;
 }
 
-.tableExpensesSection .dailyAllocationTable {
+.allocationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.allocationInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #047857;
+  font-size: 0.95rem;
+}
+
+.dateRange {
+  font-weight: 500;
+}
+
+.dailyAmount {
+  font-weight: 600;
+  background: #bbf7d0;
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+
+.dailyAllocationTable {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 0.5rem;
 }
+
 .tableExpensesSection .dailyAllocationTable th,
 .tableExpensesSection .dailyAllocationTable td {
   padding: 8px 14px;
@@ -165,4 +192,67 @@
 }
 .tableExpensesSection .dailyAllocationTable tr:last-child td {
   border-bottom: none;
+}
+
+.amortizedCard {
+  background: #e6fcf5;
+  border: 2px solid #38d9a9;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(56, 217, 169, 0.10);
+  padding: 1.2rem 2rem;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.amortizedHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #099268;
+  margin-bottom: 0.2rem;
+}
+
+.amortizedIcon {
+  font-size: 1.5rem;
+}
+
+.amortizedLabel {
+  letter-spacing: 0.5px;
+}
+
+.amortizedInfoContent {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.amortizedDateRange {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #087f5b;
+}
+
+.amortizedPerDay {
+  background: #38d9a9;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.4em 1.2em;
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  box-shadow: 0 2px 8px rgba(56, 217, 169, 0.13);
+}
+
+.perDayText {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-left: 0.3em;
+  opacity: 0.85;
 }

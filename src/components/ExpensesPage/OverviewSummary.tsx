@@ -2,9 +2,6 @@ import React from 'react'
 import styles from './OverviewSummary.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faDollarSign,
-  faTrophy,
-  faCalendarDay,
   faChartLine,
   faLightbulb,
   faChartPie,
@@ -12,34 +9,22 @@ import {
   faArrowDown,
   faCalendarAlt,
   faWallet,
-  faChartBar
+  faChartBar,
+  faList
 } from '@fortawesome/free-solid-svg-icons'
 import { Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartOptions } from 'chart.js'
 import CalendarHeatmapCard from './CalendarHeatmapCard'
 import DayDetailModal from './DayDetailModal'
-
+import { Transaction } from '../../types/transaction'
+import { categoryColors } from '../../utils/categoryUtils'
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 type Props = {
-  totalExpenses: number
   topCategory: string
   averageDaily: number
-  previousMonthTotal?: number
-  monthlyBudget?: number
   categoryBreakdown?: { category: string; amount: number; allocation?: { [date: string]: number } }[]
-  allExpenses: Array<{
-    id: string
-    category: string
-    amount: number
-    date: string
-    details: string
-    tags: string[]
-    note: string
-    change: number
-    direction: 'up' | 'down'
-    allocation?: { [date: string]: number }
-  }>
+  allExpenses: Transaction[]
 }
 
 type OverviewSummaryProps = Props & {
@@ -47,22 +32,45 @@ type OverviewSummaryProps = Props & {
   calendarYear: number
   setCalendarMonth: (m: number) => void
   setCalendarYear: (y: number) => void
-  analyticsData: any
+  analyticsData: {
+    radarLabels: string[]
+    radarValues: number[]
+    highest: { category: string; amount: number }
+    lowest: { category: string; amount: number }
+    weeklySpendingData: {
+      labels: string[]
+      datasets: { label: string; data: number[] }[]
+    }
+    weeklySpendingSummary: {
+      total: number
+      average: number
+      highest: number
+      lowest: number
+    }
+    trendsData: {
+      labels: string[]
+      datasets: { label: string; data: number[] }[]
+    }
+    periodComparison: {
+      current: number
+      previous: number
+      change: number
+    }
+    calendarHeatmapData?: { day: number; amount: number }[]
+  }
   showDayModal: boolean
   setShowDayModal: (open: boolean) => void
   selectedDay: number | null
   setSelectedDay: (day: number | null) => void
-  dayExpenses: any[]
+  dayExpenses: Transaction[]
   monthNames: string[]
   handleAddExpense: () => void
+  onShowListTab: () => void
 }
 
 const OverviewSummary: React.FC<OverviewSummaryProps> = ({
-  totalExpenses,
   topCategory,
   averageDaily,
-  previousMonthTotal,
-  monthlyBudget,
   categoryBreakdown = [],
   allExpenses,
   calendarMonth,
@@ -76,14 +84,15 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
   setSelectedDay,
   dayExpenses,
   monthNames,
-  handleAddExpense
+  handleAddExpense,
+  onShowListTab
 }) => {
   const pieData = {
     labels: categoryBreakdown.map((cat) => cat.category),
     datasets: [
       {
         data: categoryBreakdown.map((cat) => cat.amount),
-        backgroundColor: ['#1abc9c', '#3498db', '#9b59b6', '#e74c3c', '#f1c40f', '#95a5a6'],
+        backgroundColor: categoryBreakdown.map((cat) => categoryColors[cat.category] || '#ccc'),
         borderWidth: 2,
         borderColor: '#ffffff'
       }
@@ -112,6 +121,14 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
 
   // Calculate additional analytics
   const calculateAnalytics = () => {
+    if (allExpenses.length === 0) {
+      return {
+        monthOverMonthChange: 0,
+        highestSpendingDay: { day: 'No data', average: 0 },
+        categoryGrowth: {}
+      }
+    }
+
     const total = allExpenses.reduce((sum, e) => sum + e.amount, 0)
     const previousMonthTotal = total * 0.85 // Mock data - replace with actual previous month data
     const monthOverMonthChange = ((total - previousMonthTotal) / previousMonthTotal) * 100
@@ -130,22 +147,26 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
       {} as Record<string, { total: number; count: number }>
     )
 
-    const highestSpendingDay = Object.entries(dailyAverages)
-      .map(([day, data]) => ({
-        day,
-        average: data.total / data.count
-      }))
-      .reduce((a, b) => (a.average > b.average ? a : b))
+    const dailyAveragesArray = Object.entries(dailyAverages).map(([day, data]) => ({
+      day,
+      average: data.total / data.count
+    }))
 
-    const categoryGrowth = categoryBreakdown.reduce(
-      (acc, curr) => {
-        const prevAmount = curr.amount * 0.9 // Mock data - replace with actual previous period data
-        const growth = ((curr.amount - prevAmount) / prevAmount) * 100
-        acc[curr.category] = growth
-        return acc
-      },
-      {} as Record<string, number>
-    )
+    const highestSpendingDay = dailyAveragesArray.length > 0
+      ? dailyAveragesArray.reduce((a, b) => (a.average > b.average ? a : b))
+      : { day: 'No data', average: 0 }
+
+    const categoryGrowth = categoryBreakdown.length > 0
+      ? categoryBreakdown.reduce(
+          (acc, curr) => {
+            const prevAmount = curr.amount * 0.9 // Mock data - replace with actual previous period data
+            const growth = ((curr.amount - prevAmount) / prevAmount) * 100
+            acc[curr.category] = growth
+            return acc
+          },
+          {} as Record<string, number>
+        )
+      : {}
 
     return {
       monthOverMonthChange,
@@ -161,7 +182,7 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
       <div className={styles.topRow}>
         <div className={styles.calendarSection}>
           <CalendarHeatmapCard
-            data={analyticsData.calendarHeatmapData}
+            data={analyticsData.calendarHeatmapData || []}
             month={calendarMonth}
             year={calendarYear}
             onPrevMonth={() => {
@@ -190,6 +211,13 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
           <div className={styles.chartHeader}>
             <FontAwesomeIcon icon={faChartPie} />
             <h3>Category Breakdown</h3>
+            <button
+              className={styles.showDetailsIconBtn}
+              onClick={onShowListTab}
+              title="Xem chi tiết"
+            >
+              <FontAwesomeIcon icon={faList} />
+            </button>
           </div>
           <div className={styles.chartContainer}>
             <div className={styles.chartContent}>
@@ -208,81 +236,6 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
         monthNames={monthNames}
         handleAddExpense={handleAddExpense}
       />
-      <div className={styles.insightsSection}>
-        <div className={styles.insightsHeader}>
-          <FontAwesomeIcon icon={faLightbulb} />
-          <h3>Key Insights</h3>
-        </div>
-        <div className={styles.insightsGrid}>
-          <div className={styles.insightCard}>
-            <div className={styles.insightIcon}>
-              <FontAwesomeIcon icon={faDollarSign} />
-            </div>
-            <div className={styles.insightContent}>
-              <h4>Monthly Comparison</h4>
-              <p>
-                {previousMonthTotal ? (
-                  <>
-                    You've spent{' '}
-                    <span className={styles.insightHighlight}>
-                      {totalExpenses > previousMonthTotal ? '↑' : '↓'}{' '}
-                      {Math.abs(((totalExpenses - previousMonthTotal) / previousMonthTotal) * 100).toFixed(1)}%
-                    </span>{' '}
-                    {totalExpenses > previousMonthTotal ? 'more' : 'less'} than last month
-                  </>
-                ) : (
-                  'No previous month data available'
-                )}
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.insightCard}>
-            <div className={styles.insightIcon}>
-              <FontAwesomeIcon icon={faCalendarDay} />
-            </div>
-            <div className={styles.insightContent}>
-              <h4>Daily Average</h4>
-              <p>
-                You're spending an average of{' '}
-                <span className={styles.insightHighlight}>${averageDaily.toFixed(2)}</span> per day
-              </p>
-            </div>
-          </div>
-
-          {categoryBreakdown.length > 0 && (
-            <div className={styles.insightCard}>
-              <div className={styles.insightIcon}>
-                <FontAwesomeIcon icon={faTrophy} />
-              </div>
-              <div className={styles.insightContent}>
-                <h4>Top Category</h4>
-                <p>
-                  <span className={styles.insightHighlight}>{categoryBreakdown[0].category}</span> is your highest
-                  spending category at {((categoryBreakdown[0].amount / totalExpenses) * 100).toFixed(1)}% of total
-                  expenses
-                </p>
-              </div>
-            </div>
-          )}
-
-          {monthlyBudget && (
-            <div className={styles.insightCard}>
-              <div className={styles.insightIcon}>
-                <FontAwesomeIcon icon={faChartLine} />
-              </div>
-              <div className={styles.insightContent}>
-                <h4>Budget Progress</h4>
-                <p>
-                  You've used{' '}
-                  <span className={styles.insightHighlight}>{((totalExpenses / monthlyBudget) * 100).toFixed(1)}%</span>{' '}
-                  of your monthly budget
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
       <div className={styles.detailedAnalytics}>
         <div className={styles.analyticsHeader}>
           <div className={styles.analyticsTitle}>
@@ -302,7 +255,7 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
             </div>
             <div className={styles.cardValue}>{Math.abs(analytics.monthOverMonthChange).toFixed(1)}%</div>
             <div className={styles.cardChange}>
-              <span className={analytics.monthOverMonthChange >= 0 ? styles.positiveChange : styles.negativeChange}>
+              <span className={analytics.monthOverMonthChange >= 0 ? styles.negativeChange : styles.positiveChange}>
                 {analytics.monthOverMonthChange >= 0 ? 'Increase' : 'Decrease'} from last month
               </span>
             </div>
@@ -315,7 +268,7 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
             </div>
             <div className={styles.cardValue}>{analytics.highestSpendingDay.day}</div>
             <div className={styles.cardChange}>
-              <span className={styles.positiveChange}>${analytics.highestSpendingDay.average.toFixed(2)} average</span>
+              <span className={styles.negativeChange}>{analytics.highestSpendingDay.average.toLocaleString()} VND</span>
             </div>
           </div>
 
@@ -326,7 +279,11 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
             </div>
             <div className={styles.cardValue}>{topCategory}</div>
             <div className={styles.cardChange}>
-              <span className={styles.positiveChange}>{analytics.categoryGrowth[topCategory].toFixed(1)}% growth</span>
+              <span className={styles.negativeChange}>
+                {analytics.categoryGrowth && topCategory && analytics.categoryGrowth[topCategory]
+                  ? `${analytics.categoryGrowth[topCategory].toFixed(1)}% growth`
+                  : 'No growth data available'}
+              </span>
             </div>
           </div>
         </div>
@@ -338,7 +295,7 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
             </div>
             <div className={styles.insightContent}>
               <div className={styles.insightTitle}>Daily Average</div>
-              <div className={styles.insightValue}>${averageDaily.toFixed(2)}</div>
+              <div className={styles.insightValue}>{averageDaily.toLocaleString()} VND</div>
             </div>
           </div>
 

@@ -2,25 +2,10 @@ import React, { useState } from 'react'
 import styles from './ExpensesTable.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
-
-type DailyAllocation = {
-  date: string
-  amount: number
-}
-
-type Expense = {
-  id: string
-  category: string
-  amount: number
-  date: string
-  details: string
-  tags: string[]
-  note: string
-  dailyAllocation?: DailyAllocation[]
-}
+import { Transaction } from '../../types/transaction'
 
 type Props = {
-  expenses: Expense[]
+  expenses: Transaction[]
   onSearch: (val: string) => void
   onFilterCategory: (val: string) => void
   search: string
@@ -69,28 +54,30 @@ const ExpensesTable: React.FC<Props> = ({ expenses, onSearch, onFilterCategory, 
             <th>Amount</th>
             <th>Details</th>
             <th>Tags</th>
-            <th>Note</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {expenses.map((e) => (
+          {expenses.map((e, index) => (
             <>
-              <tr key={e.id} className={e.dailyAllocation ? styles.smartAllocatedRow : undefined}>
-                <td>{e.date}</td>
+              <tr key={e.id} className={e.is_amortized ? styles.smartAllocatedRow : styles.singleExpenseRow}>
+                <td>{new Date(e.date).toLocaleDateString()}</td>
                 <td>{e.category}</td>
-                <td>${e.amount}</td>
-                <td>{e.details}</td>
+                <td>{e.amount.toLocaleString()} VND</td>
+                <td>{e.description}</td>
                 <td>
-                  {e.tags.map((tag) => (
-                    <span key={tag} className={styles.tagBadge}>
-                      {tag}
+                  {e.is_amortized ? (
+                    <span key={index} className={`${styles.tagBadge} ${styles.amortizedTag}`}>
+                      Amortized
                     </span>
-                  ))}
+                  ) : (
+                    <span key={index} className={styles.tagBadge}>
+                      Single
+                    </span>
+                  )}
                 </td>
-                <td>{e.note}</td>
                 <td>
-                  {e.dailyAllocation && e.dailyAllocation.length > 0 && (
+                  {e.is_amortized && (
                     <button
                       className={styles.tableAction}
                       onClick={() => handleExpand(e.id)}
@@ -99,32 +86,30 @@ const ExpensesTable: React.FC<Props> = ({ expenses, onSearch, onFilterCategory, 
                       {expanded === e.id ? 'Hide' : 'Show'}
                     </button>
                   )}
-                  <button className={styles.tableAction}>
-                    <FontAwesomeIcon icon={faDownload} />
-                  </button>
                 </td>
               </tr>
-              {e.dailyAllocation && expanded === e.id && (
+              {e.is_amortized && expanded === e.id && (
                 <tr className={styles.dailyAllocationRow}>
                   <td colSpan={7}>
-                    <div className={styles.dailyAllocationBox}>
-                      <strong>Daily Allocation:</strong>
-                      <table className={styles.dailyAllocationTable}>
-                        <thead>
-                          <tr>
-                            <th>Date</th>
-                            <th>Allocated Amount</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {e.dailyAllocation.map((d, idx) => (
-                            <tr key={idx}>
-                              <td>{d.date}</td>
-                              <td>${d.amount}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                    <div className={styles.amortizedCard}>
+                      <div className={styles.amortizedHeader}>
+                        <span className={styles.amortizedIcon} role='img' aria-label='calendar'>
+                          📅
+                        </span>
+                        <span className={styles.amortizedLabel}>Amortized Usage</span>
+                      </div>
+                      <div className={styles.amortizedInfoContent}>
+                        <span className={styles.amortizedDateRange}>
+                          {new Date(e.date).toLocaleDateString()} →{' '}
+                          {new Date(
+                            new Date(e.date).getTime() + ((e.amortized_days || 0) - 1) * 24 * 60 * 60 * 1000
+                          ).toLocaleDateString()}
+                        </span>
+                        <span className={styles.amortizedPerDay}>
+                          💸 {(e.amount / (e.amortized_days || 0)).toLocaleString()} VND{' '}
+                          <span className={styles.perDayText}>per day</span>
+                        </span>
+                      </div>
                     </div>
                   </td>
                 </tr>

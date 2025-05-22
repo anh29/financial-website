@@ -100,14 +100,9 @@
   flex: 1;
 }
 
-.dayDetailModal .expenseCategory {
-  font-weight: 600;
-  color: #1a1f36;
-  margin-bottom: 0.2rem;
-}
-
 .dayDetailModal .expenseDetails {
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 1rem;
   color: #64748b;
 }
 
@@ -118,7 +113,7 @@
 }
 
 .dayDetailModal .tag {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   padding: 0.2rem 0.6rem;
   background: #f1f5f9;
   color: #64748b;

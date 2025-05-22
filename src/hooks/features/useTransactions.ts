@@ -5,7 +5,8 @@ import {
   createTransactionAsync,
   updateTransactionAsync,
   deleteTransactionAsync,
-  importTransactionsAsync
+  importTransactionsAsync,
+  getLatestTransactionsAsync
 } from '../../store/slices/transactionSlice'
 import { Transaction } from '../../types/transaction'
 
@@ -68,6 +69,14 @@ export const useTransactions = () => {
     [dispatch, fetchTransactions]
   )
 
+  const fetchLatestTransactions = useCallback(async () => {
+    try {
+      await dispatch(getLatestTransactionsAsync()).unwrap()
+    } catch (error) {
+      console.error('Failed to fetch latest transactions:', error)
+    }
+  }, [dispatch])
+
   return {
     transactions,
     isLoading,
@@ -76,6 +85,7 @@ export const useTransactions = () => {
     createTransactionHandler,
     updateTransactionHandler,
     deleteTransactionHandler,
-    handleImport
+    handleImport,
+    fetchLatestTransactions
   }
 }

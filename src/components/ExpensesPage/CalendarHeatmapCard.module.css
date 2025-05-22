@@ -32,7 +32,6 @@
 .heatmapCard .monthNav {
   display: flex;
   align-items: center;
-  gap: 1rem;
 }
 
 .heatmapCard .monthBtn {
@@ -59,17 +58,11 @@
   font-weight: 700;
   color: #1a1f36;
   margin: 0;
-  min-width: 140px;
+  min-width: 120px;
   text-align: center;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-.heatmapCard .legend {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
 }
 
 .heatmapCard .legendGradient {
@@ -80,6 +73,7 @@
   background: white;
   border-radius: 20px;
   box-shadow: var(--shadow-sm);
+  width: max-content;
 }
 
 .heatmapCard .legendLabel {

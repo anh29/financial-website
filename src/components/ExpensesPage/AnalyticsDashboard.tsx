@@ -183,7 +183,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         beginAtZero: true,
         ticks: {
           callback: function (value) {
-            return '$' + value
+            return value.toLocaleString() + ' VND'
           }
         }
       }
@@ -195,7 +195,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         callbacks: {
           label: function (tooltipItem: TooltipItem<'bar'>) {
             const value = tooltipItem.parsed.y
-            return `${tooltipItem.dataset.label}: $${value.toFixed(2)}`
+            return `${tooltipItem.dataset.label}: $${value.toLocaleString()} VND`
           }
         }
       }
@@ -209,14 +209,14 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Amount ($)',
+          text: 'Amount',
           font: {
             weight: 'bold'
           }
         },
         ticks: {
           callback: function (value) {
-            return '$' + value
+            return value.toLocaleString() + ' VND'
           }
         }
       },
@@ -237,7 +237,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         callbacks: {
           label: function (tooltipItem: TooltipItem<'line'>) {
             const value = tooltipItem.parsed.y
-            return `${tooltipItem.dataset.label}: $${value.toFixed(2)}`
+            return `${tooltipItem.dataset.label}: ${value.toLocaleString()} VND`
           }
         }
       }
@@ -311,13 +311,13 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <div className={styles.insight}>
               <span className={styles.insightLabel}>Highest:</span>
               <span className={styles.insightValue}>
-                {highest.category} (${highest?.amount?.toFixed(2)})
+                {highest.category} ({highest?.amount?.toLocaleString()} VND)
               </span>
             </div>
             <div className={styles.insight}>
               <span className={styles.insightLabel}>Lowest:</span>
               <span className={styles.insightValue}>
-                {lowest.category} (${lowest.amount.toFixed(2)})
+                {lowest.category} ({lowest.amount.toLocaleString()} VND)
               </span>
             </div>
           </div>
@@ -337,13 +337,11 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <div className={styles.cardInsights}>
             <div className={styles.insight}>
               <span className={styles.insightLabel}>Highest Day:</span>
-              <span className={styles.insightValue}>
-                {weeklySpendingSummary.highest} (${weeklySpendingSummary.highest.toFixed(2)})
-              </span>
+              <span className={styles.insightValue}>{weeklySpendingSummary.highest.toLocaleString()} VND</span>
             </div>
             <div className={styles.insight}>
               <span className={styles.insightLabel}>Daily Average:</span>
-              <span className={styles.insightValue}>${weeklySpendingSummary.average.toFixed(2)}</span>
+              <span className={styles.insightValue}>{weeklySpendingSummary.average.toLocaleString()} VND</span>
             </div>
           </div>
         </div>
@@ -357,9 +355,9 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               <div className={styles.trendIndicator}>
                 <FontAwesomeIcon
                   icon={yearlySummary.trendDirection === 'up' ? faArrowUp : faArrowDown}
-                  className={yearlySummary.trendDirection === 'up' ? styles.positive : styles.negative}
+                  className={yearlySummary.trendDirection === 'up' ? styles.negative : styles.positive}
                 />
-                <span className={yearlySummary.trendDirection === 'up' ? styles.positive : styles.negative}>
+                <span className={yearlySummary.trendDirection === 'up' ? styles.negative : styles.positive}>
                   {yearlySummary.trendDirection === 'up' ? 'Increasing' : 'Decreasing'} Trend
                 </span>
               </div>
@@ -371,11 +369,11 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <div className={styles.cardInsights}>
             <div className={styles.insight}>
               <span className={styles.insightLabel}>Total Yearly Spending:</span>
-              <span className={styles.insightValue}>${yearlySummary.totalSpending.toFixed(2)}</span>
+              <span className={styles.insightValue}>{yearlySummary.totalSpending.toLocaleString()} VND</span>
             </div>
             <div className={styles.insight}>
               <span className={styles.insightLabel}>Average Monthly Spending:</span>
-              <span className={styles.insightValue}>${yearlySummary.averageMonthly.toFixed(2)}</span>
+              <span className={styles.insightValue}>{yearlySummary.averageMonthly.toLocaleString()} VND</span>
             </div>
             <div className={styles.insight}>
               <span className={styles.insightLabel}>Highest Spending Month:</span>
@@ -387,14 +385,16 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             </div>
             <div className={styles.insight}>
               <span className={styles.insightLabel}>Monthly Variance:</span>
-              <span className={styles.insightValue}>${Math.sqrt(yearlySummary.monthlyVariance).toFixed(2)}</span>
+              <span className={styles.insightValue}>
+                {Math.sqrt(yearlySummary.monthlyVariance).toLocaleString()} VND
+              </span>
             </div>
             <div className={styles.insight}>
               <span className={styles.insightLabel}>Year-over-Year Change:</span>
               <span
-                className={`${styles.insightValue} ${periodComparison.change >= 0 ? styles.positive : styles.negative}`}
+                className={`${styles.insightValue} ${periodComparison.change >= 0 ? styles.negative : styles.positive}`}
               >
-                {periodComparison.change >= 0 ? '↑' : '↓'} {Math.abs(periodComparison.change)}%
+                {periodComparison.change >= 0 ? '↑' : '↓'} {Math.abs(periodComparison.change).toLocaleString()} %
               </span>
             </div>
           </div>

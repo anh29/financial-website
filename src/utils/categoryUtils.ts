@@ -101,3 +101,16 @@ export const getCategoryInfo = (label: string) => {
   }
   return null
 }
+
+export const categoryColors: Record<string, string> = {
+  'Ăn uống': '#1abc9c',
+  'Mua sắm': '#9b59b6',
+  'Giải trí': '#e67e22',
+  'Nhà cửa': '#e74c3c',
+  'Giáo dục': '#f1c40f',
+  'Sức khoẻ': '#2ecc71',
+  'Đầu tư': '#34495e',
+  'Xã hội': '#e67ea2',
+  'Du lịch': '#0074D9',
+  'Di chuyển': '#FF851B'
+}

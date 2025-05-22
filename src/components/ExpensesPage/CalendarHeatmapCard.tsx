@@ -14,9 +14,9 @@ interface CalendarHeatmapCardProps {
 
 const getIntensityClass = (amount: number) => {
   if (amount === 0) return styles.empty
-  if (amount < 50) return styles.low
-  if (amount < 150) return styles.medium
-  if (amount < 300) return styles.high
+  if (amount < 50000) return styles.low
+  if (amount < 150000) return styles.medium
+  if (amount < 300000) return styles.high
   return styles.veryHigh
 }
 
@@ -83,9 +83,9 @@ const CalendarHeatmapCard: React.FC<CalendarHeatmapCardProps> = ({
 
         <div className={styles.legend}>
           <div className={styles.legendGradient}>
-            <span className={styles.legendLabel}>$0</span>
+            <span className={styles.legendLabel}>0</span>
             <div className={styles.gradientBar} />
-            <span className={styles.legendLabel}>$300+</span>
+            <span className={styles.legendLabel}>300,000 VND+</span>
           </div>
         </div>
       </div>
@@ -114,7 +114,7 @@ const CalendarHeatmapCard: React.FC<CalendarHeatmapCardProps> = ({
                 <span className={styles.dayNumber}>{dayData.day}</span>
                 {dayData.amount > 0 && (
                   <div className={styles.tooltip}>
-                    <strong>${dayData.amount.toLocaleString()}</strong>
+                    <strong>{dayData.amount.toLocaleString()} VND</strong>
                     <span>
                       spent on {monthNames[month]} {dayData.day}
                     </span>

@@ -1,49 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './RecentTransaction.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getCategoryInfo } from '../../../utils/categoryUtils'
-import { SERVER_URL } from '../../../utils/constants'
 import { LoadingSpinner } from '../../common'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { useTransactions } from '../../../hooks/features/useTransactions'
 
 const RecentTransaction = () => {
   const [activeTab, setActiveTab] = useState('all')
-  const [transactions, setTransactions] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { transactions, isLoading, error, fetchLatestTransactions } = useTransactions()
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const localStorageData = localStorage.getItem('user')
-        if (!localStorageData) {
-          setLoading(false)
-          setError('You need to log in to see your transactions')
-          return
-        }
-        const userData = JSON.parse(localStorageData || '')
-
-        const userId = userData.id
-        const response = await fetch(`${SERVER_URL}/marketplace/getLatestTransaction/user/${userId}`)
-        if (!response.ok) {
-          throw new Error('Failed to fetch transactions')
-        }
-        const data = await response.json()
-        setTransactions(data.data)
-        setLoading(false)
-      } catch (err) {
-        setError(err.message)
-        setLoading(false)
-      }
-    }
-
-    fetchTransactions()
-  }, [])
+    fetchLatestTransactions()
+  }, [fetchLatestTransactions])
 
   const filteredTransactions = transactions.filter(
     (transaction) => activeTab === 'all' || transaction.type === activeTab
   )
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingSpinner />
   }
 
@@ -81,7 +56,7 @@ const RecentTransaction = () => {
           return (
             <li key={transaction.id}>
               <div className={styles.icon}>
-                <FontAwesomeIcon icon={categoryInfo?.icon} />
+                {categoryInfo?.icon && <FontAwesomeIcon icon={categoryInfo.icon as IconDefinition} />}
               </div>
               <div className={styles.information}>
                 <p>{transaction.description}</p>
@@ -89,7 +64,7 @@ const RecentTransaction = () => {
               </div>
               <div className={styles.details}>
                 <p>{transaction.amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
-                <p>{new Date(transaction._parsedDate).toLocaleDateString('vi-VN')}</p>
+                <p>{new Date(transaction.date).toLocaleDateString('vi-VN')}</p>
               </div>
             </li>
           )

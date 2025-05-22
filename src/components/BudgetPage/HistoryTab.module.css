@@ -1,92 +1,257 @@
 .historyTab {
-  padding: 24px;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+  background: var(--background-color);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
   font-family: 'Segoe UI', sans-serif;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .historyTab .sectionTitle {
-  font-size: 1.5rem;
-  margin-bottom: 16px;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: 2rem;
+  margin-bottom: 28px;
+  font-weight: 700;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  letter-spacing: 0.01em;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .historyTab .monthSelector {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 16px;
+  margin-bottom: 32px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.historyTab .monthSelector:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.historyTab .monthSelector label {
+  font-weight: 600;
+  color: var(--secondary-color);
+  font-size: 1.1rem;
 }
 
 .historyTab .monthSelector select {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  background-color: #b8e5d2;
-  color: black;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  border: 2px solid var(--primary-color-blur);
+  background-color: #fff;
+  color: var(--secondary-color);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  min-width: 220px;
+}
+
+.historyTab .monthSelector select:hover,
+.historyTab .monthSelector select:focus {
+  border-color: var(--primary-color);
 }
 
 .historyTab .pastMonth {
-  margin-bottom: 40px;
+  margin-bottom: 48px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.historyTab .pastMonth:hover {
+  box-shadow: var(--shadow-lg);
 }
 
 .historyTab .headerRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--light-gray);
+}
+
+.historyTab .headerRow h4 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .historyTab .summaryBox {
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  font-size: 1.1rem;
+  background: #f6fcfa;
+  padding: 16px 24px;
+  border-radius: 14px;
+  color: var(--text-color);
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid var(--primary-color-blur);
+  align-items: flex-start;
+}
+
+.summaryTotal {
+  font-size: 1.08rem;
+  color: var(--secondary-color);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summaryStatus {
+  margin-top: 6px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
   gap: 10px;
-  font-size: 0.95rem;
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 1rem;
+  box-shadow: var(--shadow-sm);
+  letter-spacing: 0.01em;
+}
+
+.summaryStatus.over {
+  background: var(--error-color);
+  color: #fff;
+  border: 1.5px solid var(--error-color);
+}
+
+.summaryStatus.ok {
+  background: var(--primary-color);
+  color: #fff;
+  border: 1.5px solid var(--primary-color);
 }
 
 .historyTab .overBudget {
-  color: #ef4444;
+  color: var(--error-color);
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff0f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--error-color);
 }
 
 .historyTab .underBudget {
-  color: #10b981;
+  color: var(--primary-color);
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #e6f9f4;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--primary-color-blur);
 }
 
 .historyTab .historyTable {
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 28px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
 .historyTab .historyTable th,
 .historyTab .historyTable td {
-  padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 18px;
   text-align: left;
-  font-size: 0.95rem;
+  font-size: 1.1rem;
 }
 
 .historyTab .historyTable th {
-  background-color: #f3f4f6;
-  font-weight: 600;
+  background: #f6fcfa;
+  color: var(--primary-color);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--primary-color-blur);
+}
+
+.historyTab .historyTable tr:not(:last-child) td {
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.historyTab .historyTable tr:hover td {
+  background-color: #f6fcfa;
 }
 
 .historyTab .chartContainer {
-  max-width: 480px;
+  max-width: 500px;
   margin: 0 auto;
-  padding: 20px;
-  background: #f9fafb;
-  border-radius: 10px;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.03);
+  padding: 28px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
 }
 
 .historyTab .chartContainer h5 {
   text-align: center;
-  margin-bottom: 16px;
-  font-size: 1.1rem;
+  margin-bottom: 24px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  letter-spacing: 0.01em;
 }

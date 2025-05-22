@@ -5,7 +5,9 @@ import {
   createTransaction,
   updateTransactionById as updateTransactionAPI,
   deleteTransaction as deleteTransactionAPI,
-  importTransactions
+  importTransactions,
+  getLatestTransactions,
+  getExpensesTransactions
 } from '../../services/features/transactionService'
 
 interface TransactionState {
@@ -80,6 +82,30 @@ export const importTransactionsAsync = createAsyncThunk(
   }
 )
 
+export const getLatestTransactionsAsync = createAsyncThunk(
+  'transactions/getLatestTransactions',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await getLatestTransactions()
+      return data
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch latest transactions')
+    }
+  }
+)
+
+export const getExpensesTransactionsAsync = createAsyncThunk(
+  'transactions/getExpensesTransactions',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await getExpensesTransactions()
+      return data
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to get expenses transactions')
+    }
+  }
+)
+
 const transactionSlice = createSlice({
   name: 'transactions',
   initialState,
@@ -132,6 +158,30 @@ const transactionSlice = createSlice({
       .addCase(createTransactionAsync.fulfilled, (state, action) => {
         state.isLoading = false
         state.transactions = action.payload
+      })
+      .addCase(getLatestTransactionsAsync.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(getLatestTransactionsAsync.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.transactions = action.payload
+      })
+      .addCase(getLatestTransactionsAsync.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload as string
+      })
+      .addCase(getExpensesTransactionsAsync.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(getExpensesTransactionsAsync.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.transactions = action.payload
+      })
+      .addCase(getExpensesTransactionsAsync.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload as string
       })
   }
 })

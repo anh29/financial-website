@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useEffect } from 'react'
 import styles from './ExpensesPage.module.css'
-import { faPlus, faChartLine, faList, faFolderOpen, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faChartLine, faList, faHome } from '@fortawesome/free-solid-svg-icons'
 import {
   Chart as ChartJS,
   ArcElement,
@@ -12,130 +12,33 @@ import {
   PointElement,
   LineElement
 } from 'chart.js'
-import { Tab } from '../../components/common/Tabs/Tabs'
+import { Tabs } from '../../components/common/Tabs/Tabs'
 import OverviewSummary from '../../components/ExpensesPage/OverviewSummary'
 import ExpensesTable from '../../components/ExpensesPage/ExpensesTable'
-import CategoriesAccordion from '../../components/ExpensesPage/CategoriesAccordion'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useNavigate } from 'react-router-dom'
 import AnalyticsDashboard from '../../components/ExpensesPage/AnalyticsDashboard'
+import { useExpenses } from '../../hooks/features/useExpenses'
+import { LoadingSpinner } from '../../components/common/LoadingSpinner/LoadingSpinner'
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement)
-
-type DailyAllocation = {
-  date: string
-  amount: number
-}
-
-type Expense = {
-  id: string
-  category: string
-  amount: number
-  date: string
-  details: string
-  tags: string[]
-  note: string
-  change: number
-  direction: 'up' | 'down'
-  dailyAllocation?: DailyAllocation[] // Optional: for multi-day/multi-use expenses
-}
-
-const expensesData: Expense[] = [
-  {
-    id: '1',
-    category: 'Housing',
-    amount: 250,
-    date: '2024-05-01',
-    details: 'House Rent: $230, Parking: $20',
-    tags: ['monthly'],
-    note: 'May rent',
-    change: 15,
-    direction: 'up'
-  },
-  {
-    id: '2',
-    category: 'Food',
-    amount: 350,
-    date: '2024-05-02',
-    details: 'Grocery: $230, Restaurant bill: $120',
-    tags: [],
-    note: '',
-    change: 8,
-    direction: 'down'
-  },
-  {
-    id: '3',
-    category: 'Transportation',
-    amount: 50,
-    date: '2024-05-03',
-    details: 'Taxi Fare: $30, Metro Card bill: $20',
-    tags: [],
-    note: '',
-    change: 12,
-    direction: 'down'
-  },
-  {
-    id: '4',
-    category: 'Entertainment',
-    amount: 80,
-    date: '2024-05-04',
-    details: 'Movie ticket: $30, iTunes: $50',
-    tags: [],
-    note: '',
-    change: 15,
-    direction: 'up'
-  },
-  {
-    id: '5',
-    category: 'Shopping',
-    amount: 420,
-    date: '2024-05-05',
-    details: 'Shirt: $230, Jeans: $190',
-    tags: [],
-    note: '',
-    change: 25,
-    direction: 'up'
-  },
-  {
-    id: '6',
-    category: 'Others',
-    amount: 50,
-    date: '2024-05-06',
-    details: 'Donation: $30, Gift: $20',
-    tags: ['charity'],
-    note: '',
-    change: 23,
-    direction: 'up'
-  },
-  {
-    id: '7',
-    category: 'Shopping',
-    amount: 300,
-    date: '2024-05-10',
-    details: '3-day conference pass',
-    tags: ['multi-day', 'smart-allocated'],
-    note: 'TechConf 2024 (May 10-12)',
-    change: 0,
-    direction: 'up',
-    dailyAllocation: [
-      { date: '2024-05-10', amount: 100 },
-      { date: '2024-05-11', amount: 100 },
-      { date: '2024-05-12', amount: 100 }
-    ]
-  }
-]
 
 const ExpensesPage: React.FC = () => {
   const [search, setSearch] = useState('')
   const [filterCategory, setFilterCategory] = useState('')
-  const [activeTab, setActiveTab] = useState<'overview' | 'analytics'>('overview')
-  const [isLoading, setIsLoading] = useState(false)
+  const [activeTab, setActiveTab] = useState<'overview' | 'analytics' | 'list'>('overview')
   const navigate = useNavigate()
-  const [calendarMonth, setCalendarMonth] = useState(4) // May (0-based month index)
-  const [calendarYear, setCalendarYear] = useState(2024) // Year of mock data
+  const currentDate = new Date()
+  const [calendarMonth, setCalendarMonth] = useState(currentDate.getMonth()) // Current month (0-based)
+  const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear()) // Current year
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
   const [showDayModal, setShowDayModal] = useState(false)
+  const { expenses: expensesData, error, fetchExpenses, isLoading } = useExpenses()
+
+  useEffect(() => {
+    fetchExpenses()
+  }, [fetchExpenses])
 
   const monthNames = [
     'January',
@@ -155,14 +58,13 @@ const ExpensesPage: React.FC = () => {
   const filteredData = useMemo(() => {
     return expensesData.filter(
       (e) =>
-        (!search || e.details.toLowerCase().includes(search.toLowerCase())) &&
+        (!search || e.description.toLowerCase().includes(search.toLowerCase())) &&
         (!filterCategory || e.category === filterCategory)
     )
-  }, [search, filterCategory])
+  }, [search, filterCategory, expensesData])
 
-  const totalExpenses = expensesData.reduce((sum, e) => sum + e.amount, 0)
-  const topCategory = expensesData.reduce((a, b) => (a.amount > b.amount ? a : b))
-  const averageDaily = totalExpenses / 30 // Assuming 30 days in a month`
+  const topCategory = expensesData.length > 0 ? expensesData.reduce((a, b) => (a.amount > b.amount ? a : b)) : null
+  const averageDaily = expensesData.reduce((sum, e) => sum + e.amount, 0) / 30 // Assuming 30 days in a month
 
   // Expenses for selected day
   const dayExpenses = useMemo(() => {
@@ -175,6 +77,34 @@ const ExpensesPage: React.FC = () => {
 
   // Compute analytics data
   const analyticsData = useMemo(() => {
+    if (expensesData.length === 0) {
+      return {
+        radarLabels: [],
+        radarValues: [],
+        highest: { category: '', amount: 0 },
+        lowest: { category: '', amount: 0 },
+        weeklySpendingData: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{ label: 'Daily Spending', data: [0, 0, 0, 0, 0, 0, 0] }]
+        },
+        weeklySpendingSummary: {
+          total: 0,
+          average: 0,
+          highest: 0,
+          lowest: 0
+        },
+        trendsData: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{ label: 'Monthly Spending', data: Array(12).fill(0) }]
+        },
+        periodComparison: {
+          current: 0,
+          previous: 0,
+          change: 0
+        }
+      }
+    }
+
     // Radar chart data (spending distribution by category)
     const categoryTotals = expensesData.reduce(
       (acc, expense) => {
@@ -225,13 +155,20 @@ const ExpensesPage: React.FC = () => {
       lowest: Math.min(...Object.values(weeklyData))
     }
 
-    // Trends data (last 6 months)
+    // Compute real monthly totals for the selected year
+    const monthlyTotals = Array(12).fill(0)
+    expensesData.forEach((e) => {
+      const date = new Date(e.date)
+      if (date.getFullYear() === calendarYear) {
+        monthlyTotals[date.getMonth()] += e.amount
+      }
+    })
     const trendsData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       datasets: [
         {
           label: 'Monthly Spending',
-          data: [3000, 3500, 3200, 3800, 3600, 4000] // This should be computed from real data
+          data: monthlyTotals
         }
       ]
     }
@@ -240,47 +177,65 @@ const ExpensesPage: React.FC = () => {
     const periodComparison = {
       current: totalSpending,
       previous: totalSpending * 0.9, // This should be computed from real data
-      change: 10 // This should be computed from real data
+      change: ((totalSpending - totalSpending * 0.9) / (totalSpending * 0.9)) * 100
     }
-
-    // Calendar Heatmap Data (for selected month/year)
-    const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate()
-    const calendarHeatmapData = Array.from({ length: daysInMonth }, (_, i) => ({ day: i + 1, amount: 0 }))
-    expensesData.forEach((expense) => {
-      const date = new Date(expense.date)
-      if (date.getMonth() === calendarMonth && date.getFullYear() === calendarYear) {
-        calendarHeatmapData[date.getDate() - 1].amount += expense.amount
-      }
-    })
 
     return {
       radarLabels,
       radarValues,
-      highest: {
-        category: highest.category,
-        amount: categoryTotals[highest.category]
-      },
-      lowest: {
-        category: lowest.category,
-        amount: categoryTotals[lowest.category]
-      },
+      highest: { category: highest.category, amount: categoryTotals[highest.category] },
+      lowest: { category: lowest.category, amount: categoryTotals[lowest.category] },
       weeklySpendingData,
       weeklySpendingSummary,
       trendsData,
-      periodComparison,
-      calendarHeatmapData
+      periodComparison
     }
+  }, [expensesData, calendarYear])
+
+  // Compute calendar heatmap data for the selected month/year
+  const calendarHeatmapData = useMemo(() => {
+    const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate()
+    const data: { day: number; amount: number }[] = Array.from({ length: daysInMonth }, (_, i) => ({
+      day: i + 1,
+      amount: 0
+    }))
+    expensesData.forEach((e) => {
+      const date = new Date(e.date)
+      if (date.getMonth() === calendarMonth && date.getFullYear() === calendarYear) {
+        const day = date.getDate()
+        data[day - 1].amount += e.amount
+      }
+    })
+    return data
   }, [expensesData, calendarMonth, calendarYear])
 
+  // Group and sum expenses by category for the pie chart breakdown
+  const categoryBreakdown = useMemo(() => {
+    const grouped = expensesData.reduce(
+      (acc, e) => {
+        acc[e.category] = (acc[e.category] || 0) + e.amount
+        return acc
+      },
+      {} as Record<string, number>
+    )
+    return Object.entries(grouped).map(([category, amount]) => ({ category, amount }))
+  }, [expensesData])
+
   const handleTabChange = useCallback((tabId: string) => {
-    setIsLoading(true)
-    setActiveTab(tabId as 'overview' | 'analytics')
-    setTimeout(() => setIsLoading(false), 300)
+    setActiveTab(tabId as 'overview' | 'analytics' | 'list')
+  }, [])
+
+  const handleSearch = useCallback((value: string) => {
+    setSearch(value)
+  }, [])
+
+  const handleFilterCategory = useCallback((category: string) => {
+    setFilterCategory(category)
   }, [])
 
   const handleExport = useCallback(() => {
     const headers = ['Date,Category,Amount,Details']
-    const rows = filteredData.map((e) => `${e.date},${e.category},${e.amount},"${e.details}"`)
+    const rows = filteredData.map((e) => `${e.date},${e.category},${e.amount},"${e.description}"`)
     const csv = headers.concat(rows).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const a = document.createElement('a')
@@ -289,34 +244,39 @@ const ExpensesPage: React.FC = () => {
     a.click()
   }, [filteredData])
 
-  const handleAddExpense = useCallback(() => {
-    navigate('/transactions')
-  }, [navigate])
+  const handleCloseModal = useCallback(() => {
+    setShowDayModal(false)
+    setSelectedDay(null)
+  }, [])
 
-  const tabs: Tab[] = [
+  if (error) {
+    return <div>Error loading expenses: {error}</div>
+  }
+
+  const tabs = [
     {
       id: 'overview',
       label: 'Overview',
       icon: faHome,
       content: (
         <OverviewSummary
-          totalExpenses={totalExpenses}
-          topCategory={topCategory.category}
+          topCategory={topCategory?.category || ''}
           averageDaily={averageDaily}
-          categoryBreakdown={expensesData.map((e) => ({ category: e.category, amount: e.amount }))}
+          categoryBreakdown={categoryBreakdown}
           allExpenses={expensesData}
           calendarMonth={calendarMonth}
           calendarYear={calendarYear}
           setCalendarMonth={setCalendarMonth}
           setCalendarYear={setCalendarYear}
-          analyticsData={analyticsData}
+          analyticsData={{ ...analyticsData, calendarHeatmapData }}
           showDayModal={showDayModal}
           setShowDayModal={setShowDayModal}
           selectedDay={selectedDay}
           setSelectedDay={setSelectedDay}
           dayExpenses={dayExpenses}
           monthNames={monthNames}
-          handleAddExpense={handleAddExpense}
+          handleAddExpense={() => navigate('/expenses/add')}
+          onShowListTab={() => handleTabChange('list')}
         />
       )
     },
@@ -328,81 +288,69 @@ const ExpensesPage: React.FC = () => {
     },
     {
       id: 'list',
-      label: 'Detail',
+      label: 'List',
       icon: faList,
       content: (
         <ExpensesTable
           expenses={filteredData}
-          onSearch={setSearch}
-          onFilterCategory={setFilterCategory}
+          onSearch={handleSearch}
+          onFilterCategory={handleFilterCategory}
           search={search}
           filterCategory={filterCategory}
           onExport={handleExport}
         />
       )
-    },
-    {
-      id: 'categories',
-      label: 'Monthly',
-      icon: faFolderOpen,
-      content: (
-        <CategoriesAccordion
-          groupedExpenses={filteredData.reduce<{ [date: string]: Expense[] }>((acc, curr) => {
-            acc[curr.date] = acc[curr.date] || []
-            acc[curr.date].push(curr)
-            return acc
-          }, {})}
-        />
-      )
     }
   ]
-
+  console.log('expensesData', expensesData)
   return (
     <div className={styles.expensesPage}>
       <div className={styles.header}>
         <h1>Expenses</h1>
-        <button className={styles.addButton} onClick={handleAddExpense}>
-          <FontAwesomeIcon icon={faPlus} /> Add Expense
-        </button>
-      </div>
-
-      <div className={styles.tabContainer}>
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            className={`${styles.tab} ${activeTab === tab.id ? styles.activeTab : ''}`}
-            onClick={() => handleTabChange(tab.id)}
-          >
-            <FontAwesomeIcon icon={tab.icon} className={styles.tabIcon} />
-            <p className={styles.tabLabel}>{tab.label}</p>
+        <div className={styles.actions}>
+          <button className={styles.addButton} onClick={() => navigate('/expenses/add')}>
+            <FontAwesomeIcon icon={faPlus} /> Add Expense
           </button>
-        ))}
+        </div>
       </div>
 
-      <AnimatePresence mode='wait'>
-        {isLoading ? (
-          <motion.div
-            key='loading'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className={styles.loadingContainer}
-          >
-            <div className={styles.loadingSpinner} />
-          </motion.div>
-        ) : (
+      <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange} />
+
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <AnimatePresence mode='wait'>
           <motion.div
             key={activeTab}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className={styles.tabContent}
+            transition={{ duration: 0.2 }}
           >
             {tabs.find((tab) => tab.id === activeTab)?.content}
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>
+      )}
+      {showDayModal && selectedDay !== null && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h2>
+              Expenses for {monthNames[calendarMonth]} {selectedDay}
+            </h2>
+            <div className={styles.dayExpenses}>
+              {dayExpenses.map((expense) => (
+                <div key={expense.id} className={styles.expenseItem}>
+                  <span className={styles.expenseDescription}>{expense.description}</span>
+                  <span className={styles.expenseAmount}>{expense.amount.toLocaleString()} VND</span>
+                </div>
+              ))}
+            </div>
+            <button className={styles.closeButton} onClick={handleCloseModal}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

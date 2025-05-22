@@ -3,20 +3,18 @@ import { SERVER_URL } from '../../utils/constants'
 import { getUser } from '../../utils/userUtils'
 import { expenseCategories, incomeCategories } from '../../utils/categoryUtils'
 
-const API_URL = SERVER_URL ?? 'http://localhost:3500'
-
 export const fetchTransactionsByUser = async () => {
   const user = getUser()
   if (!user) throw new Error('User not found')
 
-  const response = await fetch(`${API_URL}/crud/transactions/user/${user.id}`)
+  const response = await fetch(`${SERVER_URL}/crud/transactions/user/${user.id}`)
   if (!response.ok) throw new Error('Failed to fetch transactions')
 
   return await response.json()
 }
 
 export const createTransaction = async (transaction: Omit<Transaction, 'id'>) => {
-  const response = await fetch(`${API_URL}/crud/transactions`, {
+  const response = await fetch(`${SERVER_URL}/crud/transactions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(transaction)
@@ -27,7 +25,7 @@ export const createTransaction = async (transaction: Omit<Transaction, 'id'>) =>
 }
 
 export const updateTransaction = async (transaction: Transaction) => {
-  const response = await fetch(`${API_URL}/crud/transactions/${transaction.id}`, {
+  const response = await fetch(`${SERVER_URL}/crud/transactions/${transaction.id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(transaction)
@@ -38,7 +36,7 @@ export const updateTransaction = async (transaction: Transaction) => {
 }
 
 export const updateTransactionById = async (updatedTransaction: Partial<Transaction>) => {
-  const response = await fetch(`${API_URL}/crud/transactions`, {
+  const response = await fetch(`${SERVER_URL}/crud/transactions`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updatedTransaction)
@@ -49,7 +47,7 @@ export const updateTransactionById = async (updatedTransaction: Partial<Transact
 }
 
 export const deleteTransaction = async (id: string) => {
-  const response = await fetch(`${API_URL}/crud/transactions/${id}`, {
+  const response = await fetch(`${SERVER_URL}/crud/transactions/${id}`, {
     method: 'DELETE'
   })
   if (!response.ok) throw new Error('Failed to delete transaction')
@@ -67,7 +65,7 @@ export const importTransactions = async (newTransactions: Transaction[]) => {
     userId: user.id
   }))
 
-  const response = await fetch(`${API_URL}/crud/transactions`, {
+  const response = await fetch(`${SERVER_URL}/crud/transactions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(transactionsWithUser)
@@ -108,4 +106,23 @@ export const predictUsageDuration = async (transaction: { amount: number; catego
 
   const { data } = await response.json()
   return data
+}
+
+export const getExpensesTransactions = async () => {
+  const user = await getUser()
+  if (!user) throw new Error('User not found')
+
+  const response = await fetch(`${SERVER_URL}/marketplace/getExpensesTransactions/user/${user.id}`)
+  if (!response.ok) throw new Error('Failed to get expenses transactions')
+
+  return await response.json()
+}
+
+export const getLatestTransactions = async () => {
+  const user = await getUser()
+  if (!user) throw new Error('User not found')
+
+  const response = await fetch(`${SERVER_URL}/marketplace/getLatestTransaction/user/${user.id}`)
+  if (!response.ok) throw new Error('Failed to fetch latest transactions')
+  return await response.json()
 }
