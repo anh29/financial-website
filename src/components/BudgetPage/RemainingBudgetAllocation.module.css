@@ -1,0 +1,214 @@
+.section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  animation: fadeIn 0.4s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  margin-top: 20px;
+}
+
+.sectionTitle {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  color: #34495e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.remainingAmount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: #34495e;
+}
+
+.amount {
+  font-weight: 600;
+  color: #00a374;
+}
+
+.allocateSection {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.allocateDescription {
+  color: #64748b;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.allocateButton {
+  padding: 12px 24px;
+  background-color: #00a374;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.allocateButton:hover {
+  background-color: #008c63;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px;
+  color: #64748b;
+}
+
+.allocationsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.allocationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.allocationItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s;
+}
+
+.allocationItem:hover {
+  transform: translateY(-2px);
+}
+
+.goalInfo {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.goalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.goalName {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.goalTarget {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.progressBar {
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #00a374;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progressFill.overTarget {
+  background-color: #ef4444;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.allocationInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.allocationInput input {
+  width: 150px;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-align: right;
+  background-color: white;
+  transition: border-color 0.3s;
+}
+
+.allocationInput input:focus {
+  outline: none;
+  border-color: #00a374;
+  box-shadow: 0 0 0 2px rgba(0, 163, 116, 0.1);
+}
+
+.allocationInput input.inputWarning {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.currency {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.summary {
+  background-color: #f1f5f9;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  color: #475569;
+}
+
+.summaryItem .amount {
+  font-weight: 600;
+}
+
+.summaryItem .amount.negative {
+  color: #ef4444;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 

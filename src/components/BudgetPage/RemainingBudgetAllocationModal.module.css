@@ -1,0 +1,285 @@
+/* Strong, modern modal for allocation confirmation */
+@keyframes fadeInModal {
+  from { opacity: 0; transform: translateY(40px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(44, 62, 80, 0.32);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInModal 0.3s cubic-bezier(.4,1,.7,1);
+}
+.modalContent {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 12px 48px rgba(44,62,80,0.22);
+  padding: 36px 36px 28px 36px;
+  min-width: 400px;
+  max-width: 98vw;
+  max-height: 92vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  animation: fadeInModal 0.4s cubic-bezier(.4,1,.7,1);
+}
+.modalHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #223254;
+  margin-bottom: 8px;
+}
+.modalHeaderIcon {
+  background: linear-gradient(135deg, #00c48c 60%, #2ecc71 100%);
+  color: #fff;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 2px 8px rgba(0,196,140,0.12);
+}
+.modalSummary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4f8fb;
+  border-radius: 14px;
+  padding: 16px 24px;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #009e60;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.modalSummaryValue {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #00c48c;
+}
+.modalList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 12px 0 18px 0;
+}
+.modalItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 22px 20px 22px 20px;
+  background: #f8fafc;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+  margin-bottom: 18px;
+  border: 1.5px solid #e0e7ef;
+  transition: box-shadow 0.2s, background 0.2s, border 0.2s;
+}
+.modalItem:last-child {
+  margin-bottom: 0;
+}
+.modalItem:hover {
+  background: #f0f7f4;
+  box-shadow: 0 4px 16px rgba(0,196,140,0.12);
+  border-color: #b6e0fe;
+}
+.goalInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.goalHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 1.13rem;
+  font-weight: 700;
+  color: #223254;
+  margin-bottom: 2px;
+}
+.goalName {
+  font-weight: 700;
+  color: #223254;
+  margin-right: 10px;
+}
+.goalTarget {
+  font-size: 1.01rem;
+  color: #64748b;
+  font-weight: 500;
+}
+.progressBarRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+.progressBar {
+  flex: 1;
+  height: 16px;
+  background: #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #00c48c 0%, #2ecc71 100%);
+  border-radius: 8px;
+  transition: width 0.4s cubic-bezier(.4,1,.7,1);
+}
+.progressFill.overTarget {
+  background: linear-gradient(90deg, #ef4444 0%, #ffb199 100%);
+}
+.progressInfo {
+  font-size: 1.02rem;
+  color: #009e60;
+  margin-top: 2px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.progressBadge {
+  background: #fff;
+  color: #00c48c;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  font-weight: 800;
+  padding: 3px 14px;
+  box-shadow: 0 1px 4px rgba(0,196,140,0.10);
+  border: 1.5px solid #e0e7ef;
+  margin-left: 0;
+}
+.allocationInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.allocationInput input {
+  width: 130px;
+  padding: 11px 14px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 1.13rem;
+  text-align: right;
+  background-color: white;
+  transition: border-color 0.3s;
+  font-weight: 700;
+}
+.allocationInput input:focus {
+  outline: none;
+  border-color: #00a374;
+  box-shadow: 0 0 0 2px rgba(0, 163, 116, 0.13);
+}
+.allocationInput input.inputWarning {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+.currency {
+  color: #64748b;
+  font-weight: 700;
+  font-size: 1.13rem;
+}
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 18px;
+  margin-top: 18px;
+  border-top: 1px solid #e0e7ef;
+  padding-top: 18px;
+}
+.cancelButton {
+  background: #f4f8fb;
+  color: #223254;
+  border: 1.5px solid #e0e7ef;
+  border-radius: 10px;
+  padding: 10px 28px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+}
+.cancelButton:hover {
+  background: #e0e7ef;
+  border-color: #b6e0fe;
+}
+.confirmButton {
+  background: linear-gradient(90deg, #00c48c 0%, #2ecc71 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 28px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,196,140,0.10);
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.confirmButton:hover {
+  background: linear-gradient(90deg, #009e60 0%, #00c48c 100%);
+}
+.allocatedValue {
+  font-size: 1.13rem;
+  font-weight: 700;
+  color: #223254;
+  margin-right: 4px;
+}
+.editBtn {
+  background: none;
+  border: none;
+  color: #00c48c;
+  font-size: 1.18rem;
+  margin-left: 8px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.editBtn:hover {
+  background: #e0e7ef;
+}
+.editConfirmBtn {
+  background: #00c48c;
+  color: #fff;
+  border: none;
+  font-size: 1.13rem;
+  margin-left: 8px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+.editConfirmBtn:hover {
+  background: #009e60;
+}
+.editCancelBtn {
+  background: #f4f8fb;
+  color: #d32f2f;
+  border: none;
+  font-size: 1.13rem;
+  margin-left: 4px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+.editCancelBtn:hover {
+  background: #ffeaea;
+} 

@@ -7,16 +7,17 @@
   font-size: 1rem;
   font-weight: bold;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: aliceblue;
   transition: transform 1s ease-in-out, opacity 1s ease-in-out;
   z-index: 1000;
 }
 
-.logContainer .show {
+.logContainer.show {
   transform: translateX(-320px); /* Slide in */
   opacity: 1;
 }
 
-.logContainer .hide {
+.logContainer.hide {
   transform: translateX(0); /* Slide out */
   opacity: 0;
 }

@@ -6,7 +6,7 @@ import ExistingTab from '../../components/BudgetPage/ExistingTab'
 import HistoryTab from '../../components/BudgetPage/HistoryTab'
 import OverviewTab from '../../components/BudgetPage/OverviewTab'
 import { useBudgets } from '../../hooks/features/useBudgets'
-import { Budget, BudgetAllocation } from '../../types'
+import { Budget, BudgetAllocation } from '../../types/budgets'
 import { LoadingSpinner } from '../../components/common'
 
 const BudgetPage = () => {
@@ -19,7 +19,9 @@ const BudgetPage = () => {
     fetchHistoricalExpenditures,
     fetchMonthlyBudgetAllocations,
     saveMonthlyBudgetAllocationHandler,
-    createBudgetHandler
+    createBudgetHandler,
+    getRemainingBudgetHandler,
+    remainingBudget
   } = useBudgets()
 
   useEffect(() => {
@@ -47,6 +49,14 @@ const BudgetPage = () => {
     }
     fetchHistoricalData()
   }, [fetchHistoricalExpenditures])
+
+  useEffect(() => {
+    const fetchRemainingBudget = async () => {
+      const previousMonth = new Date(new Date(month).setMonth(new Date(month).getMonth() - 1)).toISOString().slice(0, 7)
+      await getRemainingBudgetHandler(previousMonth)
+    }
+    fetchRemainingBudget()
+  }, [month, getRemainingBudgetHandler])
 
   const [activeTab, setActiveTab] = useState<'setup' | 'existing' | 'history' | 'overview' | 'comparison'>('setup')
   const [existingBudgets, setExistingBudgets] = useState<Budget[]>(budgets)
@@ -121,6 +131,7 @@ const BudgetPage = () => {
               handleSavingsChange={setSavings}
               handleSaveBudget={(newAllocation: BudgetAllocation[]) => handleSaveAllocationBudget(newAllocation)}
               isBudgetSaved={isBudgetSaved}
+              remainingBudget={remainingBudget}
             />
           )}
 

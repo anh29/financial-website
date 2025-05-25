@@ -4,9 +4,10 @@ import {
   fetchBudgetsAsync,
   createBudgetAsync,
   updateBudgetAsync,
-  fetchHistoricalExpendituresAsync
+  fetchHistoricalExpendituresAsync,
+  fetchRemainingBudgetAsync
 } from '../../store/slices/budgetSlice'
-import { Budget, BudgetAllocation } from '../../types'
+import { Budget, BudgetAllocation } from '../../types/budgets'
 import {
   saveMonthlyBudgetAllocation,
   saveMonthlyBudget,
@@ -15,7 +16,7 @@ import {
 
 export const useBudgets = () => {
   const dispatch = useAppDispatch()
-  const { budgets, income, pastBudgets, isLoading, error } = useAppSelector((state) => state.budgets)
+  const { budgets, income, pastBudgets, isLoading, error, remainingBudget } = useAppSelector((state) => state.budgets)
 
   const fetchBudgets = useCallback(async () => {
     try {
@@ -89,6 +90,17 @@ export const useBudgets = () => {
     }
   }, [])
 
+  const getRemainingBudgetHandler = useCallback(
+    async (month: string): Promise<void> => {
+      try {
+        await dispatch(fetchRemainingBudgetAsync(month)).unwrap()
+      } catch (error) {
+        console.error('Failed to get remaining budget:', error)
+      }
+    },
+    [dispatch]
+  )
+
   return {
     budgets,
     income,
@@ -101,6 +113,8 @@ export const useBudgets = () => {
     fetchHistoricalExpenditures,
     saveMonthlyBudgetHandler,
     saveMonthlyBudgetAllocationHandler,
-    fetchMonthlyBudgetAllocations
+    fetchMonthlyBudgetAllocations,
+    getRemainingBudgetHandler,
+    remainingBudget
   }
 }

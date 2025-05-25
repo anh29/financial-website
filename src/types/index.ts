@@ -1,3 +1,4 @@
+import { Budget } from './budgets'
 import { Transaction } from './transaction'
 
 export interface User {
@@ -5,29 +6,6 @@ export interface User {
   email: string
   name: string
   avatar?: string
-}
-
-export interface Budget {
-  id: string
-  description: string
-  amount: number
-  allocations: BudgetAllocation[]
-  [key: string]: string | number | undefined | BudgetAllocation[]
-}
-
-export interface BudgetAllocation {
-  monthly_budget_id: string
-  description: string
-  amount: number
-  [key: string]: string | number | undefined
-}
-
-export interface HistoryBudgets {
-  month: string
-  total: number
-  disposable: number
-  allocations: BudgetAllocation[]
-  spent: Record<string, number>
 }
 
 export interface Notification {

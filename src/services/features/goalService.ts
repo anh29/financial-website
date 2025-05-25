@@ -1,4 +1,4 @@
-import { Goals } from '../../types/goals'
+import { AllocateSavingToGoals, Goals, GoalContributions } from '../../types/goals'
 import { SERVER_URL } from '../../utils/constants'
 import { getUser } from '../../utils/userUtils'
 
@@ -29,6 +29,7 @@ const goalAPI = {
 
     const body = goals.map((item) => ({
       ...item,
+      missing_amount: item.amount,
       userId: user.id
     }))
 
@@ -73,6 +74,32 @@ const goalAPI = {
     const response = await fetch(`${SERVER_URL}/crud/goals/user/${user.id}`)
     return handleResponse<Goals[]>(response)
   }
+}
+
+export const allocateSavingToGoals = async (
+  amount: number
+): Promise<{ message: string; data: AllocateSavingToGoals[] }> => {
+  const user = getUser()
+  if (!user) throw new APIError('User not found')
+
+  const response = await fetch(`${SERVER_URL}/marketplace/allocateSavingToGoals/user/${user.id}/amount/${amount}`)
+
+  return handleResponse<{ message: string; data: AllocateSavingToGoals[] }>(response)
+}
+
+export const addGoalContributions = async (
+  goalContributions: Omit<GoalContributions[], 'id'>
+): Promise<{ message: string; data: GoalContributions[] }> => {
+  const user = getUser()
+  if (!user) throw new APIError('User not found')
+
+  const response = await fetch(`${SERVER_URL}/crud/goalContributions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(goalContributions.map((item) => ({ ...item, userId: user.id })))
+  })
+
+  return handleResponse<{ message: string; data: GoalContributions[] }>(response)
 }
 
 export const {

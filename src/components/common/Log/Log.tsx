@@ -13,7 +13,7 @@ const Log: React.FC<LogProps> = ({ message, status, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false)
-      setTimeout(onClose, 1000) // Wait for animation to complete before closing
+      setTimeout(onClose, 1000)
     }, 3000) // Show for 3 seconds
 
     return () => clearTimeout(timer)

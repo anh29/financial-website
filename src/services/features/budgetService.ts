@@ -1,4 +1,4 @@
-import { Budget, BudgetAllocation, HistoryBudgets } from '../../types'
+import { Budget, BudgetAllocation, HistoryBudgets, RemainingBudget } from '../../types/budgets'
 import { SERVER_URL } from '../../utils/constants'
 import { getUser } from '../../utils/userUtils'
 
@@ -170,6 +170,15 @@ export const getHistoricalExpenditures = async (): Promise<{ message: string; da
   if (!user) throw new Error('User not found')
 
   const response = await fetch(`${SERVER_URL}/marketplace/getHistoricalExpenditures/user/${user.id}`)
+
+  return handleResponse(response)
+}
+
+export const getRemainingBudget = async (month: string): Promise<{ message: string; data: RemainingBudget }> => {
+  const user = getUser()
+  if (!user) throw new Error('User not found')
+
+  const response = await fetch(`${SERVER_URL}/marketplace/getRemainingBudget/user/${user.id}/month/${month}`)
 
   return handleResponse(response)
 }

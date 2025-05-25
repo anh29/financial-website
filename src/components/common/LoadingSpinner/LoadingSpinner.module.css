@@ -1,28 +1,39 @@
-.loader {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+.loadingSpinner {
+  display: inline-block;
+  width: var(--spinner-size, 48px);
+  height: var(--spinner-size, 48px);
   position: relative;
-  animation: rotate 1s linear infinite;
-  justify-self: center;
 }
-.loader::before,
-.loader::after {
+
+.loadingSpinner.page,
+.loadingSpinner.inline,
+.loadingSpinner.button {
+  width: var(--spinner-size, 48px);
+  height: var(--spinner-size, 48px);
+}
+
+.loadingSpinner.page,
+.loadingSpinner.inline {
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+.loadingSpinner.page::before,
+.loadingSpinner.page::after,
+.loadingSpinner.inline::before,
+.loadingSpinner.inline::after {
   content: '';
   box-sizing: border-box;
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: 5px solid #fff;
+  border: var(--spinner-thickness, 5px) solid var(--spinner-color, #00a374);
   animation: prixClipFix 2s linear infinite;
 }
-.loader::before {
-  border-color: rgb(0, 163, 116);
-}
-.loader::after {
+.loadingSpinner.page::after,
+.loadingSpinner.inline::after {
   inset: 8px;
-  transform: rotate3d(90, 90, 0, 180deg);
   border-color: rgba(0, 163, 116, 0.5);
+  transform: rotate3d(90, 90, 0, 180deg);
 }
 
 @keyframes rotate {
@@ -33,7 +44,6 @@
     transform: rotate(360deg);
   }
 }
-
 @keyframes prixClipFix {
   0% {
     clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
@@ -44,5 +54,102 @@
   75%,
   100% {
     clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+  }
+}
+
+/* Button spinner */
+.loadingSpinner.button {
+  position: relative;
+  width: 80px;
+  height: 20px;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.symmetryDot {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--spinner-color, #fff);
+  transform: translateY(-50%) translateX(0);
+  animation-duration: 1.2s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-iteration-count: infinite;
+}
+
+.symmetryDot.center {
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-name: symmetryDotCenter;
+}
+
+.symmetryDot.right {
+  left: 50%;
+  animation-name: symmetryDotMoveRight3;
+}
+
+.symmetryDot.left {
+  left: 50%;
+  animation-name: symmetryDotMoveLeft3;
+}
+
+@keyframes symmetryDotCenter {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+  40%,
+  60% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes symmetryDotMoveRight3 {
+  0%,
+  100% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+  }
+  40%,
+  60% {
+    transform: translateY(-50%) translateX(24px);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes symmetryDotMoveLeft3 {
+  0%,
+  100% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+  }
+  40%,
+  60% {
+    transform: translateY(-50%) translateX(-24px);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
   }
 }

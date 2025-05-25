@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { Budget, HistoryBudgets } from '../../types'
+import { Budget, HistoryBudgets, RemainingBudget } from '../../types/budgets'
 import { findById } from '../utils/common'
 import {
   fetchBudgetsByUser,
   createBudget,
   updateBudget,
-  getHistoricalExpenditures
+  getHistoricalExpenditures,
+  getRemainingBudget
 } from '../../services/features/budgetService'
 
 interface BudgetState {
@@ -14,6 +15,7 @@ interface BudgetState {
   pastBudgets: HistoryBudgets[]
   isLoading: boolean
   error: string | null
+  remainingBudget: RemainingBudget | null
 }
 
 const initialState: BudgetState = {
@@ -21,7 +23,8 @@ const initialState: BudgetState = {
   income: null,
   pastBudgets: [],
   isLoading: false,
-  error: null
+  error: null,
+  remainingBudget: null
 }
 
 // Async thunks
@@ -72,6 +75,18 @@ export const fetchHistoricalExpendituresAsync = createAsyncThunk(
   }
 )
 
+export const fetchRemainingBudgetAsync = createAsyncThunk(
+  'budgets/fetchRemainingBudget',
+  async (month: string, { rejectWithValue }) => {
+    try {
+      const response = await getRemainingBudget(month)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch remaining budget')
+    }
+  }
+)
+
 const budgetSlice = createSlice({
   name: 'budgets',
   initialState,
@@ -87,6 +102,9 @@ const budgetSlice = createSlice({
       if (budget) {
         budget.spent = action.payload.spent
       }
+    },
+    setRemainingBudget: (state, action: PayloadAction<RemainingBudget>) => {
+      state.remainingBudget = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -143,6 +161,19 @@ const budgetSlice = createSlice({
         state.pastBudgets = action.payload
       })
       .addCase(fetchHistoricalExpendituresAsync.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload as string
+      })
+      // Fetch Remaining Budget
+      .addCase(fetchRemainingBudgetAsync.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(fetchRemainingBudgetAsync.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.remainingBudget = action.payload
+      })
+      .addCase(fetchRemainingBudgetAsync.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.payload as string
       })

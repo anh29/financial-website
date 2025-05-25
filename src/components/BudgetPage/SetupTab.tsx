@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { BudgetAllocation } from '../../types'
+import { BudgetAllocation, RemainingBudget } from '../../types/budgets'
 import styles from './SectionTab.module.css'
+import RemainingBudgetAllocation from './RemainingBudgetAllocation'
 
 interface SetupTabProps {
   totalBudget: number
@@ -16,6 +17,7 @@ interface SetupTabProps {
   savings: number
   handleSavingsChange: (value: number) => void
   remainingMonthlyBudget: number
+  remainingBudget: RemainingBudget | null
 }
 
 const SetupTab: React.FC<SetupTabProps> = ({
@@ -29,10 +31,12 @@ const SetupTab: React.FC<SetupTabProps> = ({
   monthlyBudget,
   handleSaveBudget,
   isBudgetSaved,
-  remainingMonthlyBudget
+  remainingMonthlyBudget,
+  remainingBudget
 }) => {
   const [animatedIndex, setAnimatedIndex] = useState<number | null>(null)
   const [allocations, setAllocations] = useState<BudgetAllocation[]>([])
+  const [showCategoryManagement, setShowCategoryManagement] = useState(false)
 
   const handleAdd = (description?: string) => {
     const newAllocation: BudgetAllocation = {
@@ -122,79 +126,143 @@ const SetupTab: React.FC<SetupTabProps> = ({
   return (
     <div className={styles.sectionTab}>
       {/* Tổng ngân sách */}
-      <div className={styles.section}>
-        <div className={styles.budgetHeader}>
-          <label className={styles.label}>Tổng ngân sách:</label>
-          <input type='number' className={styles.totalInput} value={totalBudget} readOnly />
+      <div className={styles.infoCard}>
+        <div className={styles.infoIcon}>💰</div>
+        <div className={styles.infoContent}>
+          <span className={styles.infoLabel}>Tổng ngân sách:</span>
+          <span className={styles.infoValue}>{formatCurrency(totalBudget)}</span>
         </div>
-        <div className={styles.summaryBox}>
-          <span style={{ color: remaining < 0 ? '#e74c3c' : '#2ecc71' }}>
-            {remaining < 0
-              ? `⚠ Thiếu: ${formatCurrency(Math.abs(remaining))}`
-              : `🟢 Còn lại: ${formatCurrency(remaining)}`}
-          </span>
-        </div>
-      </div>
-
-      {/* Ngân sách tháng hiện tại */}
-      <div className={styles.section}>
-        <label className={styles.label}>Ngân sách dự định chi tiêu trong tháng:</label>
-        <input
-          type='number'
-          className={styles.monthlyInput}
-          value={monthlyBudget}
-          onChange={(e) => handleMonthlyBudgetChange(Number(e.target.value))}
-        />
-        <div className={styles.summaryBox}>
-          <span>
-            📦 Đã phân bổ: <strong>{formatCurrency(totalAllocated)}</strong>
-          </span>
-          <span style={{ color: remainingMonthlyBudget < 0 ? '#e74c3c' : '#2ecc71' }}>
-            {remainingMonthlyBudget < 0
-              ? `⚠ Thiếu: ${formatCurrency(Math.abs(remainingMonthlyBudget))}`
-              : `🟢 Còn lại: ${formatCurrency(remainingMonthlyBudget)}`}
-          </span>
+        <div className={styles.infoStatus} style={{ color: remaining < 0 ? '#e74c3c' : '#2ecc71' }}>
+          {remaining < 0
+            ? `⚠ Thiếu: ${formatCurrency(Math.abs(remaining))}`
+            : `🟢 Còn lại: ${formatCurrency(remaining)}`}
         </div>
       </div>
+      <div className={styles.divider} />
 
-      {/* Tạo mới */}
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>➕ Tạo mới danh mục</h3>
-        <div className={styles.list}>{allocations.map((item, index) => renderAllocationCard(item, index, true))}</div>
-        <div className={styles.buttonGroup}>
-          <button className={styles.addButton} onClick={() => handleAdd()}>
-            + Thêm danh mục
-          </button>
-          <button className={styles.saveButton} onClick={handleSave}>
-            💾 Lưu ngân sách
-          </button>
-        </div>
-        {isBudgetSaved && <p className={styles.saveConfirmation}>✅ Ngân sách đã được lưu thành công!</p>}
-
-        {/* Gợi ý danh mục */}
-        <div className={styles.subSection}>
-          <h3 className={styles.subSectionTitle}>✨ Gợi ý danh mục</h3>
-          <div className={styles.suggestionList}>
-            {suggestedCategories.map((cat) => (
-              <button
-                key={cat}
-                className={styles.suggestionButton}
-                onClick={() => handleAdd(cat)}
-                title='Nhấn để thêm nhanh'
-              >
-                {cat}
-              </button>
-            ))}
+      {/* Section 1: Monthly Budget Allocation */}
+      <div className={styles.cardSection}>
+        <div className={styles.cardHeaderRow}>
+          <div className={styles.headerLeft}>
+            <span className={styles.cardIcon}>📅</span>
+            <h2 className={styles.cardTitle}>Phân bổ ngân sách tháng này</h2>
+          </div>
+          <div className={styles.inlineInputGroup}>
+            <label className={styles.label} htmlFor='monthlyBudgetInput'>
+              Ngân sách tháng:
+            </label>
+            <input
+              id='monthlyBudgetInput'
+              type='number'
+              className={styles.totalInput}
+              value={monthlyBudget}
+              onChange={(e) => handleMonthlyBudgetChange(Number(e.target.value))}
+            />
           </div>
         </div>
+        <div className={styles.progressGroup}>
+          <div className={styles.progressBarLarge}>
+            <div
+              className={styles.progressFillLarge}
+              style={{
+                width: `${Math.min(100, (totalAllocated / monthlyBudget) * 100)}%`,
+                backgroundColor: totalAllocated > monthlyBudget ? '#e74c3c' : '#2ecc71'
+              }}
+            />
+            <span className={styles.progressAllocatedLabel}>
+              <span className={styles.progressBadgeIcon}>📦</span>
+              {formatCurrency(totalAllocated)}
+              {` (${Math.round((totalAllocated / monthlyBudget) * 100)}%)`}
+            </span>
+            <span className={styles.progressRemainingLabel}>
+              <span className={styles.progressBadgeIcon} style={{ color: '#00c48c' }}>
+                🟢
+              </span>
+              {formatCurrency(Math.abs(remainingMonthlyBudget))}
+              {` (${Math.round((Math.abs(remainingMonthlyBudget) / monthlyBudget) * 100)}%)`}
+            </span>
+          </div>
+          <div className={styles.progressLabelsLarge}>
+            <span>0đ</span>
+            <span>{formatCurrency(monthlyBudget)}</span>
+          </div>
+        </div>
+        {remainingMonthlyBudget < 0 && (
+          <div className={styles.warningMessage}>
+            ⚠️ Cảnh báo: Ngân sách đã vượt quá {formatCurrency(Math.abs(remainingMonthlyBudget))} so với dự kiến
+          </div>
+        )}
       </div>
 
-      {/* Phân bổ danh mục */}
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>📊 Phân bổ danh mục theo tháng</h3>
-        <div className={styles.allocationList}>
-          {budgetAllocations.map((item, index) => renderAllocationCard(item, index, false))}
+      {/* Section 2: Previous Month's Remaining Budget Allocation */}
+      {remainingBudget && remainingBudget.remainingBudget > 0 && (
+        <div className={styles.cardSection}>
+          <div className={styles.cardTitleRow}>
+            <span className={styles.cardIcon}>🎯</span>
+            <h2 className={styles.cardTitle}>Phân bổ ngân sách còn lại từ tháng trước vào mục tiêu</h2>
+          </div>
+          <div className={styles.remainingBox}>
+            <span className={styles.remainingLabel}>Còn lại:</span>
+            <span className={styles.remainingValue}>{formatCurrency(remainingBudget.remainingBudget)}</span>
+          </div>
+          <div className={styles.remainingDesc}>
+            Bạn có thể phân bổ số tiền còn lại từ tháng trước vào các mục tiêu tiết kiệm của mình. Hệ thống sẽ tự động
+            tính toán và đề xuất cách phân bổ tối ưu.
+          </div>
+          <RemainingBudgetAllocation
+            remainingBudget={remainingBudget.remainingBudget}
+            formatCurrency={formatCurrency}
+            month={remainingBudget.month}
+          />
         </div>
+      )}
+
+      {/* Collapsible Category Management Section */}
+      <div className={styles.cardSection}>
+        <button className={styles.collapseToggle} onClick={() => setShowCategoryManagement((prev) => !prev)}>
+          {showCategoryManagement ? 'Ẩn quản lý danh mục ▲' : 'Quản lý danh mục ▼'}
+        </button>
+        {showCategoryManagement && (
+          <div className={styles.categoryManagement}>
+            {/* Tạo mới danh mục */}
+            <h3 className={styles.sectionTitle}>➕ Tạo mới danh mục</h3>
+            <div className={styles.list}>
+              {allocations.map((item, index) => renderAllocationCard(item, index, true))}
+            </div>
+            <div className={styles.buttonGroup}>
+              <button className={styles.addButton} onClick={() => handleAdd()}>
+                + Thêm danh mục
+              </button>
+              <button className={styles.saveButton} onClick={handleSave}>
+                💾 Lưu ngân sách
+              </button>
+            </div>
+            {isBudgetSaved && <p className={styles.saveConfirmation}>✅ Ngân sách đã được lưu thành công!</p>}
+
+            {/* Gợi ý danh mục */}
+            <div className={styles.subSection}>
+              <h3 className={styles.subSectionTitle}>✨ Gợi ý danh mục</h3>
+              <div className={styles.suggestionList}>
+                {suggestedCategories.map((cat) => (
+                  <button
+                    key={cat}
+                    className={styles.suggestionButton}
+                    onClick={() => handleAdd(cat)}
+                    title='Nhấn để thêm nhanh'
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Phân bổ danh mục theo tháng */}
+            <h3 className={styles.sectionTitle}>📊 Phân bổ danh mục theo tháng</h3>
+            <div className={styles.allocationList}>
+              {budgetAllocations.map((item, index) => renderAllocationCard(item, index, false))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

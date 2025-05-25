@@ -2,6 +2,9 @@ import { useState } from 'react'
 import styles from './GoalPage.module.css'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
+import AddGoalModal from '../../components/HomePage/Goals/AddGoalModal/AddGoalModal'
+import { useGoal } from '../../hooks/features/useGoals'
+import { Goals } from '../../types/goals'
 
 // Define types for goals
 interface BaseGoal {
@@ -155,13 +158,24 @@ const categoryIcons: Record<GoalCategory, string> = {
 }
 
 const GoalPage = () => {
+  const { addGoal, updateGoal } = useGoal()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editGoal, setEditGoal] = useState<Partial<Goal> | null>(null)
+  const [editGoal, setEditGoal] = useState<Partial<Goals> | null>(null)
   const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active')
   const [selectedCategory, setSelectedCategory] = useState<GoalCategory | 'all'>('all')
 
   const handleAdjustClick = (goal: Goal) => {
-    setEditGoal(goal)
+    // Convert Goal type to Goals type
+    const convertedGoal: Partial<Goals> = {
+      id: goal.id,
+      description: goal.title,
+      amount: goal.target_amount,
+      target_date: goal.target_date,
+      status: goal.status,
+      start_date: goal.start_date,
+      repeat_type: goal.type === 'recurring' ? goal.frequency : 'none'
+    }
+    setEditGoal(convertedGoal)
     setIsModalOpen(true)
   }
 
@@ -170,10 +184,19 @@ const GoalPage = () => {
     setEditGoal(null)
   }
 
-  const handleSaveGoal = (updatedGoal: Partial<Goal> | null) => {
-    if (!updatedGoal) return
-    setIsModalOpen(false)
-    // TODO: Implement save functionality
+  const handleSaveGoal = async (updatedGoal: Partial<Goals>) => {
+    try {
+      if (editGoal?.id) {
+        // Update existing goal
+        await updateGoal({ ...updatedGoal, id: editGoal.id } as Goals)
+      } else {
+        // Create new goal
+        await addGoal(updatedGoal as Goals)
+      }
+      handleModalClose()
+    } catch (error) {
+      console.error('Failed to save goal:', error)
+    }
   }
 
   const calculateTimeLeft = (targetDate: string) => {
@@ -212,7 +235,7 @@ const GoalPage = () => {
             <div className={styles.statIcon}>🎯</div>
             <div className={styles.statInfo}>
               <h3>Active Goals</h3>
-              <p>{mockGoals.filter(g => g.status === 'active').length}</p>
+              <p>{mockGoals.filter((g) => g.status === 'active').length}</p>
             </div>
           </div>
           <div className={styles.statCard}>
@@ -226,10 +249,13 @@ const GoalPage = () => {
             <div className={styles.statIcon}>📈</div>
             <div className={styles.statInfo}>
               <h3>Monthly Target</h3>
-              <p>${mockGoals
-                .filter(g => g.type === 'recurring')
-                .reduce((sum, goal) => sum + (goal as RecurringGoal).monthly_target, 0)
-                .toLocaleString()}</p>
+              <p>
+                $
+                {mockGoals
+                  .filter((g) => g.type === 'recurring')
+                  .reduce((sum, goal) => sum + (goal as RecurringGoal).monthly_target, 0)
+                  .toLocaleString()}
+              </p>
             </div>
           </div>
         </div>
@@ -374,158 +400,7 @@ const GoalPage = () => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <div className={styles.modalHeader}>
-              <h3>{editGoal ? 'Edit Goal' : 'Create New Goal'}</h3>
-              <button className={styles.closeBtn} onClick={handleModalClose}>
-                ×
-              </button>
-            </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleSaveGoal(editGoal)
-              }}
-            >
-              <div className={styles.formGrid}>
-                <div className={styles.formGroup}>
-                  <label>Goal Type</label>
-                  <select
-                    value={editGoal?.type || ''}
-                    onChange={(e) => setEditGoal({ ...editGoal, type: e.target.value as 'recurring' | 'one-time' })}
-                  >
-                    <option value=''>Select type</option>
-                    <option value='recurring'>Recurring Goal</option>
-                    <option value='one-time'>One-time Goal</option>
-                  </select>
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Title</label>
-                  <input
-                    type='text'
-                    value={editGoal?.title || ''}
-                    onChange={(e) => setEditGoal({ ...editGoal, title: e.target.value })}
-                    placeholder='Enter goal title'
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Description</label>
-                  <input
-                    type='text'
-                    value={editGoal?.description || ''}
-                    onChange={(e) => setEditGoal({ ...editGoal, description: e.target.value })}
-                    placeholder='Enter goal description'
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Category</label>
-                  <select
-                    value={editGoal?.category || ''}
-                    onChange={(e) => setEditGoal({ ...editGoal, category: e.target.value as GoalCategory })}
-                  >
-                    <option value=''>Select a category</option>
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Priority</label>
-                  <select
-                    value={editGoal?.priority || ''}
-                    onChange={(e) =>
-                      setEditGoal({ ...editGoal, priority: e.target.value as 'low' | 'medium' | 'high' })
-                    }
-                  >
-                    <option value=''>Select priority</option>
-                    <option value='low'>Low</option>
-                    <option value='medium'>Medium</option>
-                    <option value='high'>High</option>
-                  </select>
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Target Amount</label>
-                  <input
-                    type='number'
-                    value={editGoal?.target_amount || ''}
-                    onChange={(e) => setEditGoal({ ...editGoal, target_amount: Number(e.target.value) })}
-                    placeholder='Enter target amount'
-                  />
-                </div>
-                {editGoal?.type === 'recurring' && (
-                  <>
-                    <div className={styles.formGroup}>
-                      <label>Frequency</label>
-                      <select
-                        value={(editGoal as RecurringGoal)?.frequency || ''}
-                        onChange={(e) =>
-                          setEditGoal({ ...editGoal, frequency: e.target.value as 'monthly' | 'yearly' })
-                        }
-                      >
-                        <option value=''>Select frequency</option>
-                        <option value='monthly'>Monthly</option>
-                        <option value='yearly'>Yearly</option>
-                      </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                      <label>Monthly Target</label>
-                      <input
-                        type='number'
-                        value={(editGoal as RecurringGoal)?.monthly_target || ''}
-                        onChange={(e) => setEditGoal({ ...editGoal, monthly_target: Number(e.target.value) })}
-                        placeholder='Enter monthly target'
-                      />
-                    </div>
-                    <div className={styles.formGroup}>
-                      <label>Contribution Frequency</label>
-                      <select
-                        value={(editGoal as RecurringGoal)?.contribution_frequency || ''}
-                        onChange={(e) =>
-                          setEditGoal({
-                            ...editGoal,
-                            contribution_frequency: e.target.value as 'weekly' | 'bi-weekly' | 'monthly'
-                          })
-                        }
-                      >
-                        <option value=''>Select frequency</option>
-                        <option value='weekly'>Weekly</option>
-                        <option value='bi-weekly'>Bi-weekly</option>
-                        <option value='monthly'>Monthly</option>
-                      </select>
-                    </div>
-                  </>
-                )}
-                <div className={styles.formGroup}>
-                  <label>Start Date</label>
-                  <input
-                    type='date'
-                    value={editGoal?.start_date || ''}
-                    onChange={(e) => setEditGoal({ ...editGoal, start_date: e.target.value })}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Target Date</label>
-                  <input
-                    type='date'
-                    value={editGoal?.target_date || ''}
-                    onChange={(e) => setEditGoal({ ...editGoal, target_date: e.target.value })}
-                  />
-                </div>
-              </div>
-              <div className={styles.modalActions}>
-                <button type='button' onClick={handleModalClose}>
-                  Cancel
-                </button>
-                <button type='submit'>Save Goal</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <AddGoalModal isOpen={isModalOpen} onClose={handleModalClose} onSave={handleSaveGoal} editGoal={editGoal} />
     </div>
   )
 }
