@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { BudgetAllocation, RemainingBudget } from '../../types/budgets'
-import styles from './SectionTab.module.css'
+import styles from './SetupTab.module.css'
 import RemainingBudgetAllocation from './RemainingBudgetAllocation'
 
 interface SetupTabProps {
@@ -124,7 +124,7 @@ const SetupTab: React.FC<SetupTabProps> = ({
   }
 
   return (
-    <div className={styles.sectionTab}>
+    <div className={styles.setupTab}>
       {/* Tổng ngân sách */}
       <div className={styles.infoCard}>
         <div className={styles.infoIcon}>💰</div>
@@ -197,13 +197,15 @@ const SetupTab: React.FC<SetupTabProps> = ({
       {/* Section 2: Previous Month's Remaining Budget Allocation */}
       {remainingBudget && remainingBudget.remainingBudget > 0 && (
         <div className={styles.cardSection}>
-          <div className={styles.cardTitleRow}>
-            <span className={styles.cardIcon}>🎯</span>
-            <h2 className={styles.cardTitle}>Phân bổ ngân sách còn lại từ tháng trước vào mục tiêu</h2>
-          </div>
-          <div className={styles.remainingBox}>
-            <span className={styles.remainingLabel}>Còn lại:</span>
-            <span className={styles.remainingValue}>{formatCurrency(remainingBudget.remainingBudget)}</span>
+          <div className={styles.cardHeader}>
+            <div className={styles.cardTitleRow}>
+              <span className={styles.cardIcon}>🎯</span>
+              <h2 className={styles.cardTitle}>Phân bổ ngân sách còn lại từ tháng trước vào mục tiêu</h2>
+            </div>
+            <div className={styles.remainingBox}>
+              <span className={styles.remainingLabel}>Còn lại:</span>
+              <span className={styles.remainingValue}>{formatCurrency(remainingBudget.remainingBudget)}</span>
+            </div>
           </div>
           <div className={styles.remainingDesc}>
             Bạn có thể phân bổ số tiền còn lại từ tháng trước vào các mục tiêu tiết kiệm của mình. Hệ thống sẽ tự động

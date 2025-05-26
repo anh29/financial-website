@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import styles from './RemainingBudgetAllocation.module.css'
-import modalStyles from './RemainingBudgetAllocationModal.module.css'
 import { useGoal } from '../../hooks/features/useGoals'
 import { AllocateSavingToGoals } from '../../types/goals'
 import { LoadingSpinner } from '../common/LoadingSpinner/LoadingSpinner'
 import Log from '../common/Log/Log'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
+import RemainingBudgetAllocationModal from './RemainingBudgetAllocationModal'
 
 interface RemainingBudgetAllocationProps {
   remainingBudget: number
@@ -102,15 +102,8 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
   const finalRemainingBudget = remainingBudget - totalAllocated
 
   return (
-    <div className={styles.section}>
+    <div className={styles.remainingBudgetAllocation}>
       {log && <Log message={log.message} status={log.status} onClose={() => setLog(null)} />}
-      <div className={styles.sectionTitle}>
-        <span>🎯 Phân bổ ngân sách còn lại vào mục tiêu</span>
-        <div className={styles.remainingAmount}>
-          <span>Còn lại:</span>
-          <span className={styles.amount}>{formatCurrency(finalRemainingBudget)}</span>
-        </div>
-      </div>
 
       {/* Show just-saved allocations */}
       {savedAllocations.length > 0 && (
@@ -145,115 +138,29 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
       )}
 
       {finalRemainingBudget > 0 && (
-        <div className={styles.allocateSection}>
-          <p className={styles.allocateDescription}>
-            Bạn có thể phân bổ số tiền còn lại từ tháng trước vào các mục tiêu tiết kiệm của mình. Hệ thống sẽ tự động
-            tính toán và đề xuất cách phân bổ tối ưu.
-          </p>
-          <button className={styles.allocateButton} onClick={handleAllocate} disabled={isAllocating}>
-            {isAllocating ? <LoadingSpinner type='button' size={20} color='#fff' thickness={2} /> : 'Phân bổ ngân sách'}
-          </button>
-        </div>
+        <button className={styles.allocateButton} onClick={handleAllocate} disabled={isAllocating}>
+          {isAllocating ? <LoadingSpinner type='button' size={20} color='#fff' thickness={2} /> : 'Phân bổ ngân sách'}
+        </button>
       )}
 
-      {/* Modal for allocation review and confirmation */}
-      {showModal && (
-        <div className={modalStyles.modalOverlay}>
-          <div className={modalStyles.modalContent}>
-            {editError && <Log message={editError} status='error' onClose={() => setEditError(null)} />}
-            <div className={modalStyles.modalHeader}>
-              <span className={modalStyles.modalHeaderIcon}>🎯</span>
-              <span>Xác nhận phân bổ ngân sách</span>
-            </div>
-            <div className={modalStyles.modalSummary}>
-              <span>
-                Tổng đã phân bổ: <span className={modalStyles.modalSummaryValue}>{formatCurrency(totalAllocated)}</span>
-              </span>
-              <span>
-                Còn lại: <span className={modalStyles.modalSummaryValue}>{formatCurrency(finalRemainingBudget)}</span>
-              </span>
-            </div>
-            <div className={modalStyles.modalList}>
-              {pendingAllocations.map((allocation) => {
-                const progress = (allocation.allocated / allocation.amount) * 100
-                const isOverTarget = allocation.allocated > allocation.amount
-                const otherAllocated = pendingAllocations
-                  .filter((a) => a.goal_id !== allocation.goal_id)
-                  .reduce((sum, a) => sum + a.allocated, 0)
-                const maxAllocatable = Math.min(
-                  allocation.amount,
-                  remainingBudget - otherAllocated + allocation.allocated
-                )
-                return (
-                  <div key={allocation.goal_id} className={modalStyles.modalItem}>
-                    <div className={modalStyles.goalInfo}>
-                      <div className={modalStyles.goalHeader}>
-                        <span className={modalStyles.goalName}>{allocation.description}</span>
-                        <span className={modalStyles.goalTarget}>Mục tiêu: {formatCurrency(allocation.amount)}</span>
-                      </div>
-                      <div className={modalStyles.progressBarRow}>
-                        <div className={modalStyles.progressBar}>
-                          <div
-                            className={`${modalStyles.progressFill} ${isOverTarget ? modalStyles.overTarget : ''}`}
-                            style={{ width: `${Math.min(progress, 100)}%` }}
-                          />
-                        </div>
-                        <span className={modalStyles.progressBadge}>{progress.toFixed(1)}%</span>
-                      </div>
-                    </div>
-                    <div className={modalStyles.allocationInput}>
-                      {editingGoalId === allocation.goal_id ? (
-                        <>
-                          <input
-                            type='number'
-                            value={editValue ?? allocation.allocated}
-                            onChange={(e) => setEditValue(Number(e.target.value))}
-                            min={0}
-                            max={maxAllocatable}
-                            className={isOverTarget ? modalStyles.inputWarning : ''}
-                            autoFocus
-                          />
-                          <span className={modalStyles.currency}>đ</span>
-                          <button
-                            className={modalStyles.editConfirmBtn}
-                            onClick={() => handleEditConfirm(allocation.goal_id, maxAllocatable)}
-                            title='Lưu'
-                          >
-                            ✔
-                          </button>
-                          <button className={modalStyles.editCancelBtn} onClick={handleEditCancel} title='Huỷ'>
-                            ✖
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <span className={modalStyles.allocatedValue}>{formatCurrency(allocation.allocated)}</span>
-                          <span className={modalStyles.currency}>đ</span>
-                          <button
-                            className={modalStyles.editBtn}
-                            onClick={() => handleEditClick(allocation.goal_id, allocation.allocated)}
-                            title='Chỉnh sửa'
-                          >
-                            ✏️
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-            <div className={modalStyles.modalActions}>
-              <button className={modalStyles.cancelButton} onClick={handleCancelModal}>
-                Huỷ
-              </button>
-              <button className={modalStyles.confirmButton} onClick={handleConfirmSave}>
-                <span>✔</span> Xác nhận
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <RemainingBudgetAllocationModal
+        showModal={showModal}
+        pendingAllocations={pendingAllocations}
+        totalAllocated={totalAllocated}
+        finalRemainingBudget={finalRemainingBudget}
+        remainingBudget={remainingBudget}
+        formatCurrency={formatCurrency}
+        editingGoalId={editingGoalId}
+        editValue={editValue}
+        editError={editError}
+        onEditClick={handleEditClick}
+        onEditConfirm={handleEditConfirm}
+        onEditCancel={handleEditCancel}
+        onEditValueChange={setEditValue}
+        onCancelModal={handleCancelModal}
+        onConfirmSave={handleConfirmSave}
+        onEditErrorClose={() => setEditError(null)}
+      />
     </div>
   )
 }

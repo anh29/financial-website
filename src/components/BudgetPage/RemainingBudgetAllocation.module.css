@@ -1,4 +1,8 @@
-.section {
+.remainingBudgetAllocation {
+  align-self: center;
+}
+
+.remainingBudgetAllocation .section {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
@@ -7,7 +11,7 @@
   margin-top: 20px;
 }
 
-.sectionTitle {
+.remainingBudgetAllocation .sectionTitle {
   font-size: 1.2rem;
   margin-bottom: 16px;
   color: #34495e;
@@ -17,7 +21,7 @@
   gap: 6px;
 }
 
-.remainingAmount {
+.remainingBudgetAllocation .remainingAmount {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -25,12 +29,12 @@
   color: #34495e;
 }
 
-.amount {
+.remainingBudgetAllocation .amount {
   font-weight: 600;
   color: #00a374;
 }
 
-.allocateSection {
+.remainingBudgetAllocation .allocateSection {
   text-align: center;
   padding: 20px;
   background-color: #f8fafc;
@@ -38,13 +42,13 @@
   margin-bottom: 20px;
 }
 
-.allocateDescription {
+.remainingBudgetAllocation .allocateDescription {
   color: #64748b;
   margin-bottom: 20px;
   line-height: 1.5;
 }
 
-.allocateButton {
+.remainingBudgetAllocation .allocateButton {
   padding: 12px 24px;
   background-color: #00a374;
   color: white;
@@ -55,11 +59,11 @@
   transition: background-color 0.3s;
 }
 
-.allocateButton:hover {
+.remainingBudgetAllocation .allocateButton:hover {
   background-color: #008c63;
 }
 
-.loadingContainer {
+.remainingBudgetAllocation .loadingContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,19 +72,19 @@
   color: #64748b;
 }
 
-.allocationsContainer {
+.remainingBudgetAllocation .allocationsContainer {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.allocationsList {
+.remainingBudgetAllocation .allocationsList {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.allocationItem {
+.remainingBudgetAllocation .allocationItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -91,34 +95,34 @@
   transition: transform 0.2s;
 }
 
-.allocationItem:hover {
+.remainingBudgetAllocation .allocationItem:hover {
   transform: translateY(-2px);
 }
 
-.goalInfo {
+.remainingBudgetAllocation .goalInfo {
   flex: 1;
   margin-right: 20px;
 }
 
-.goalHeader {
+.remainingBudgetAllocation .goalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
 
-.goalName {
+.remainingBudgetAllocation .goalName {
   font-weight: 600;
   color: #2c3e50;
   font-size: 1.1rem;
 }
 
-.goalTarget {
+.remainingBudgetAllocation .goalTarget {
   font-size: 0.9rem;
   color: #64748b;
 }
 
-.progressBar {
+.remainingBudgetAllocation .progressBar {
   height: 8px;
   background-color: #e2e8f0;
   border-radius: 4px;
@@ -126,31 +130,31 @@
   margin: 8px 0;
 }
 
-.progressFill {
+.remainingBudgetAllocation .progressFill {
   height: 100%;
   background-color: #00a374;
   border-radius: 4px;
   transition: width 0.3s ease;
 }
 
-.progressFill.overTarget {
+.remainingBudgetAllocation .progressFill.overTarget {
   background-color: #ef4444;
 }
 
-.progressInfo {
+.remainingBudgetAllocation .progressInfo {
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
   color: #64748b;
 }
 
-.allocationInput {
+.remainingBudgetAllocation .allocationInput {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.allocationInput input {
+.remainingBudgetAllocation .allocationInput input {
   width: 150px;
   padding: 8px 12px;
   border: 1px solid #cbd5e1;
@@ -161,23 +165,23 @@
   transition: border-color 0.3s;
 }
 
-.allocationInput input:focus {
+.remainingBudgetAllocation .allocationInput input:focus {
   outline: none;
   border-color: #00a374;
   box-shadow: 0 0 0 2px rgba(0, 163, 116, 0.1);
 }
 
-.allocationInput input.inputWarning {
+.remainingBudgetAllocation .allocationInput input.inputWarning {
   border-color: #ef4444;
   background-color: #fef2f2;
 }
 
-.currency {
+.remainingBudgetAllocation .currency {
   color: #64748b;
   font-weight: 500;
 }
 
-.summary {
+.remainingBudgetAllocation .summary {
   background-color: #f1f5f9;
   padding: 16px;
   border-radius: 8px;
@@ -186,7 +190,7 @@
   gap: 8px;
 }
 
-.summaryItem {
+.remainingBudgetAllocation .summaryItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -194,11 +198,11 @@
   color: #475569;
 }
 
-.summaryItem .amount {
+.remainingBudgetAllocation .summaryItem .amount {
   font-weight: 600;
 }
 
-.summaryItem .amount.negative {
+.remainingBudgetAllocation .summaryItem .amount.negative {
   color: #ef4444;
 }
 

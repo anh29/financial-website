@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import styles from './SectionTab.module.css'
-import { Budget } from '../../types'
+import styles from './SetupTab.module.css'
+import { Budget } from '../../types/budgets'
 
 interface ExistingTabProps {
   income: Budget | null
