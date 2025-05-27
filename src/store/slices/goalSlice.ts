@@ -28,7 +28,8 @@ const initialState: GoalState = {
 // Async thunks
 export const fetchGoalsAsync = createAsyncThunk('goals/fetchGoals', async (_, { rejectWithValue }) => {
   try {
-    return await fetchGoalsByUserId()
+    const response = await fetchGoalsByUserId()
+    return response.data
   } catch (error) {
     return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch goals')
   }

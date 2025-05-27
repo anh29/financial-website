@@ -7,6 +7,7 @@ import Log from '../common/Log/Log'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 import RemainingBudgetAllocationModal from './RemainingBudgetAllocationModal'
+import Confetti from 'react-confetti'
 
 interface RemainingBudgetAllocationProps {
   remainingBudget: number
@@ -29,6 +30,7 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
   const [editError, setEditError] = useState<string | null>(null)
   const [log, setLog] = useState<{ message: string; status: 'success' | 'error' } | null>(null)
   const [savedAllocations, setSavedAllocations] = useState<AllocateSavingToGoals[]>([])
+  const [showConfetti, setShowConfetti] = useState(false)
 
   const handleAllocate = async () => {
     try {
@@ -60,6 +62,8 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
       setLog({ message: 'Phân bổ thành công!', status: 'success' })
       setShowModal(false)
       setSavedAllocations([...pendingAllocations])
+      setShowConfetti(true)
+      setTimeout(() => setShowConfetti(false), 3500)
     } catch (error) {
       console.error('Failed to save goal contributions:', error)
       setLog({ message: 'Có lỗi khi lưu phân bổ mục tiêu!', status: 'error' })
@@ -103,6 +107,13 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
 
   return (
     <div className={styles.remainingBudgetAllocation}>
+      {showConfetti && (
+        <Confetti
+          numberOfPieces={220}
+          recycle={false}
+          style={{ zIndex: 1000, position: 'fixed', top: 0, left: 200, width: '100vw', pointerEvents: 'none' }}
+        />
+      )}
       {log && <Log message={log.message} status={log.status} onClose={() => setLog(null)} />}
 
       {/* Show just-saved allocations */}

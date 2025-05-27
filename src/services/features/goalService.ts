@@ -67,12 +67,12 @@ const goalAPI = {
     return handleResponse<Goals>(response)
   },
 
-  fetchByUserId: async (): Promise<Goals[]> => {
+  fetchByUserId: async (): Promise<{ data: Goals[]; message: string }> => {
     const user = getUser()
     if (!user) throw new APIError('User not found')
 
     const response = await fetch(`${SERVER_URL}/crud/goals/user/${user.id}`)
-    return handleResponse<Goals[]>(response)
+    return handleResponse<{ data: Goals[]; message: string }>(response)
   }
 }
 
