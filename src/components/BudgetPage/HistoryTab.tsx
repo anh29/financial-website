@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, TooltipItem } from 'chart.js'
 import styles from './HistoryTab.module.css'
-import { HistoryBudgets } from '../../types'
+import { HistoryBudgets } from '../../types/budgets'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 

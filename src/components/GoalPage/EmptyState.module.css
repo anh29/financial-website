@@ -1,0 +1,88 @@
+.emptyStateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background: #f3f6fa;
+  border-radius: 2rem;
+  box-shadow: 0 2px 16px rgba(26,188,156,0.07);
+  margin: 2rem auto;
+  max-width: 500px;
+  text-align: center;
+  animation: fadeInCard 0.7s cubic-bezier(.4,2,.6,1);
+}
+
+.emptyStateContainer .emptyStateNoImg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.emptyStateContainer .emptyStateNoImg h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a2b3c;
+  margin-bottom: 0.5rem;
+}
+
+.emptyStateContainer .emptyStateNoImg p {
+  color: #7b869a;
+  margin-bottom: 1.5rem;
+}
+
+.emptyStateContainer .addGoalBtn {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 0.9rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(26,188,156,0.07);
+}
+
+.emptyStateContainer .addGoalBtn:hover {
+  background: var(--secondary-color);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(26,188,156,0.13);
+}
+
+.emptyStateContainer .cancelledHappyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.emptyStateContainer .cancelledHappyState h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a2b3c;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.emptyStateContainer .cancelledHappyState p {
+  color: #1abc9c;
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

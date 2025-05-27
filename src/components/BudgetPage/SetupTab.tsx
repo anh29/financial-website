@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BudgetAllocation, RemainingBudget } from '../../types/budgets'
 import styles from './SetupTab.module.css'
 import RemainingBudgetAllocation from './RemainingBudgetAllocation'
+import Confetti from 'react-confetti'
+import Log from '../common/Log/Log'
 
 interface SetupTabProps {
   totalBudget: number
@@ -37,6 +39,17 @@ const SetupTab: React.FC<SetupTabProps> = ({
   const [animatedIndex, setAnimatedIndex] = useState<number | null>(null)
   const [allocations, setAllocations] = useState<BudgetAllocation[]>([])
   const [showCategoryManagement, setShowCategoryManagement] = useState(false)
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [log, setLog] = useState<{ message: string; status: 'success' | 'error' } | null>(null)
+
+  useEffect(() => {
+    if (remainingBudget && remainingBudget.remainingBudget <= 0) {
+      setShowConfetti(true)
+      setLog({ message: 'Không có ngân sách còn lại từ tháng trước!', status: 'success' })
+      const timer = setTimeout(() => setShowConfetti(false), 3500)
+      return () => clearTimeout(timer)
+    }
+  }, [remainingBudget])
 
   const handleAdd = (description?: string) => {
     const newAllocation: BudgetAllocation = {
@@ -125,6 +138,15 @@ const SetupTab: React.FC<SetupTabProps> = ({
 
   return (
     <div className={styles.setupTab}>
+      {showConfetti && (
+        <Confetti
+          numberOfPieces={220}
+          recycle={false}
+          style={{ zIndex: 1000, position: 'fixed', top: 0, left: 200, width: '100vw', pointerEvents: 'none' }}
+        />
+      )}
+      {log && <Log message={log.message} status={log.status} onClose={() => setLog(null)} />}
+
       {/* Tổng ngân sách */}
       <div className={styles.infoCard}>
         <div className={styles.infoIcon}>💰</div>
