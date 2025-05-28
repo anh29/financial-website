@@ -1,26 +1,55 @@
 import React, { useState } from 'react'
-import { Card } from '../common'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import EditTransactionModal from './EditTransactionModal'
 import styles from './TransactionTable.module.css'
 import { Transaction } from '../../types/transaction'
+import { getCategoryInfo, categoryColors } from '../../utils/categoryUtils'
+import { faChevronRight, faChevronDown, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
+import { format, addDays } from 'date-fns'
 
 interface TransactionTableProps {
   transactions: Transaction[]
   updatedTransactions: Transaction[]
   onTransactionUpdate?: (updatedTransactions: Transaction[]) => void
+  viewMode?: 'compact' | 'detailed'
+}
+
+// Helper to group transactions by date string
+const groupByDate = (transactions: Transaction[]) => {
+  return transactions.reduce((groups: Record<string, Transaction[]>, tx) => {
+    const date = tx.date
+      ? new Date(tx.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+      : new Date(tx.created_at || '').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+    if (!groups[date]) groups[date] = []
+    groups[date].push(tx)
+    return groups
+  }, {})
 }
 
 const TransactionTable: React.FC<TransactionTableProps> = ({
   transactions,
   updatedTransactions,
-  onTransactionUpdate
+  onTransactionUpdate,
+  viewMode = 'compact'
 }) => {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null)
   const [isModalOpen, setModalOpen] = useState(false)
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
   const transactionMap = new Map<string, Transaction>()
   transactions.forEach((tx) => transactionMap.set(tx.id, tx))
   updatedTransactions.forEach((tx) => transactionMap.set(tx.id, tx)) // updated takes precedence
   const totalTransactions = Array.from(transactionMap.values())
+  const grouped = groupByDate(totalTransactions)
+
+  // Ensure all groups are collapsed initially
+  React.useEffect(() => {
+    const collapsed: Record<string, boolean> = {}
+    Object.keys(grouped).forEach((date) => {
+      collapsed[date] = viewMode === 'detailed'
+    })
+    setExpandedGroups(collapsed)
+    // eslint-disable-next-line
+  }, [transactions.length, updatedTransactions.length, viewMode])
 
   const handleEditClick = (transaction: Transaction) => {
     setSelectedTransaction(transaction)
@@ -33,73 +62,136 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   }
 
   const handleTransactionUpdate = (updatedTransaction: Transaction) => {
-    // Update the transactions array with the updated transaction
     const updatedTransactions = transactions.map((transaction) =>
       transaction.id === updatedTransaction.id ? updatedTransaction : transaction
     )
-
     if (onTransactionUpdate) {
       onTransactionUpdate(updatedTransactions)
     }
-
     handleCloseModal()
   }
 
-  const displayDate = (transaction: Transaction) =>
-    transaction.date
-      ? new Date(transaction.date).toLocaleDateString('vi-VN')
-      : new Date(transaction.created_at || '').toLocaleDateString('vi-VN')
+  // Helper for summary
+  const getSummary = (txs: Transaction[]) => {
+    let income = 0,
+      expense = 0
+    txs.forEach((tx) => {
+      if (tx.type === 'income') income += tx.amount
+      if (tx.type === 'expense') expense += tx.amount
+    })
+    return {
+      count: txs.length,
+      income,
+      expense,
+      net: income - expense
+    }
+  }
 
-  const getAmountClass = (transaction: Transaction) => {
-    if (transaction.is_amortized) return styles.amountAmortized
-    if (transaction.type === 'income') return styles.amountIncome
-    if (transaction.type === 'expense') return styles.amountExpense
-    return ''
+  const handleToggleGroup = (date: string) => {
+    setExpandedGroups((prev) => ({ ...prev, [date]: !prev[date] }))
   }
 
   return (
-    <Card className={styles.tableWrapper}>
-      <div className={styles.tableContainer}>
-        <table className={styles.transactionTable}>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Amount</th>
-              <th>Category</th>
-              <th>Description</th>
-              <th>Source</th>
-              <th>Edit</th>
-            </tr>
-          </thead>
-          <tbody className={styles.transactionTableBody}>
-            {totalTransactions &&
-              totalTransactions.map((transaction) => (
-                <tr key={transaction.id}>
-                  <td>{displayDate(transaction)}</td>
-                  <td className={getAmountClass(transaction)}>
-                    {transaction.amount.toLocaleString('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND'
-                    })}
-                  </td>
-                  <td>{transaction.category}</td>
-                  <td>{transaction.description}</td>
-                  <td>{transaction.source || 'manual'}</td>
-                  <td>
+    <div className={styles.tableWrapper}>
+      {Object.entries(grouped).map(([date, txs]) => {
+        const summary = getSummary(txs)
+        const expanded = expandedGroups[date] !== false // default expanded
+        return (
+          <div className={styles.groupCard} key={date}>
+            <div className={styles.groupHeader}>
+              <button
+                className={styles.expandBtn}
+                onClick={() => handleToggleGroup(date)}
+                aria-label={expanded ? 'Collapse group' : 'Expand group'}
+              >
+                <FontAwesomeIcon
+                  icon={expanded ? faChevronDown : faChevronRight}
+                  className={styles.chevron + (expanded ? ' ' + styles.chevronExpanded : '')}
+                />
+              </button>
+              <div className={styles.groupDateWrapper}>
+                <div className={styles.groupDate}>{date}</div>
+                <div className={styles.groupCount}>
+                  <span className={styles.groupCountIcon}>👥</span> {summary.count} transactions
+                </div>
+              </div>
+              <div className={styles.groupIncome}>
+                +{summary.income.toLocaleString(undefined, { minimumFractionDigits: 2 })} VND
+              </div>
+              <div className={styles.groupExpense}>
+                -{summary.expense.toLocaleString(undefined, { minimumFractionDigits: 2 })} VND
+              </div>
+              <div className={styles.groupNetAmount + ' ' + (summary.net < 0 ? styles.negative : styles.positive)}>
+                {summary.net < 0
+                  ? `-${Math.abs(summary.net).toLocaleString(undefined, { minimumFractionDigits: 2 })} VND`
+                  : `+${summary.net.toLocaleString(undefined, { minimumFractionDigits: 2 })} VND`}
+                <span className={styles.groupNetLabel}>Net amount</span>
+              </div>
+            </div>
+            <div className={styles.transactionList + ' ' + (expanded ? styles.show : styles.hide)}>
+              {expanded &&
+                txs.map((transaction) => (
+                  <div className={styles.transactionCard} key={transaction.id}>
+                    {(() => {
+                      const info = getCategoryInfo(transaction.category)
+                      const color = categoryColors[transaction.category] || '#e0e0e0'
+                      return (
+                        <div className={styles.transactionIcon} style={{ background: color + '22', color }}>
+                          {info && info.icon ? (
+                            <FontAwesomeIcon icon={info.icon} />
+                          ) : (
+                            <FontAwesomeIcon icon={faPencilAlt} />
+                          )}
+                        </div>
+                      )
+                    })()}
+                    <div className={styles.transactionMain}>
+                      <div className={styles.transactionTitle}>{transaction.description || 'Transaction'}</div>
+                      {transaction.is_amortized && transaction.amortized_days && transaction.date && (
+                        <div className={styles.amortizedInfo}>
+                          Amortized: {format(new Date(transaction.date), 'MMM dd, yyyy')} -{' '}
+                          {format(
+                            addDays(new Date(transaction.date), Number(transaction.amortized_days)),
+                            'MMM dd, yyyy'
+                          )}
+                        </div>
+                      )}
+                      <div className={styles.transactionTags}>
+                        {(() => {
+                          const info = getCategoryInfo(transaction.category)
+                          const color = categoryColors[transaction.category] || '#e0e0e0'
+                          return (
+                            <span className={styles.transactionTag} style={{ background: color + '22', color }}>
+                              {info ? info.label : transaction.category}
+                            </span>
+                          )
+                        })()}
+                        <span className={styles.transactionAccount}>{transaction.source || 'manual'}</span>
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        styles.transactionAmount +
+                        ' ' +
+                        (transaction.type === 'income' ? styles.amountIncome : styles.amountExpense)
+                      }
+                    >
+                      {transaction.type === 'income' ? '+' : '-'}
+                      {transaction.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} VND
+                    </div>
                     <button
                       className={styles.editButton}
                       onClick={() => handleEditClick(transaction)}
                       aria-label='Edit transaction'
                     >
-                      ✏️
+                      <FontAwesomeIcon icon={faPencilAlt} />
                     </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-
+                  </div>
+                ))}
+            </div>
+          </div>
+        )
+      })}
       {isModalOpen && selectedTransaction && (
         <EditTransactionModal
           transaction={selectedTransaction}
@@ -107,7 +199,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
           onTransactionUpdated={handleTransactionUpdate}
         />
       )}
-    </Card>
+    </div>
   )
 }
 

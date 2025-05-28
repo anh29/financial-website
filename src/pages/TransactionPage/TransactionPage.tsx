@@ -2,15 +2,22 @@ import styles from './TransactionPage.module.css'
 import TransactionTable from '../../components/TransactionPage/TransactionTable'
 import ImportButton from '../../components/TransactionPage/ImportButton'
 import OCRUpload from '../../components/TransactionPage/OCRUpload'
-import SearchFilter from '../../components/TransactionPage/SearchFilter'
+import SearchFilter, { SearchFilterState } from '../../components/TransactionPage/SearchFilter'
 import { LoadingSpinner } from '../../components/common'
 import { useTransactions } from '../../hooks/features/useTransactions'
 import { useEffect, useState } from 'react'
 import { Transaction } from '../../types/transaction'
+import { FloatingActionButton } from '../../components/GoalPage/FloatingActionButton'
 
 const TransactionPage = () => {
   const { transactions, isLoading, error, handleImport, fetchTransactions } = useTransactions()
   const [updatedTransactions, setUpdatedTransactions] = useState<Transaction[]>([])
+  const [showFabModal, setShowFabModal] = useState(false)
+  const [filter, setFilter] = useState<SearchFilterState>({
+    searchTerm: '',
+    viewMode: 'compact',
+    typeFilter: 'all'
+  })
 
   useEffect(() => {
     fetchTransactions() // Fetch transactions when the component mounts
@@ -19,7 +26,31 @@ const TransactionPage = () => {
   const handleTransactionUpdate = (transactions: Transaction[]) => {
     setUpdatedTransactions(transactions)
   }
- 
+
+  const handleAddTransaction = () => {
+    setShowFabModal(true)
+  }
+
+  const handleFabClose = () => setShowFabModal(false)
+
+  // Filtering/search logic
+  const getFilteredTransactions = () => {
+    let txs = transactions
+    if (filter.typeFilter !== 'all') {
+      txs = txs.filter((t) => t.type === filter.typeFilter)
+    }
+    if (filter.searchTerm.trim()) {
+      const term = filter.searchTerm.toLowerCase()
+      txs = txs.filter(
+        (t) =>
+          t.description.toLowerCase().includes(term) ||
+          t.category.toLowerCase().includes(term) ||
+          t.source.toLowerCase().includes(term)
+      )
+    }
+    return txs
+  }
+
   if (error) return <div>Error: {error}</div>
 
   return (
@@ -30,21 +61,27 @@ const TransactionPage = () => {
       </header>
 
       <div className={styles.controls}>
-        <SearchFilter />
-        <div className={styles.buttonGroup}>
-          <ImportButton onImport={handleImport} />
-          <OCRUpload onUpload={handleImport} />
-        </div>
+        <SearchFilter onFilterChange={setFilter} />
       </div>
 
       {isLoading && <LoadingSpinner />}
       {!isLoading && transactions.length === 0 && <p>No transactions found.</p>}
       {!isLoading && transactions.length > 0 && (
         <TransactionTable
-          transactions={transactions}
+          transactions={getFilteredTransactions()}
           updatedTransactions={updatedTransactions}
           onTransactionUpdate={handleTransactionUpdate}
+          viewMode={filter.viewMode}
         />
+      )}
+      <FloatingActionButton onClick={handleAddTransaction} />
+      {showFabModal && (
+        <div className={styles.floatingActionModalWrapper} onClick={handleFabClose}>
+          <div className={styles.floatingActionModalContent} onClick={(e) => e.stopPropagation()}>
+            <ImportButton onImport={handleImport} />
+            <OCRUpload onUpload={handleImport} />
+          </div>
+        </div>
       )}
     </div>
   )

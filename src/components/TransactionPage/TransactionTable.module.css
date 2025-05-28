@@ -1,62 +1,273 @@
 .tableWrapper {
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+  background: none;
+  box-shadow: none;
+  overflow: visible;
 }
 
-.tableContainer {
-  overflow-x: auto;
-  margin: -1.5rem;
-  padding: 1.5rem;
+.tableWrapper .groupCard {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  padding: 0 0 1.5rem 0;
+  margin-bottom: 0.5rem;
+  transition: box-shadow 0.25s, transform 0.18s;
+}
+.tableWrapper .groupCard:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  transform: translateY(-2px) scale(1.01);
 }
 
-.transactionTable {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
+.tableWrapper .groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.5rem 2rem 1.2rem 2rem;
+  border-bottom: 1.5px solid #f2f2f2;
+  background: transparent;
+  min-height: 64px;
 }
 
-.transactionTable th,
-.transactionTable td {
-  padding: 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+.tableWrapper .expandBtn {
+  background: #f3f4f8;
+  border: none;
+  border-radius: 50%;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 1.3rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  transition: none;
+}
+.tableWrapper .chevron {
+  font-size: 1.6rem;
+  color: #7b7e8c;
+  text-shadow: 0 1px 2px #fff, 0 0px 1px #b0b8c1;
+  display: block;
+  transition: none;
+}
+.tableWrapper .chevronExpanded {
+  transform: rotate(0);
+  color: #7b7e8c;
 }
 
-.transactionTable th {
-  background-color: #f9fafb;
+.tableWrapper .groupDateWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.tableWrapper .groupDate {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #181c32;
+  margin-right: 1.2rem;
+  letter-spacing: -0.5px;
+}
+.tableWrapper .groupCount {
+  background: #fff;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 999px;
+  padding: 0.22rem 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  color: #374151;
+  color: #181c32;
+  display: flex;
+  align-items: center;
+  margin-right: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.tableWrapper .groupCountIcon {
+  font-size: 1.1rem;
+  margin-right: 0.4rem;
+}
+.tableWrapper .groupIncome {
+  color: #0bab64;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-right: 0.8rem;
+  letter-spacing: 0.2px;
+}
+.tableWrapper .groupExpense {
+  color: #ff3b6b;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-right: 0.8rem;
+  letter-spacing: 0.2px;
+}
+.tableWrapper .groupNetAmount {
+  font-weight: 700;
+  font-size: 1.45rem;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: #0bab64;
+  letter-spacing: 0.2px;
+}
+.tableWrapper .groupNetAmount.negative {
+  color: #ff3b6b;
+}
+.tableWrapper .groupNetAmount.positive {
+  color: #0bab64;
+}
+.tableWrapper .groupNetLabel {
+  font-size: 1.05rem;
+  color: #7f8c8d;
+  font-weight: 400;
+  margin-top: 0.1rem;
+  letter-spacing: 0;
 }
 
-.transactionTableBody tr:hover {
-  background-color: #f9fafb;
+.tableWrapper .transactionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1.2rem 2rem 0 2rem;
+  will-change: opacity, transform;
+}
+.tableWrapper .show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.32s cubic-bezier(.4,2,.6,1), transform 0.32s cubic-bezier(.4,2,.6,1);
+}
+.tableWrapper .hide {
+  opacity: 0;
+  transform: translateY(-16px);
+  pointer-events: none;
+  height: 0;
+  transition: opacity 0.32s cubic-bezier(.4,2,.6,1), transform 0.32s cubic-bezier(.4,2,.6,1);
 }
 
-.amountIncome {
-  color: #059669;
+.tableWrapper .transactionCard {
+  display: flex;
+  align-items: center;
+  background: #f9fbfd;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  padding: 1.1rem 1.5rem;
+  margin-bottom: 0.2rem;
+  gap: 1.2rem;
+  position: relative;
+  transition: box-shadow 0.22s, transform 0.18s;
+  cursor: pointer;
+}
+.tableWrapper .transactionCard:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transform: scale(1.012);
+  background: #f3f8fd;
+}
+.tableWrapper .transactionIcon {
+  font-size: 1.7rem;
+  background: #f5f6fa;
+  border-radius: 10px;
+  padding: 0.7rem;
+  margin-right: 1.1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+.tableWrapper .transactionCard:hover .transactionIcon {
+  background: var(--primary-color, #eafaf1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.tableWrapper .transactionMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+.tableWrapper .transactionTitle {
+  font-size: 1.13rem;
+  font-weight: 700;
+  color: #181c32;
+  margin-bottom: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tableWrapper .transactionTags {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.tableWrapper .transactionTag {
+  display: inline-block;
+  border-radius: 6px;
+  padding: 0.18rem 0.7rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  margin-right: 0.7rem;
+  background: #eafaf1;
+  color: #0bab64;
+  transition: background 0.18s, color 0.18s;
+}
+.tableWrapper .transactionCard:hover .transactionTag {
+  filter: brightness(1.08);
+}
+.tableWrapper .transactionAccount {
+  color: #a0a4b8;
+  font-size: 0.98rem;
   font-weight: 500;
 }
-
-.amountExpense {
-  color: #dc2626;
-  font-weight: 500;
+.tableWrapper .transactionAmount {
+  font-size: 1.18rem;
+  font-weight: 700;
+  margin-left: 1.2rem;
+  min-width: 120px;
+  text-align: right;
+  letter-spacing: 0.2px;
 }
-
-.amountAmortized {
-  color: #6366f1;
-  font-weight: 500;
+.tableWrapper .amountIncome {
+  color: #0bab64;
 }
-
-.editButton {
+.tableWrapper .amountExpense {
+  color: #ff3b6b;
+}
+.tableWrapper .editButton {
   background: none;
   border: none;
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 4px;
-  transition: background-color 0.2s;
+  margin-left: 0.7rem;
+  font-size: 1.15rem;
+  color: #ffb300;
+  transition: background-color 0.18s, box-shadow 0.18s, transform 0.18s, color 0.18s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tableWrapper .editButton:hover {
+  background-color: #fffbe6;
+  color: #ff9800;
+  box-shadow: 0 2px 8px rgba(255,187,0,0.08);
+  transform: scale(1.08);
 }
 
-.editButton:hover {
-  background-color: #f3f4f6;
+.tableWrapper .amortizedInfo {
+  color: #1976d2;
+  font-weight: 700;
+  font-size: 1.01rem;
+  border-radius: 8px;
+  margin: 10px 0;
+  display: inline-block;
+  letter-spacing: 0.1px;
 }
 
 @media (max-width: 640px) {

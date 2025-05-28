@@ -1,12 +1,12 @@
-.searchFilter {
+.searchFilterBar {
   display: flex;
   gap: 0.75rem;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.searchFilter input,
-.searchFilter select {
+.searchFilterBar input,
+.searchFilterBar select {
   padding: 0.6rem 1rem;
   border-radius: 6px;
   border: 1px solid #dcdcdc;
@@ -14,7 +14,7 @@
   background-color: #fff;
 }
 
-.searchFilter button {
+.searchFilterBar button {
   background-color: #2ecc71;
   border: none;
   padding: 0.6rem 1.25rem;
@@ -25,6 +25,124 @@
   transition: background-color 0.3s;
 }
 
-.searchFilter button:hover {
+.searchFilterBar button:hover {
   background-color: #27ae60;
+}
+
+.searchFilterBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  padding: 1.25rem 2rem;
+  gap: 2rem;
+  width: -webkit-fill-available;
+}
+
+.searchFilterBar .searchInputWrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.searchFilterBar .searchIcon {
+  position: absolute;
+  left: 1rem;
+  font-size: 1.3rem;
+  color: #b0b8c1;
+  pointer-events: none;
+}
+
+.searchFilterBar .searchInput {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.5rem;
+  border-radius: 10px;
+  border: none;
+  background: #f7fafd;
+  font-size: 1.1rem;
+  color: #222;
+  outline: none;
+  box-shadow: none;
+}
+
+.searchFilterBar .filterControls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.searchFilterBar .toggleBtn {
+  background: #fff;
+  border: 1.5px solid #e0e0e0;
+  color: #222;
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 0.7rem 1.3rem;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.searchFilterBar .toggleBtn.active {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+}
+.searchFilterBar .toggleIcon {
+  font-size: 1.2rem;
+}
+.searchFilterBar .incomeBtn {
+  background: #fff;
+  border: 1.5px solid #3ecf8e;
+  color: #0bab64;
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 0.7rem 1.3rem;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.searchFilterBar .incomeIcon {
+  font-size: 1.2rem;
+}
+.searchFilterBar .expenseBtn {
+  background: #fff;
+  border: 1.5px solid #ff758c;
+  color: #ff3b6b;
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 0.7rem 1.3rem;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.searchFilterBar .expenseIcon {
+  font-size: 1.2rem;
+}
+.searchFilterBar .expenseBtn.active {
+  background: #ff3b6b;
+  color: #fff;
+  border-color: #ff3b6b;
+}
+.searchFilterBar .incomeBtn.active {
+  background: #0bab64;
+  color: #fff;
+  border-color: #0bab64;
 }
