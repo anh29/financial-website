@@ -3,7 +3,10 @@ export interface Goals {
   amount: number
   description: string
   target_date: string
-  amortized_days: number
+  start_date: string
+  repeat_type: string
+  status: string
+  category: string
   created_at: string
   [key: string]: string | number
 }

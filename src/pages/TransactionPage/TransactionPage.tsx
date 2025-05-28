@@ -7,7 +7,7 @@ import { LoadingSpinner } from '../../components/common'
 import { useTransactions } from '../../hooks/features/useTransactions'
 import { useEffect, useState } from 'react'
 import { Transaction } from '../../types/transaction'
-import { FloatingActionButton } from '../../components/GoalPage/FloatingActionButton'
+import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
 
 const TransactionPage = () => {
   const { transactions, isLoading, error, handleImport, fetchTransactions } = useTransactions()

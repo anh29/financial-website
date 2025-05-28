@@ -9,15 +9,18 @@ import { StatusTabs } from '../../components/GoalPage/StatusTabs'
 import { StatsRow } from '../../components/GoalPage/StatsRow'
 import { GoalCard } from '../../components/GoalPage/GoalCard'
 import { EmptyState } from '../../components/GoalPage/EmptyState'
-import { FloatingActionButton } from '../../components/GoalPage/FloatingActionButton'
+import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
+import CreateGoalModal from '../../components/GoalPage/CreateGoalModal'
+import { Goals } from '../../types/goals'
 
 const goalIcons = [<FiHome />, <FiBook />, <FiGlobe />, <FiTarget />, <FiTrendingUp />]
 
 const GoalPage = () => {
-  const { goals, getGoals } = useGoal()
+  const { goals, getGoals, addGoal } = useGoal()
   const [activeTab, setActiveTab] = useState('active')
   const navigate = useNavigate()
   const [showConfetti, setShowConfetti] = useState(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   useEffect(() => {
     getGoals()
@@ -64,6 +67,15 @@ const GoalPage = () => {
     console.log('Delete goal:', goalId)
   }
 
+  const handleCreateGoal = async (goalData: Goals) => {
+    try {
+      await addGoal(goalData)
+      setIsCreateModalOpen(false)
+    } catch (error) {
+      console.error('Failed to create goal:', error)
+    }
+  }
+
   return (
     <div className={styles.goalPageContainer}>
       {showConfetti && (
@@ -75,7 +87,7 @@ const GoalPage = () => {
       )}
 
       <HeroBanner totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
-      <FloatingActionButton onClick={() => {}} />
+      <FloatingActionButton onClick={() => setIsCreateModalOpen(true)} />
       <StatusTabs activeTab={activeTab} onTabChange={setActiveTab} />
       <StatsRow totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
 
@@ -101,6 +113,12 @@ const GoalPage = () => {
           </button>
         </div>
       )}
+
+      <CreateGoalModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSubmit={handleCreateGoal}
+      />
     </div>
   )
 }
