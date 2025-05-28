@@ -19,7 +19,6 @@ const BudgetPage = () => {
     fetchHistoricalExpenditures,
     fetchMonthlyBudgetAllocations,
     saveMonthlyBudgetAllocationHandler,
-    createBudgetHandler,
     getRemainingBudgetHandler,
     remainingBudget
   } = useBudgets()
@@ -90,10 +89,6 @@ const BudgetPage = () => {
     }
   }
 
-  const handleSaveExisting = async (newBudget: Budget[]) => {
-    await createBudgetHandler(newBudget)
-  }
-
   const handleMonthlyBudgetChange = (value: number) => {
     setMonthlyBudget(value)
   }
@@ -135,13 +130,7 @@ const BudgetPage = () => {
             />
           )}
 
-          {activeTab === 'existing' && (
-            <ExistingTab
-              income={income}
-              existingBudgets={existingBudgets}
-              handleSaveExisting={(newBudget: Budget[]) => handleSaveExisting(newBudget)}
-            />
-          )}
+          {activeTab === 'existing' && <ExistingTab income={income} existingBudgets={existingBudgets} />}
 
           {activeTab === 'history' && (
             <HistoryTab
