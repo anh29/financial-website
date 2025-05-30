@@ -24,9 +24,6 @@ export const EmptyState = ({ onAdd, type = 'default' }: EmptyStateProps) => {
       <div className={styles.emptyStateNoImg}>
         <h2>Chưa có mục tiêu nào</h2>
         <p>Bắt đầu bằng cách thêm mục tiêu tài chính đầu tiên của bạn!</p>
-        <button className={styles.addGoalBtn} onClick={onAdd}>
-          <FiPlus /> Thêm mục tiêu mới
-        </button>
       </div>
     </div>
   )

@@ -86,7 +86,7 @@ const TransactionModal = ({
           updated[index].category = predictedCategory.key
           hasPredicted.current[index] = true
         } catch (error) {
-          updated[index].classificationError = '⚠ Classification failed'
+          updated[index].classificationError = '⚠ Phân loại thất bại'
           console.error('Classification error:', error)
         } finally {
           updated[index].isClassifying = false
@@ -105,7 +105,7 @@ const TransactionModal = ({
     const invalidTransactions = transactions.filter((t) => !t.date || !t.description || !t.amount || !t.category)
 
     if (invalidTransactions.length > 0) {
-      setError('Please fill in all required fields for each transaction')
+      setError('Vui lòng điền đầy đủ thông tin cho mỗi giao dịch')
       return false
     }
 
@@ -124,7 +124,7 @@ const TransactionModal = ({
       await onSave(transactions)
       onClose()
     } catch (error) {
-      setError('Failed to save transactions. Please try again.')
+      setError('Không thể lưu giao dịch. Vui lòng thử lại.')
       console.error('Save error:', error)
     } finally {
       setIsSaving(false)
@@ -135,7 +135,7 @@ const TransactionModal = ({
     <div className={styles.transactionModal}>
       <div className={styles.modalContent} ref={modalRef}>
         <div className={styles.modalHeader}>
-          <h2>Review Transactions</h2>
+          <h2>Xem Lại Giao Dịch</h2>
           <button className={styles.closeButton} onClick={onClose} aria-label='Close'>
             &times;
           </button>
@@ -151,12 +151,12 @@ const TransactionModal = ({
           <table className={styles.transactionTable}>
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Type</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Actions</th>
+                <th>Ngày</th>
+                <th>Mô Tả</th>
+                <th>Loại</th>
+                <th>Danh Mục</th>
+                <th>Số Tiền</th>
+                <th>Thao Tác</th>
               </tr>
             </thead>
             <tbody>
@@ -176,7 +176,7 @@ const TransactionModal = ({
                       type='text'
                       value={transaction.description}
                       onChange={(e) => handleInputChange(index, 'description', e)}
-                      placeholder='Enter description'
+                      placeholder='Nhập mô tả'
                       required
                       aria-label='Transaction description'
                     />
@@ -187,15 +187,15 @@ const TransactionModal = ({
                       onChange={(e) => handleInputChange(index, 'type', e)}
                       aria-label='Transaction type'
                     >
-                      <option value='expense'>Expense</option>
-                      <option value='income'>Income</option>
+                      <option value='expense'>Chi Tiêu</option>
+                      <option value='income'>Thu Nhập</option>
                     </select>
                   </td>
                   <td>
                     {transaction.isClassifying ? (
                       <div className={styles.loadingSpinner}>
                         <span className={styles.spinner}></span>
-                        Classifying...
+                        Đang phân loại...
                       </div>
                     ) : (
                       <select
@@ -212,7 +212,7 @@ const TransactionModal = ({
                     )}
                     {transaction.classificationError && (
                       <div className={styles.errorText} role='alert'>
-                        {transaction.classificationError}
+                        ⚠ Phân loại thất bại
                       </div>
                     )}
                   </td>
@@ -234,7 +234,7 @@ const TransactionModal = ({
                       onClick={() => handleDeleteTransaction(index)}
                       aria-label='Delete transaction'
                     >
-                      Delete
+                      Xóa
                     </button>
                   </td>
                 </tr>
@@ -253,7 +253,7 @@ const TransactionModal = ({
             disabled={isSaving}
             aria-label='Save all transactions'
           >
-            {isSaving ? 'Saving...' : 'Save All'}
+            {isSaving ? 'Đang Lưu...' : 'Lưu Tất Cả'}
           </button>
         </div>
       </div>

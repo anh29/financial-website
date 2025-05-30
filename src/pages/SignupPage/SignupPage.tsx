@@ -6,6 +6,7 @@ import { GOOGLE_INFO_API_KEY, SERVER_ENDPOINT } from '../../utils/constants'
 import { useAuth } from '../../context/AuthContext'
 import { LoadingSpinner } from '../../components/common'
 import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa'
+import { User } from '../../types'
 
 const SignupPage = () => {
   const { login } = useAuth()
@@ -38,8 +39,18 @@ const SignupPage = () => {
         email_verified,
         via_google: true
       })
+      const userData: User = {
+        id: response.data.data.id,
+        email: email,
+        name: name,
+        username: name,
+        avatar: picture,
+        email_verified: email_verified,
+        via_google: true
+      }
       setLogData({ message: response.data.message, status: 'success' })
-      login(response.data.data)
+
+      login(userData)
     } catch (error) {
       setLogData({ message: `Lỗi khi lấy thông tin người dùng Google: ${error}`, status: 'error' })
     } finally {
@@ -65,7 +76,19 @@ const SignupPage = () => {
     try {
       const response = await axios.post(SERVER_ENDPOINT.AUTH.CREATE_USER, formData)
       setLogData({ message: response.data.message, status: 'success' })
-      login(response.data.data)
+
+      const userData: User = {
+        id: response.data.data.id,
+        email: formData.email,
+        name: formData.username,
+        username: formData.username,
+        avatar: '',
+        email_verified: false,
+        via_google: false
+      }
+
+      setLogData({ message: response.data.message, status: 'success' })
+      login(userData)
     } catch {
       setLogData({ message: 'Đã xảy ra lỗi.', status: 'error' })
     } finally {

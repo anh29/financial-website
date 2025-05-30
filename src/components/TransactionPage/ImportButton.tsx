@@ -17,7 +17,7 @@ const ImportButton = ({ onImport }: { onImport: (newTransactions: Transaction[])
   return (
     <>
       <button className={styles.importButton} onClick={handleOpenModal}>
-        Add Transactions
+        Thêm Giao Dịch
       </button>
       {isModalOpen && <TransactionModal onClose={handleCloseModal} onSave={onImport} initialTransactions={[]} />}
     </>

@@ -90,7 +90,7 @@ const OCRUpload = ({ onUpload }: { onUpload: (transactions: Transaction[]) => vo
   return (
     <div className={styles.ocrUploadContainer}>
       <label htmlFor='ocr-upload' className={styles.uploadLabel}>
-        Upload Invoice
+        Tải Hóa Đơn
       </label>
       <input
         type='file'

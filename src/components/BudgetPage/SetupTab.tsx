@@ -283,7 +283,7 @@ const SetupTab: React.FC<SetupTabProps> = ({
             {/* Phân bổ danh mục theo tháng */}
             <h3 className={styles.sectionTitle}>📊 Phân bổ danh mục theo tháng</h3>
             <div className={styles.allocationList}>
-              {budgetAllocations.map((item, index) => renderAllocationCard(item, index, false))}
+              {budgetAllocations && budgetAllocations.map((item, index) => renderAllocationCard(item, index, false))}
             </div>
           </div>
         )}

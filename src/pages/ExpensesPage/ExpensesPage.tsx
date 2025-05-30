@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom'
 import AnalyticsDashboard from '../../components/ExpensesPage/AnalyticsDashboard'
 import { useExpenses } from '../../hooks/features/useExpenses'
 import { LoadingSpinner } from '../../components/common/LoadingSpinner/LoadingSpinner'
+import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement)
 
@@ -307,11 +308,6 @@ const ExpensesPage: React.FC = () => {
     <div className={styles.expensesPage}>
       <div className={styles.header}>
         <h1>Chi tiêu</h1>
-        <div className={styles.actions}>
-          <button className={styles.addButton} onClick={() => navigate('/expenses/add')}>
-            <FontAwesomeIcon icon={faPlus} /> Thêm chi tiêu
-          </button>
-        </div>
       </div>
 
       <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange} />
@@ -351,6 +347,8 @@ const ExpensesPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      <FloatingActionButton onClick={() => navigate('/transactions')} />
     </div>
   )
 }

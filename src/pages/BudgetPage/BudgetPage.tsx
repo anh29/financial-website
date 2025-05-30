@@ -93,7 +93,7 @@ const BudgetPage = () => {
     setMonthlyBudget(value)
   }
 
-  const formatCurrency = (value: number) => value.toLocaleString('vi-VN') + 'đ'
+  const formatCurrency = (value?: number) => (value ? value.toLocaleString('vi-VN') + 'đ' : '0đ')
 
   const mappedPastBudgets = pastBudgets.map((budget) => ({
     ...budget,

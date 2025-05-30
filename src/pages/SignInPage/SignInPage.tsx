@@ -6,6 +6,7 @@ import { LoadingSpinner } from '../../components/common'
 import { useAuth } from '../../context/AuthContext'
 import { GOOGLE_INFO_API_KEY, SERVER_ENDPOINT } from '../../utils/constants'
 import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa'
+import { User } from '../../types'
 
 const SignInPage: React.FC = () => {
   const { login } = useAuth()
@@ -37,8 +38,19 @@ const SignInPage: React.FC = () => {
         email_verified,
         via_google: true
       })
+
+      const userData: User = {
+        id: response.data.data.id,
+        email: email,
+        name: name,
+        username: name,
+        avatar: picture,
+        email_verified: email_verified,
+        via_google: true
+      }
+
       setLogData({ message: response.data.message, status: 'success' })
-      login(response.data.data)
+      login(userData)
     } catch {
       setLogData({ message: 'Lỗi khi lấy thông tin người dùng Google. Vui lòng thử lại.', status: 'error' })
     } finally {
