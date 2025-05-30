@@ -24,12 +24,12 @@ export const Contact: React.FC = () => {
   return (
     <div className={styles.contact}>
       <div className={styles.contactContainer}>
-        <h1>Contact Us</h1>
+        <h1>Liên Hệ Với Chúng Tôi</h1>
 
         <Card className={styles.contactForm}>
           <Form onSubmit={handleSubmit}>
             <Input
-              label='Name'
+              label='Họ và tên'
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
@@ -44,7 +44,7 @@ export const Contact: React.FC = () => {
             />
 
             <Input
-              label='Message'
+              label='Nội dung'
               type='text'
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -52,28 +52,28 @@ export const Contact: React.FC = () => {
             />
 
             <Button type='submit' fullWidth isLoading={isLoading}>
-              Send Message
+              Gửi Tin Nhắn
             </Button>
           </Form>
         </Card>
 
         <Card className={styles.contactInfo}>
-          <h2>Other Ways to Reach Us</h2>
+          <h2>Các Cách Khác Để Liên Hệ</h2>
           <div className={styles.infoGrid}>
             <div className={styles.infoItem}>
               <h3>Email</h3>
               <p>support@financialapp.com</p>
-              <Badge variant='primary'>24/7 Support</Badge>
+              <Badge variant='primary'>Hỗ Trợ 24/7</Badge>
             </div>
             <div className={styles.infoItem}>
-              <h3>Phone</h3>
-              <p>+1 (555) 123-4567</p>
-              <Badge variant='success'>Available</Badge>
+              <h3>Điện thoại</h3>
+              <p>+84 (123) 456-7890</p>
+              <Badge variant='success'>Có sẵn</Badge>
             </div>
             <div className={styles.infoItem}>
-              <h3>Address</h3>
-              <p>123 Financial Street, New York, NY 10001</p>
-              <Badge variant='warning'>Office Hours</Badge>
+              <h3>Địa chỉ</h3>
+              <p>123 Đường Tài Chính, Hà Nội, Việt Nam</p>
+              <Badge variant='warning'>Giờ Làm Việc</Badge>
             </div>
           </div>
         </Card>

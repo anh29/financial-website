@@ -21,21 +21,21 @@ const getIntensityClass = (amount: number) => {
 }
 
 const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
+  'Tháng 1',
+  'Tháng 2',
+  'Tháng 3',
+  'Tháng 4',
+  'Tháng 5',
+  'Tháng 6',
+  'Tháng 7',
+  'Tháng 8',
+  'Tháng 9',
+  'Tháng 10',
+  'Tháng 11',
+  'Tháng 12'
 ]
 
-const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const weekDays = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']
 
 const CalendarHeatmapCard: React.FC<CalendarHeatmapCardProps> = ({
   data = [],
@@ -70,13 +70,13 @@ const CalendarHeatmapCard: React.FC<CalendarHeatmapCardProps> = ({
     <div className={styles.heatmapCard}>
       <div className={styles.cardHeader}>
         <div className={styles.monthNav}>
-          <button className={styles.monthBtn} onClick={onPrevMonth} aria-label='Previous month'>
+          <button className={styles.monthBtn} onClick={onPrevMonth} aria-label='Tháng trước'>
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
           <h2 className={styles.monthLabel}>
             {monthNames[month]} {year}
           </h2>
-          <button className={styles.monthBtn} onClick={onNextMonth} aria-label='Next month'>
+          <button className={styles.monthBtn} onClick={onNextMonth} aria-label='Tháng sau'>
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
         </div>
@@ -85,7 +85,7 @@ const CalendarHeatmapCard: React.FC<CalendarHeatmapCardProps> = ({
           <div className={styles.legendGradient}>
             <span className={styles.legendLabel}>0</span>
             <div className={styles.gradientBar} />
-            <span className={styles.legendLabel}>300,000 VND+</span>
+            <span className={styles.legendLabel}>300.000đ+</span>
           </div>
         </div>
       </div>
@@ -114,9 +114,9 @@ const CalendarHeatmapCard: React.FC<CalendarHeatmapCardProps> = ({
                 <span className={styles.dayNumber}>{dayData.day}</span>
                 {dayData.amount > 0 && (
                   <div className={styles.tooltip}>
-                    <strong>{dayData.amount.toLocaleString()} VND</strong>
+                    <strong>{dayData.amount.toLocaleString('vi-VN')}đ</strong>
                     <span>
-                      spent on {monthNames[month]} {dayData.day}
+                      chi tiêu vào ngày {dayData.day} {monthNames[month]}
                     </span>
                   </div>
                 )}

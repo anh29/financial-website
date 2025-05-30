@@ -183,7 +183,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         beginAtZero: true,
         ticks: {
           callback: function (value) {
-            return value.toLocaleString() + ' VND'
+            return value.toLocaleString('vi-VN') + 'đ'
           }
         }
       }
@@ -195,7 +195,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         callbacks: {
           label: function (tooltipItem: TooltipItem<'bar'>) {
             const value = tooltipItem.parsed.y
-            return `${tooltipItem.dataset.label}: $${value.toLocaleString()} VND`
+            return `${tooltipItem.dataset.label}: ${value.toLocaleString('vi-VN')}đ`
           }
         }
       }
@@ -209,21 +209,21 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Amount',
+          text: 'Số tiền',
           font: {
             weight: 'bold'
           }
         },
         ticks: {
           callback: function (value) {
-            return value.toLocaleString() + ' VND'
+            return value.toLocaleString('vi-VN') + 'đ'
           }
         }
       },
       x: {
         title: {
           display: true,
-          text: 'Month',
+          text: 'Tháng',
           font: {
             weight: 'bold'
           }
@@ -237,7 +237,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         callbacks: {
           label: function (tooltipItem: TooltipItem<'line'>) {
             const value = tooltipItem.parsed.y
-            return `${tooltipItem.dataset.label}: ${value.toLocaleString()} VND`
+            return `${tooltipItem.dataset.label}: ${value.toLocaleString('vi-VN')}đ`
           }
         }
       }
@@ -249,7 +249,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     labels: radarLabels,
     datasets: [
       {
-        label: 'Spending Distribution',
+        label: 'Phân bổ chi tiêu',
         data: radarValues,
         backgroundColor: 'rgba(26, 188, 156, 0.2)',
         borderColor: '#1abc9c',
@@ -301,7 +301,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>
               <FontAwesomeIcon icon={faChartPie} />
-              <h3>Spending Distribution</h3>
+              <h3>Phân bổ chi tiêu</h3>
             </div>
           </div>
           <div className={styles.chartContainer}>
@@ -309,13 +309,13 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </div>
           <div className={styles.cardInsights}>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Highest:</span>
+              <span className={styles.insightLabel}>Cao nhất:</span>
               <span className={styles.insightValue}>
                 {highest.category} ({highest?.amount?.toLocaleString()} VND)
               </span>
             </div>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Lowest:</span>
+              <span className={styles.insightLabel}>Thấp nhất:</span>
               <span className={styles.insightValue}>
                 {lowest.category} ({lowest.amount.toLocaleString()} VND)
               </span>
@@ -328,7 +328,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>
               <FontAwesomeIcon icon={faChartBar} />
-              <h3>Weekly Spending</h3>
+              <h3>Chi tiêu hàng tuần</h3>
             </div>
           </div>
           <div className={styles.chartContainer}>
@@ -336,11 +336,11 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </div>
           <div className={styles.cardInsights}>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Highest Day:</span>
+              <span className={styles.insightLabel}>Ngày chi tiêu cao nhất:</span>
               <span className={styles.insightValue}>{weeklySpendingSummary.highest.toLocaleString()} VND</span>
             </div>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Daily Average:</span>
+              <span className={styles.insightLabel}>Trung bình hàng ngày:</span>
               <span className={styles.insightValue}>{weeklySpendingSummary.average.toLocaleString()} VND</span>
             </div>
           </div>
@@ -351,14 +351,14 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>
               <FontAwesomeIcon icon={faChartLine} />
-              <h3>Yearly Spending Trends</h3>
+              <h3>Xu hướng chi tiêu hàng năm</h3>
               <div className={styles.trendIndicator}>
                 <FontAwesomeIcon
                   icon={yearlySummary.trendDirection === 'up' ? faArrowUp : faArrowDown}
                   className={yearlySummary.trendDirection === 'up' ? styles.negative : styles.positive}
                 />
                 <span className={yearlySummary.trendDirection === 'up' ? styles.negative : styles.positive}>
-                  {yearlySummary.trendDirection === 'up' ? 'Increasing' : 'Decreasing'} Trend
+                  {yearlySummary.trendDirection === 'up' ? 'Xu hướng tăng' : 'Xu hướng giảm'}
                 </span>
               </div>
             </div>
@@ -368,29 +368,29 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </div>
           <div className={styles.cardInsights}>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Total Yearly Spending:</span>
+              <span className={styles.insightLabel}>Tổng chi tiêu hàng năm:</span>
               <span className={styles.insightValue}>{yearlySummary.totalSpending.toLocaleString()} VND</span>
             </div>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Average Monthly Spending:</span>
+              <span className={styles.insightLabel}>Chi tiêu trung bình hàng tháng:</span>
               <span className={styles.insightValue}>{yearlySummary.averageMonthly.toLocaleString()} VND</span>
             </div>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Highest Spending Month:</span>
+              <span className={styles.insightLabel}>Tháng chi tiêu cao nhất:</span>
               <span className={styles.insightValue}>{yearlySummary.highestMonth}</span>
             </div>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Lowest Spending Month:</span>
+              <span className={styles.insightLabel}>Tháng chi tiêu thấp nhất:</span>
               <span className={styles.insightValue}>{yearlySummary.lowestMonth}</span>
             </div>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Monthly Variance:</span>
+              <span className={styles.insightLabel}>Độ biến động hàng tháng:</span>
               <span className={styles.insightValue}>
                 {Math.sqrt(yearlySummary.monthlyVariance).toLocaleString()} VND
               </span>
             </div>
             <div className={styles.insight}>
-              <span className={styles.insightLabel}>Year-over-Year Change:</span>
+              <span className={styles.insightLabel}>Thay đổi so với năm trước:</span>
               <span
                 className={`${styles.insightValue} ${periodComparison.change >= 0 ? styles.negative : styles.positive}`}
               >

@@ -41,18 +41,18 @@ const ExpensesPage: React.FC = () => {
   }, [fetchExpenses])
 
   const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
+    'Tháng 1',
+    'Tháng 2',
+    'Tháng 3',
+    'Tháng 4',
+    'Tháng 5',
+    'Tháng 6',
+    'Tháng 7',
+    'Tháng 8',
+    'Tháng 9',
+    'Tháng 10',
+    'Tháng 11',
+    'Tháng 12'
   ]
 
   const filteredData = useMemo(() => {
@@ -84,8 +84,8 @@ const ExpensesPage: React.FC = () => {
         highest: { category: '', amount: 0 },
         lowest: { category: '', amount: 0 },
         weeklySpendingData: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{ label: 'Daily Spending', data: [0, 0, 0, 0, 0, 0, 0] }]
+          labels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+          datasets: [{ label: 'Chi tiêu hàng ngày', data: [0, 0, 0, 0, 0, 0, 0] }]
         },
         weeklySpendingSummary: {
           total: 0,
@@ -94,8 +94,8 @@ const ExpensesPage: React.FC = () => {
           lowest: 0
         },
         trendsData: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          datasets: [{ label: 'Monthly Spending', data: Array(12).fill(0) }]
+          labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+          datasets: [{ label: 'Chi tiêu hàng tháng', data: Array(12).fill(0) }]
         },
         periodComparison: {
           current: 0,
@@ -130,7 +130,7 @@ const ExpensesPage: React.FC = () => {
     const weeklyData = expensesData.reduce(
       (acc, expense) => {
         const date = new Date(expense.date)
-        const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' })
+        const dayOfWeek = date.toLocaleDateString('vi-VN', { weekday: 'short' })
         acc[dayOfWeek] = (acc[dayOfWeek] || 0) + expense.amount
         return acc
       },
@@ -138,11 +138,11 @@ const ExpensesPage: React.FC = () => {
     )
 
     const weeklySpendingData = {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      labels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
       datasets: [
         {
-          label: 'Daily Spending',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => weeklyData[day] || 0)
+          label: 'Chi tiêu hàng ngày',
+          data: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map((day) => weeklyData[day] || 0)
         }
       ]
     }
@@ -164,10 +164,10 @@ const ExpensesPage: React.FC = () => {
       }
     })
     const trendsData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
       datasets: [
         {
-          label: 'Monthly Spending',
+          label: 'Chi tiêu hàng tháng',
           data: monthlyTotals
         }
       ]
@@ -234,7 +234,7 @@ const ExpensesPage: React.FC = () => {
   }, [])
 
   const handleExport = useCallback(() => {
-    const headers = ['Date,Category,Amount,Details']
+    const headers = ['Ngày,Danh mục,Số tiền,Chi tiết']
     const rows = filteredData.map((e) => `${e.date},${e.category},${e.amount},"${e.description}"`)
     const csv = headers.concat(rows).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
@@ -250,13 +250,13 @@ const ExpensesPage: React.FC = () => {
   }, [])
 
   if (error) {
-    return <div>Error loading expenses: {error}</div>
+    return <div>Lỗi khi tải chi tiêu: {error}</div>
   }
 
   const tabs = [
     {
       id: 'overview',
-      label: 'Overview',
+      label: 'Tổng quan',
       icon: faHome,
       content: (
         <OverviewSummary
@@ -282,13 +282,13 @@ const ExpensesPage: React.FC = () => {
     },
     {
       id: 'analytics',
-      label: 'Analytics',
+      label: 'Phân tích',
       icon: faChartLine,
       content: <AnalyticsDashboard {...analyticsData} />
     },
     {
       id: 'list',
-      label: 'List',
+      label: 'Danh sách',
       icon: faList,
       content: (
         <ExpensesTable
@@ -306,10 +306,10 @@ const ExpensesPage: React.FC = () => {
   return (
     <div className={styles.expensesPage}>
       <div className={styles.header}>
-        <h1>Expenses</h1>
+        <h1>Chi tiêu</h1>
         <div className={styles.actions}>
           <button className={styles.addButton} onClick={() => navigate('/expenses/add')}>
-            <FontAwesomeIcon icon={faPlus} /> Add Expense
+            <FontAwesomeIcon icon={faPlus} /> Thêm chi tiêu
           </button>
         </div>
       </div>
@@ -335,7 +335,7 @@ const ExpensesPage: React.FC = () => {
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h2>
-              Expenses for {monthNames[calendarMonth]} {selectedDay}
+              Chi tiêu cho ngày {selectedDay} {monthNames[calendarMonth]}
             </h2>
             <div className={styles.dayExpenses}>
               {dayExpenses.map((expense) => (
@@ -346,7 +346,7 @@ const ExpensesPage: React.FC = () => {
               ))}
             </div>
             <button className={styles.closeButton} onClick={handleCloseModal}>
-              Close
+              Đóng
             </button>
           </div>
         </div>

@@ -19,7 +19,7 @@ export const FAQ: React.FC = () => {
   return (
     <div className={styles.faq}>
       <div className={styles.faqContainer}>
-        <h1>Frequently Asked Questions</h1>
+        <h1>Câu Hỏi Thường Gặp</h1>
 
         {isLoading ? (
           <div className={styles.loadingContainer}>
@@ -28,7 +28,7 @@ export const FAQ: React.FC = () => {
         ) : (
           <>
             <div className={styles.categories}>
-              <Badge variant={selectedCategory === 'all' ? 'primary' : 'success'}>All</Badge>
+              <Badge variant={selectedCategory === 'all' ? 'primary' : 'success'}>Tất cả</Badge>
               {/* Add more category badges */}
             </div>
 

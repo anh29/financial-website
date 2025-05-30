@@ -72,7 +72,7 @@ const GoalPage = () => {
       await addGoal(goalData)
       setIsCreateModalOpen(false)
     } catch (error) {
-      console.error('Failed to create goal:', error)
+      console.error('Không thể tạo mục tiêu:', error)
     }
   }
 
@@ -109,7 +109,7 @@ const GoalPage = () => {
       {activeTab === 'active' && filteredGoals.length > 0 && (
         <div className={styles.addContributionCommonWrapper}>
           <button className={styles.addContributionBtnCommon} onClick={() => navigate('/budget')}>
-            <FiPlus /> Add Contribution
+            <FiPlus /> Thêm đóng góp
           </button>
         </div>
       )}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -13,35 +13,27 @@ import {
 import './FinancialStatementsPage.css'
 
 // Register the required components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-)
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 const FinancialStatementsPage = () => {
   const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7'],
     datasets: [
       {
-        label: 'Income',
+        label: 'Thu nhập',
         data: [65, 59, 80, 81, 56, 55, 40],
         fill: false,
         backgroundColor: 'rgb(75, 192, 192)',
-        borderColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 0.2)'
       },
       {
-        label: 'Expenses',
+        label: 'Chi tiêu',
         data: [28, 48, 40, 19, 86, 27, 90],
         fill: false,
         backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.2)',
-      },
-    ],
+        borderColor: 'rgba(255, 99, 132, 0.2)'
+      }
+    ]
   }
 
   useEffect(() => {
@@ -53,8 +45,8 @@ const FinancialStatementsPage = () => {
 
   return (
     <div>
-      <h1>Financial Statements</h1>
-      <div className="chart-container">
+      <h1>Báo Cáo Tài Chính</h1>
+      <div className='chart-container'>
         <Line data={data} options={{ responsive: true, maintainAspectRatio: false }} />
       </div>
     </div>

@@ -1,6 +1,4 @@
 import styles from './Header.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '../../context/AuthContext'
 import { generateAvatar } from '../../utils/userUtils'
 
@@ -10,14 +8,10 @@ const Header = ({ className }: { className?: string }) => {
   return (
     <header className={`${styles.headerContainer} ${className}`}>
       <div className={styles.headerLeft}>
-        <h1>Hello {user && user.username}</h1>
-        <span>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        <h1>Xin chào {user && user.username}</h1>
+        <span>{new Date().toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
       </div>
       <div className={styles.headerRight}>
-        <input type='text' placeholder='Search here' />
-        <button className={styles.notification}>
-          <FontAwesomeIcon icon={faBell} />
-        </button>
         <div className={styles.userProfile}>
           {user && (
             <>

@@ -34,8 +34,8 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({
             {monthNames[calendarMonth]} {selectedDay}, {calendarYear}
           </h3>
           <div className={styles.totalAmount}>
-            {dayExpenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString()} VND
-            <span>total spent</span>
+            {dayExpenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString('vi-VN')}đ
+            <span>tổng chi tiêu</span>
           </div>
         </div>
 
@@ -43,9 +43,9 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({
           {dayExpenses.length === 0 ? (
             <div className={styles.noExpenses}>
               <span className={styles.emptyIcon}>💰</span>
-              <p>No expenses recorded for this day.</p>
+              <p>Không có chi tiêu nào được ghi nhận cho ngày này.</p>
               <button className={styles.addButton} onClick={handleAddExpense}>
-                Add Expense
+                Thêm chi tiêu
               </button>
             </div>
           ) : (
@@ -71,20 +71,20 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({
                       e.amount < 50000 ? styles.low : e.amount < 150000 ? styles.medium : styles.high
                     }`}
                   >
-                    {e.amount.toLocaleString()} VND
+                    {e.amount.toLocaleString('vi-VN')}đ
                   </div>
                 </div>
               ))}
 
               <div className={styles.dayStats}>
                 <div className={styles.statItem}>
-                  <span>Average per transaction</span>
+                  <span>Trung bình mỗi giao dịch</span>
                   <strong>
-                    {(dayExpenses.reduce((sum, e) => sum + e.amount, 0) / dayExpenses.length).toLocaleString()} VND
+                    {(dayExpenses.reduce((sum, e) => sum + e.amount, 0) / dayExpenses.length).toLocaleString('vi-VN')}đ
                   </strong>
                 </div>
                 <div className={styles.statItem}>
-                  <span>Number of transactions</span>
+                  <span>Số lượng giao dịch</span>
                   <strong>{dayExpenses.length}</strong>
                 </div>
               </div>

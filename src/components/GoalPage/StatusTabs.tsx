@@ -12,19 +12,19 @@ export const StatusTabs = ({ activeTab, onTabChange }: StatusTabsProps) => {
         className={activeTab === 'active' ? styles.statusTabActive : styles.statusTab}
         onClick={() => onTabChange('active')}
       >
-        Active
+        Đang thực hiện
       </button>
       <button
         className={activeTab === 'completed' ? styles.statusTabActive : styles.statusTab}
         onClick={() => onTabChange('completed')}
       >
-        Completed
+        Hoàn thành
       </button>
       <button
         className={activeTab === 'cancelled' ? styles.statusTabActive : styles.statusTab}
         onClick={() => onTabChange('cancelled')}
       >
-        Cancelled
+        Đã hủy
       </button>
     </div>
   )

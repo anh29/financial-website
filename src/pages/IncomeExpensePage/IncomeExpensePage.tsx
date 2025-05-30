@@ -11,12 +11,12 @@ const IncomeExpensePage = () => {
 
   return (
     <div className={styles.incomeExpensePage}>
-      <h1>Income and Expense Management</h1>
+      <h1>Quản Lý Thu Chi</h1>
       <IncomeExpenseForm onAdd={handleAddTransaction} />
       <ul>
         {transactions.map((transaction, index) => (
           <li key={index}>
-            {transaction.type}: ${transaction.amount} - {transaction.description}
+            {transaction.type}: {transaction.amount.toLocaleString('vi-VN')} VND - {transaction.description}
           </li>
         ))}
       </ul>

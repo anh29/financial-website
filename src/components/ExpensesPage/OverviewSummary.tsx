@@ -124,7 +124,7 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
     if (allExpenses.length === 0) {
       return {
         monthOverMonthChange: 0,
-        highestSpendingDay: { day: 'No data', average: 0 },
+        highestSpendingDay: { day: 'Không có dữ liệu', average: 0 },
         categoryGrowth: {}
       }
     }
@@ -136,7 +136,7 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
     const dailyAverages = allExpenses.reduce(
       (acc, expense) => {
         const date = new Date(expense.date)
-        const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' })
+        const dayOfWeek = date.toLocaleDateString('vi-VN', { weekday: 'long' })
         if (!acc[dayOfWeek]) {
           acc[dayOfWeek] = { total: 0, count: 0 }
         }
@@ -152,21 +152,23 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
       average: data.total / data.count
     }))
 
-    const highestSpendingDay = dailyAveragesArray.length > 0
-      ? dailyAveragesArray.reduce((a, b) => (a.average > b.average ? a : b))
-      : { day: 'No data', average: 0 }
+    const highestSpendingDay =
+      dailyAveragesArray.length > 0
+        ? dailyAveragesArray.reduce((a, b) => (a.average > b.average ? a : b))
+        : { day: 'Không có dữ liệu', average: 0 }
 
-    const categoryGrowth = categoryBreakdown.length > 0
-      ? categoryBreakdown.reduce(
-          (acc, curr) => {
-            const prevAmount = curr.amount * 0.9 // Mock data - replace with actual previous period data
-            const growth = ((curr.amount - prevAmount) / prevAmount) * 100
-            acc[curr.category] = growth
-            return acc
-          },
-          {} as Record<string, number>
-        )
-      : {}
+    const categoryGrowth =
+      categoryBreakdown.length > 0
+        ? categoryBreakdown.reduce(
+            (acc, curr) => {
+              const prevAmount = curr.amount * 0.9 // Mock data - replace with actual previous period data
+              const growth = ((curr.amount - prevAmount) / prevAmount) * 100
+              acc[curr.category] = growth
+              return acc
+            },
+            {} as Record<string, number>
+          )
+        : {}
 
     return {
       monthOverMonthChange,
@@ -210,12 +212,8 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
         <div className={styles.chartSection}>
           <div className={styles.chartHeader}>
             <FontAwesomeIcon icon={faChartPie} />
-            <h3>Category Breakdown</h3>
-            <button
-              className={styles.showDetailsIconBtn}
-              onClick={onShowListTab}
-              title="Xem chi tiết"
-            >
+            <h3>Phân bổ theo danh mục</h3>
+            <button className={styles.showDetailsIconBtn} onClick={onShowListTab} title='Xem chi tiết'>
               <FontAwesomeIcon icon={faList} />
             </button>
           </div>
@@ -240,14 +238,14 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
         <div className={styles.analyticsHeader}>
           <div className={styles.analyticsTitle}>
             <FontAwesomeIcon icon={faChartLine} />
-            <h2>Detailed Analytics</h2>
+            <h2>Phân tích chi tiết</h2>
           </div>
         </div>
 
         <div className={styles.analyticsGrid}>
           <div className={styles.analyticsCard}>
             <div className={styles.cardHeader}>
-              <span className={styles.cardTitle}>Monthly Change</span>
+              <span className={styles.cardTitle}>Thay đổi hàng tháng</span>
               <FontAwesomeIcon
                 icon={analytics.monthOverMonthChange >= 0 ? faArrowUp : faArrowDown}
                 className={analytics.monthOverMonthChange >= 0 ? styles.positiveChange : styles.negativeChange}
@@ -256,14 +254,14 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
             <div className={styles.cardValue}>{Math.abs(analytics.monthOverMonthChange).toFixed(1)}%</div>
             <div className={styles.cardChange}>
               <span className={analytics.monthOverMonthChange >= 0 ? styles.negativeChange : styles.positiveChange}>
-                {analytics.monthOverMonthChange >= 0 ? 'Increase' : 'Decrease'} from last month
+                {analytics.monthOverMonthChange >= 0 ? 'Tăng' : 'Giảm'} so với tháng trước
               </span>
             </div>
           </div>
 
           <div className={styles.analyticsCard}>
             <div className={styles.cardHeader}>
-              <span className={styles.cardTitle}>Highest Spending Day</span>
+              <span className={styles.cardTitle}>Ngày chi tiêu cao nhất</span>
               <FontAwesomeIcon icon={faCalendarAlt} />
             </div>
             <div className={styles.cardValue}>{analytics.highestSpendingDay.day}</div>
@@ -274,15 +272,15 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
 
           <div className={styles.analyticsCard}>
             <div className={styles.cardHeader}>
-              <span className={styles.cardTitle}>Top Category Growth</span>
+              <span className={styles.cardTitle}>Tăng trưởng danh mục hàng đầu</span>
               <FontAwesomeIcon icon={faChartBar} />
             </div>
             <div className={styles.cardValue}>{topCategory}</div>
             <div className={styles.cardChange}>
               <span className={styles.negativeChange}>
                 {analytics.categoryGrowth && topCategory && analytics.categoryGrowth[topCategory]
-                  ? `${analytics.categoryGrowth[topCategory].toFixed(1)}% growth`
-                  : 'No growth data available'}
+                  ? `Tăng ${analytics.categoryGrowth[topCategory].toFixed(1)}%`
+                  : 'Không có dữ liệu tăng trưởng'}
               </span>
             </div>
           </div>
@@ -294,7 +292,7 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
               <FontAwesomeIcon icon={faWallet} />
             </div>
             <div className={styles.insightContent}>
-              <div className={styles.insightTitle}>Daily Average</div>
+              <div className={styles.insightTitle}>Trung bình hàng ngày</div>
               <div className={styles.insightValue}>{averageDaily.toLocaleString()} VND</div>
             </div>
           </div>
@@ -304,9 +302,9 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
               <FontAwesomeIcon icon={faLightbulb} />
             </div>
             <div className={styles.insightContent}>
-              <div className={styles.insightTitle}>Spending Pattern</div>
+              <div className={styles.insightTitle}>Mẫu chi tiêu</div>
               <div className={styles.insightValue}>
-                {analytics.monthOverMonthChange > 0 ? 'Increasing' : 'Decreasing'} trend
+                {analytics.monthOverMonthChange > 0 ? 'Xu hướng tăng' : 'Xu hướng giảm'}
               </div>
             </div>
           </div>

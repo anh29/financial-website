@@ -15,8 +15,8 @@ const useFormState = (initialState: { [key: string]: string }) => {
 
 const IncomeExpenseForm = ({
   onAdd,
-  labels = { type: 'Type', amount: 'Amount', description: 'Description' },
-  options = { income: 'Income', expense: 'Expense' }
+  labels = { type: 'Loại', amount: 'Số tiền', description: 'Mô tả' },
+  options = { income: 'Thu nhập', expense: 'Chi tiêu' }
 }: {
   onAdd: (transaction: { type: string; amount: number; description: string }) => void
   labels?: { type: string; amount: string; description: string }
@@ -32,7 +32,7 @@ const IncomeExpenseForm = ({
     e.preventDefault()
     const amount = parseFloat(formState.amount)
     if (isNaN(amount) || amount <= 0) {
-      alert('Please enter a valid positive amount')
+      alert('Vui lòng nhập số tiền hợp lệ và lớn hơn 0')
       return
     }
     onAdd({ type: formState.type, amount, description: formState.description })
@@ -62,7 +62,7 @@ const IncomeExpenseForm = ({
           <input type='text' name='description' value={formState.description} onChange={handleChange} required />
         </label>
       </div>
-      <button type='submit'>Add</button>
+      <button type='submit'>Thêm</button>
     </form>
   )
 }

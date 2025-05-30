@@ -85,7 +85,7 @@ const BudgetPage = () => {
       setIsBudgetSaved(true)
       setBudgetAllocations((prev) => [...prev, ...newAllocation])
     } catch (error) {
-      console.error('Error saving new allocation:', error)
+      console.error('Lỗi khi lưu phân bổ mới:', error)
     }
   }
 

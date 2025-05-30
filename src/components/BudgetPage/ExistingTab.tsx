@@ -54,8 +54,8 @@ const ExistingTab: React.FC<ExistingTabProps> = ({ income, existingBudgets }) =>
       setShowModal(false)
       setNewBudgets([{ id: '', description: '', amount: 0, allocations: [] }])
       setTimeout(() => setShowSuccess(false), 1000)
-    } catch {
-      // Optionally show error notification
+    } catch (error) {
+      console.error('Lỗi khi lưu ngân sách mới:', error)
     } finally {
       setIsSaving(false)
     }

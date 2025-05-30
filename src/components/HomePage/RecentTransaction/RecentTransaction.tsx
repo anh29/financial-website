@@ -28,25 +28,25 @@ const RecentTransaction = () => {
 
   return (
     <div className={styles.recentTransaction}>
-      <h2>Recent Transaction</h2>
+      <h2>Giao Dịch Gần Đây</h2>
       <div className={styles.tabs}>
         <div
           className={`${styles.tab} ${activeTab === 'all' ? styles.active : ''}`}
           onClick={() => setActiveTab('all')}
         >
-          All
+          Tất cả
         </div>
         <div
           className={`${styles.tab} ${activeTab === 'income' ? styles.active : ''}`}
           onClick={() => setActiveTab('income')}
         >
-          Revenue
+          Thu nhập
         </div>
         <div
           className={`${styles.tab} ${activeTab === 'expense' ? styles.active : ''}`}
           onClick={() => setActiveTab('expense')}
         >
-          Expenses
+          Chi tiêu
         </div>
       </div>
       <ul>

@@ -36,18 +36,18 @@ const CustomerHeader: React.FC = () => {
 
         <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
           <Link
-            to='/customer/features'
-            className={location.pathname.startsWith('/customer/features') ? styles.active : ''}
+            to='/customer'
+            className={location.pathname.startsWith('/customer') ? styles.active : ''}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Features
+            Tính năng
           </Link>
           <Link
             to='/customer/support'
             className={location.pathname === '/customer/support' ? styles.active : ''}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Support
+            Hỗ trợ
           </Link>
           <Link
             to='/customer/blog'
@@ -60,10 +60,10 @@ const CustomerHeader: React.FC = () => {
 
         <div className={styles.actions}>
           <Link to='/signin' className={styles.signIn}>
-            Sign In
+            Đăng nhập
           </Link>
           <Link to='/signup' className={styles.signUp}>
-            Get Started
+            Bắt đầu
           </Link>
         </div>
       </div>

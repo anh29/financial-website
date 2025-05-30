@@ -17,47 +17,55 @@ const BillDetails: React.FC<BillDetailsProps> = ({ selectedBill, handleCloseModa
   return (
     <div className={styles.billDetailsModal} onClick={handleCloseModal}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <h2>Bill Details</h2>
+        <h2>Chi tiết hóa đơn</h2>
         <div className={styles.billInfo}>
           <div className={styles.infoRow}>
-            <span>Title:</span>
+            <span>Tiêu đề:</span>
             <span>{selectedBill.title}</span>
           </div>
           <div className={styles.infoRow}>
-            <span>Amount:</span>
-            <span>${selectedBill.amount.toLocaleString()}</span>
+            <span>Số tiền:</span>
+            <span>{selectedBill.amount.toLocaleString('vi-VN')} đ</span>
           </div>
           <div className={styles.infoRow}>
-            <span>Category:</span>
+            <span>Danh mục:</span>
             <span>{selectedBill.category}</span>
           </div>
           <div className={styles.infoRow}>
-            <span>Frequency:</span>
-            <span>{selectedBill.repeat_type}</span>
+            <span>Tần suất:</span>
+            <span>
+              {selectedBill.repeat_type === 'monthly'
+                ? 'Hàng tháng'
+                : selectedBill.repeat_type === 'quarterly'
+                  ? 'Hàng quý'
+                  : selectedBill.repeat_type}
+            </span>
           </div>
           <div className={styles.infoRow}>
-            <span>Start Date:</span>
-            <span>{selectedBill.start_date ? new Date(selectedBill.start_date).toLocaleDateString() : ''}</span>
+            <span>Ngày bắt đầu:</span>
+            <span>{selectedBill.start_date ? new Date(selectedBill.start_date).toLocaleDateString('vi-VN') : ''}</span>
           </div>
           <div className={styles.infoRow}>
-            <span>End Date:</span>
-            <span>{selectedBill.end_date ? new Date(selectedBill.end_date).toLocaleDateString() : ''}</span>
+            <span>Ngày kết thúc:</span>
+            <span>{selectedBill.end_date ? new Date(selectedBill.end_date).toLocaleDateString('vi-VN') : ''}</span>
           </div>
           <div className={styles.infoRow}>
-            <span>Day of Month:</span>
+            <span>Ngày thanh toán:</span>
             <span>{selectedBill.due_date}</span>
           </div>
           <div className={styles.infoRow}>
-            <span>Status:</span>
-            <span className={styles[selectedBill.payment_status]}>{selectedBill.payment_status}</span>
+            <span>Trạng thái:</span>
+            <span className={styles[selectedBill.payment_status]}>
+              {selectedBill.payment_status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán'}
+            </span>
           </div>
         </div>
         <form onSubmit={handleSubmit} className={styles.paymentForm}>
           <button type='submit' className={styles.payButton}>
-            Confirm Payment
+            Xác nhận thanh toán
           </button>
           <button type='button' className={styles.cancelButton} onClick={handleCloseModal}>
-            Cancel
+            Hủy
           </button>
         </form>
       </div>

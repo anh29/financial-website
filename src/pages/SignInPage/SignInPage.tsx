@@ -40,7 +40,7 @@ const SignInPage: React.FC = () => {
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
     } catch {
-      setLogData({ message: 'Error fetching Google user info. Please try again.', status: 'error' })
+      setLogData({ message: 'Lỗi khi lấy thông tin người dùng Google. Vui lòng thử lại.', status: 'error' })
     } finally {
       setLoading(false)
     }
@@ -54,7 +54,7 @@ const SignInPage: React.FC = () => {
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
     } catch {
-      setLogData({ message: 'An error occurred.', status: 'error' })
+      setLogData({ message: 'Đã xảy ra lỗi.', status: 'error' })
     } finally {
       setLoading(false)
     }
@@ -75,54 +75,54 @@ const SignInPage: React.FC = () => {
             Finance<span>Hub</span>
           </p>
         </div>
-        <div className={styles.heading}>Sign In</div>
+        <div className={styles.heading}>Đăng Nhập</div>
         {logData && <div className={`${styles.feedback} ${styles[logData.status]}`}>{logData.message}</div>}
         <form onSubmit={handleSubmit} className={styles.form} autoComplete='on'>
           <div className={styles.inputWrapper}>
             <input
               type='text'
-              placeholder='Username'
+              placeholder='Tên đăng nhập'
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               required
               autoComplete='username'
-              aria-label='Username'
+              aria-label='Tên đăng nhập'
             />
           </div>
           <div className={styles.inputWrapper}>
             <input
               type={showPassword ? 'text' : 'password'}
-              placeholder='Password'
+              placeholder='Mật khẩu'
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
               autoComplete='current-password'
-              aria-label='Password'
+              aria-label='Mật khẩu'
             />
             <button
               type='button'
               className={styles.passwordToggle}
               onClick={() => setShowPassword((v) => !v)}
               tabIndex={0}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
           <div className={styles.forgotPassword}>
-            <a href='/forgot-password'>Forgot password?</a>
+            <a href='/forgot-password'>Quên mật khẩu?</a>
           </div>
           <button type='submit' className={styles.button} disabled={loading}>
-            {loading ? <LoadingSpinner /> : 'Sign In'}
+            {loading ? <LoadingSpinner /> : 'Đăng Nhập'}
           </button>
         </form>
-        <div className={styles.divider}>or sign in with</div>
+        <div className={styles.divider}>hoặc đăng nhập bằng</div>
         <button type='button' className={styles.googleButton} onClick={() => handleGoogleLogin()} disabled={loading}>
           <FaGoogle style={{ fontSize: '1.2rem' }} />
-          <span>Continue with Google</span>
+          <span>Tiếp tục với Google</span>
         </button>
         <div className={styles.switchLink}>
-          Don't have an account? <a href='/signup'>Sign up here</a>
+          Chưa có tài khoản? <a href='/signup'>Đăng ký tại đây</a>
         </div>
       </div>
     </div>

@@ -12,11 +12,11 @@ export const StatsRow = ({ totalGoals, totalTarget, overallProgress }: StatsRowP
     <div className={styles.statsRowContainer}>
       <div className={styles.statCard}>
         <div className={styles.statCardHeader}>
-          <div className={styles.statCardTitle}>Total Goals</div>
+          <div className={styles.statCardTitle}>Tổng số mục tiêu</div>
           <FiTarget />
         </div>
         <div className={styles.statCardValue}>{totalGoals}</div>
-        <div className={styles.statCardDesc}>Active financial goals</div>
+        <div className={styles.statCardDesc}>Mục tiêu tài chính đang thực hiện</div>
         <div className={styles.statCardProgressBarBg}>
           <div className={styles.statCardProgressBar} style={{ width: '100%' }} />
         </div>
@@ -24,11 +24,11 @@ export const StatsRow = ({ totalGoals, totalTarget, overallProgress }: StatsRowP
 
       <div className={styles.statCard}>
         <div className={styles.statCardHeader}>
-          <div className={styles.statCardTitle}>Total Target</div>
+          <div className={styles.statCardTitle}>Tổng mục tiêu</div>
           <FiDollarSign />
         </div>
-        <div className={styles.statCardValue}>${totalTarget.toLocaleString()}</div>
-        <div className={styles.statCardDesc}>Target amount to achieve</div>
+        <div className={styles.statCardValue}>{totalTarget.toLocaleString('vi-VN')}đ</div>
+        <div className={styles.statCardDesc}>Số tiền cần đạt được</div>
         <div className={styles.statCardProgressBarBg}>
           <div className={styles.statCardProgressBar} style={{ width: '100%' }} />
         </div>
@@ -36,11 +36,11 @@ export const StatsRow = ({ totalGoals, totalTarget, overallProgress }: StatsRowP
 
       <div className={styles.statCard}>
         <div className={styles.statCardHeader}>
-          <div className={styles.statCardTitle}>Overall Progress</div>
+          <div className={styles.statCardTitle}>Tiến độ tổng thể</div>
           <FiTrendingUp />
         </div>
         <div className={styles.statCardValue}>{overallProgress.toFixed(1)}%</div>
-        <div className={styles.statCardDesc}>Progress towards goals</div>
+        <div className={styles.statCardDesc}>Tiến độ hướng tới mục tiêu</div>
         <div className={styles.statCardProgressBarBg}>
           <div className={styles.statCardProgressBar} style={{ width: `${overallProgress}%` }} />
         </div>

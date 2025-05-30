@@ -5,14 +5,14 @@ import { getUser } from '../../utils/userUtils'
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
     const error = await response.json().catch(() => ({}))
-    throw new Error(error.message || 'An error occurred')
+    throw new Error(error.message || 'Đã xảy ra lỗi')
   }
   return response.json()
 }
 
 export const createBudget = async (budget: Budget[]): Promise<void> => {
   const user = getUser()
-  if (!user) throw new Error('User not found')
+  if (!user) throw new Error('Không tìm thấy người dùng')
 
   const body = budget.map((item) => ({
     userId: user.id,
@@ -49,7 +49,7 @@ export const createMonthlyBudget = async (budget: Budget[]): Promise<void> => {
     body: JSON.stringify(body)
   })
   if (!response.ok) {
-    throw new Error('Failed to create budget')
+    throw new Error('Không thể tạo ngân sách')
   }
   const data = await response.json()
   return data
@@ -62,7 +62,7 @@ export const updateMonthlyBudget = async (budget: Budget): Promise<void> => {
     body: JSON.stringify(budget)
   })
   if (!response.ok) {
-    throw new Error('Failed to update budget')
+    throw new Error('Không thể cập nhật ngân sách')
   }
   const data = await response.json()
   return data
@@ -70,12 +70,12 @@ export const updateMonthlyBudget = async (budget: Budget): Promise<void> => {
 
 export const fetchMonthlyBudgetsByUser = async (): Promise<{ message: string; data: Budget[] }> => {
   const user = getUser()
-  if (!user) throw new Error('User not found')
+  if (!user) throw new Error('Không tìm thấy người dùng')
 
   const response = await fetch(`${SERVER_URL}/crud/monthlyBudgets/user/${user.id}`)
 
   if (!response.ok) {
-    throw new Error('Failed to fetch monthly budgets')
+    throw new Error('Không thể lấy danh sách ngân sách hàng tháng')
   }
 
   return response.json()
@@ -85,11 +85,12 @@ export const fetchBudgetAllocations = async (): Promise<{ message: string; data:
   const response = await fetch(`${SERVER_URL}/crud/budgets/user/${getUser().id}`)
 
   if (!response.ok) {
-    throw new Error('Failed to fetch budget allocations')
+    throw new Error('Không thể lấy danh sách phân bổ ngân sách')
   }
 
   return response.json()
 }
+
 export const saveBudgetAllocations = async (allocations: Budget[]): Promise<void> => {
   const body = allocations.map((allocation) => ({
     userId: getUser().id,
@@ -102,13 +103,13 @@ export const saveBudgetAllocations = async (allocations: Budget[]): Promise<void
   })
 
   if (!response.ok) {
-    throw new Error('Failed to save budget allocations')
+    throw new Error('Không thể lưu phân bổ ngân sách')
   }
 }
 
 export const saveMonthlyBudget = async (monthlyBudget: { amount: number; month: string }[]): Promise<void> => {
   const user = getUser()
-  if (!user) throw new Error('User not found')
+  if (!user) throw new Error('Không tìm thấy người dùng')
 
   const body = monthlyBudget.map((budget) => ({
     userId: user.id,
@@ -126,7 +127,7 @@ export const saveMonthlyBudget = async (monthlyBudget: { amount: number; month: 
 
 export const saveMonthlyBudgetAllocation = async (allocation: BudgetAllocation[]): Promise<void> => {
   const user = getUser()
-  if (!user) throw new Error('User not found')
+  if (!user) throw new Error('Không tìm thấy người dùng')
 
   const body = allocation.map((item) => ({
     userId: user.id,
@@ -144,7 +145,7 @@ export const saveMonthlyBudgetAllocation = async (allocation: BudgetAllocation[]
 
 export const fetchMonthlyBudgetWithAllocations = async (month: string): Promise<{ message: string; data: Budget }> => {
   const user = getUser()
-  if (!user) throw new Error('User not found')
+  if (!user) throw new Error('Không tìm thấy người dùng')
 
   const response = await fetch(
     `${SERVER_URL}/marketplace/getMonthlyBudgetWithAllocations/user/${user.id}/month/${month}`
@@ -158,7 +159,7 @@ export const fetchBudgetsByUser = async (): Promise<{
   data: { budgets: Budget[]; income: Budget }
 }> => {
   const user = getUser()
-  if (!user) throw new Error('User not found')
+  if (!user) throw new Error('Không tìm thấy người dùng')
 
   const response = await fetch(`${SERVER_URL}/marketplace/getUserIncomeAndBudgets/user/${user.id}`)
 
@@ -167,7 +168,7 @@ export const fetchBudgetsByUser = async (): Promise<{
 
 export const getHistoricalExpenditures = async (): Promise<{ message: string; data: HistoryBudgets[] }> => {
   const user = getUser()
-  if (!user) throw new Error('User not found')
+  if (!user) throw new Error('Không tìm thấy người dùng')
 
   const response = await fetch(`${SERVER_URL}/marketplace/getHistoricalExpenditures/user/${user.id}`)
 
@@ -176,7 +177,7 @@ export const getHistoricalExpenditures = async (): Promise<{ message: string; da
 
 export const getRemainingBudget = async (month: string): Promise<{ message: string; data: RemainingBudget }> => {
   const user = getUser()
-  if (!user) throw new Error('User not found')
+  if (!user) throw new Error('Không tìm thấy người dùng')
 
   const response = await fetch(`${SERVER_URL}/marketplace/getRemainingBudget/user/${user.id}/month/${month}`)
 

@@ -20,12 +20,18 @@ export const UserGuide: React.FC = () => {
       advanced: 'warning'
     } as const
 
-    return <Badge variant={variants[difficulty as keyof typeof variants]}>{difficulty}</Badge>
+    const difficultyLabels = {
+      beginner: 'Cơ bản',
+      intermediate: 'Trung cấp',
+      advanced: 'Nâng cao'
+    } as const
+
+    return <Badge variant={variants[difficulty as keyof typeof variants]}>{difficultyLabels[difficulty as keyof typeof difficultyLabels]}</Badge>
   }
 
   return (
     <div className={styles.guideContainer}>
-      <h1>User Guide</h1>
+      <h1>Hướng Dẫn Sử Dụng</h1>
 
       {isLoading ? (
         <div className={styles.loadingContainer}>
@@ -40,7 +46,7 @@ export const UserGuide: React.FC = () => {
                 {getDifficultyBadge(section.difficulty)}
               </div>
               <p>{section.content}</p>
-              <Button variant='outline'>Read More</Button>
+              <Button variant='outline'>Đọc Thêm</Button>
             </Card>
           ))}
         </div>

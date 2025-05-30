@@ -17,13 +17,13 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   }
 
   const menuItems = [
-    { path: '/', label: 'Homepage', icon: <FaHome /> },
-    { path: '/transactions', label: 'Transactions', icon: <FaExchangeAlt /> },
-    { path: '/upcoming', label: 'Bills', icon: <FaFileInvoiceDollar /> },
-    { path: '/expenses', label: 'Expenses', icon: <FaWallet /> },
-    { path: '/budget', label: 'Budget', icon: <FaChartPie /> },
-    { path: '/goal', label: 'Goal', icon: <FaBullseye /> },
-    { path: '/settings', label: 'Settings', icon: <FaCog /> }
+    { path: '/', label: 'Trang chủ', icon: <FaHome /> },
+    { path: '/transactions', label: 'Giao dịch', icon: <FaExchangeAlt /> },
+    { path: '/expenses', label: 'Chi tiêu', icon: <FaWallet /> },
+    { path: '/upcoming', label: 'Hóa đơn', icon: <FaFileInvoiceDollar /> },
+    { path: '/budget', label: 'Ngân sách', icon: <FaChartPie /> },
+    { path: '/goal', label: 'Mục tiêu', icon: <FaBullseye /> },
+    { path: '/settings', label: 'Cài đặt', icon: <FaCog /> }
   ]
 
   return (
@@ -46,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         </ul>
       </nav>
       <button className={styles.logout} onClick={handleLogout}>
-        Logout
+        Đăng xuất
       </button>
     </aside>
   )

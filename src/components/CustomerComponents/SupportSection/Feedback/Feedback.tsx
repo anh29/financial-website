@@ -23,24 +23,24 @@ export const Feedback: React.FC = () => {
 
   return (
     <div className={styles.feedbackContainer}>
-      <h1>Your Feedback</h1>
+      <h1>Phản Hồi Của Bạn</h1>
 
       <Card className={styles.feedbackForm}>
         <Form onSubmit={handleSubmit}>
           <Select
-            label='Feedback Type'
+            label='Loại Phản Hồi'
             value={formData.type}
             onChange={(e) => setFormData({ ...formData, type: e.target.value })}
             options={[
-              { value: 'bug', label: 'Bug Report' },
-              { value: 'feature', label: 'Feature Request' },
-              { value: 'improvement', label: 'Improvement Suggestion' }
+              { value: 'bug', label: 'Báo Lỗi' },
+              { value: 'feature', label: 'Yêu Cầu Tính Năng' },
+              { value: 'improvement', label: 'Đề Xuất Cải Thiện' }
             ]}
             required
           />
 
           <Select
-            label='Rating'
+            label='Đánh Giá'
             value={formData.rating}
             onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
             options={[
@@ -54,7 +54,7 @@ export const Feedback: React.FC = () => {
           />
 
           <Input
-            label='Your Feedback'
+            label='Phản Hồi Của Bạn'
             type='text'
             value={formData.comment}
             onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
@@ -62,7 +62,7 @@ export const Feedback: React.FC = () => {
           />
 
           <Button type='submit' fullWidth isLoading={isLoading}>
-            Submit Feedback
+            Gửi Phản Hồi
           </Button>
         </Form>
       </Card>

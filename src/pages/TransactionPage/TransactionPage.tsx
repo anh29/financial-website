@@ -51,13 +51,13 @@ const TransactionPage = () => {
     return txs
   }
 
-  if (error) return <div>Error: {error}</div>
+  if (error) return <div>Lỗi: {error}</div>
 
   return (
     <div className={styles.transactionPage}>
       <header className={styles.header}>
-        <h1>📊 Transaction Dashboard</h1>
-        <p>Import, view, and manage your financial transactions with ease.</p>
+        <h1>📊 Bảng Điều Khiển Giao Dịch</h1>
+        <p>Nhập, xem và quản lý các giao dịch tài chính của bạn một cách dễ dàng.</p>
       </header>
 
       <div className={styles.controls}>
@@ -65,7 +65,7 @@ const TransactionPage = () => {
       </div>
 
       {isLoading && <LoadingSpinner />}
-      {!isLoading && transactions.length === 0 && <p>No transactions found.</p>}
+      {!isLoading && transactions.length === 0 && <p>Không tìm thấy giao dịch nào.</p>}
       {!isLoading && transactions.length > 0 && (
         <TransactionTable
           transactions={getFilteredTransactions()}

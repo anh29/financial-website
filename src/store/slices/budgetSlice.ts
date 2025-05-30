@@ -33,7 +33,7 @@ export const fetchBudgetsAsync = createAsyncThunk('budgets/fetchBudgets', async 
     const response = await fetchBudgetsByUser()
     return response.data
   } catch (error) {
-    return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch budgets')
+    return rejectWithValue(error instanceof Error ? error.message : 'Không thể lấy danh sách ngân sách')
   }
 })
 
@@ -45,7 +45,7 @@ export const createBudgetAsync = createAsyncThunk(
       const response = await fetchBudgetsByUser()
       return response.data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to create budget')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể tạo ngân sách')
     }
   }
 )
@@ -58,7 +58,7 @@ export const updateBudgetAsync = createAsyncThunk(
       const response = await fetchBudgetsByUser()
       return response.data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to update budget')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể cập nhật ngân sách')
     }
   }
 )
@@ -70,7 +70,7 @@ export const fetchHistoricalExpendituresAsync = createAsyncThunk(
       const response = await getHistoricalExpenditures()
       return response.data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch historical expenditures')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể lấy lịch sử chi tiêu')
     }
   }
 )
@@ -82,7 +82,7 @@ export const fetchRemainingBudgetAsync = createAsyncThunk(
       const response = await getRemainingBudget(month)
       return response.data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch remaining budget')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể lấy ngân sách còn lại')
     }
   }
 )

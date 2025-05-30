@@ -10,19 +10,19 @@ interface HeroBannerProps {
 export const HeroBanner = ({ totalGoals, totalTarget, overallProgress }: HeroBannerProps) => {
   return (
     <div className={styles.heroBannerContainer}>
-      <h1 className={styles.gradientText}>Financial Goals</h1>
+      <h1 className={styles.gradientText}>Mục Tiêu Tài Chính</h1>
       <p className={styles.heroQuote}>
-        "The journey of a thousand miles begins with a single step" <span>- Lao Tzu</span>
+        "Hành trình ngàn dặm bắt đầu từ một bước chân" <span>- Lão Tử</span>
       </p>
       <div className={styles.heroStatsRow}>
         <div className={styles.heroStat}>
-          <FiTarget /> {totalGoals} Goals
+          <FiTarget /> {totalGoals} Mục tiêu
         </div>
         <div className={styles.heroStat}>
-          <FiDollarSign /> ${totalTarget.toLocaleString()}
+          <FiDollarSign /> {totalTarget.toLocaleString('vi-VN')}đ
         </div>
         <div className={styles.heroStat}>
-          <FiTrendingUp /> {overallProgress.toFixed(1)}% Progress
+          <FiTrendingUp /> {overallProgress.toFixed(1)}% Tiến độ
         </div>
       </div>
     </div>

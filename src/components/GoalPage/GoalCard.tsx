@@ -22,7 +22,7 @@ interface GoalCardProps {
 }
 
 const formatCurrency = (amount: number) => {
-  return '$' + amount.toLocaleString()
+  return amount.toLocaleString('vi-VN') + 'đ'
 }
 
 export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
@@ -56,19 +56,19 @@ export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
         <div className={styles.goalCardActions}>
           <span className={styles.statusBadge + ' ' + (isCompleted ? styles.completed : '')}>
             {isCompleted ? (
-              'Completed'
+              'Hoàn thành'
             ) : (
               <>
-                <MdBolt style={{ color: '#1976d2' }} /> Active
+                <MdBolt style={{ color: '#1976d2' }} /> Đang thực hiện
               </>
             )}
           </span>
           {!isCompleted && (
             <>
-              <button className={styles.iconBtn} onClick={onEdit} aria-label='Edit goal'>
+              <button className={styles.iconBtn} onClick={onEdit} aria-label='Chỉnh sửa mục tiêu'>
                 <FiEdit2 />
               </button>
-              <button className={styles.iconBtn} onClick={onDelete} aria-label='Delete goal'>
+              <button className={styles.iconBtn} onClick={onDelete} aria-label='Xóa mục tiêu'>
                 <FiTrash2 />
               </button>
             </>
@@ -132,19 +132,19 @@ export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
           {isCompleted ? (
             <>
               <div className={styles.goalCardCelebrationIcon}>🎉</div>
-              <div className={styles.goalCardCelebrationText}>Goal Achieved!</div>
+              <div className={styles.goalCardCelebrationText}>Đã đạt được mục tiêu!</div>
               <div className={styles.goalCardCelebrationValue}>{formatCurrency(goal.target)}</div>
               {daysToAchieve && (
                 <div className={styles.goalCardDaysToAchieve}>
                   <MdEmojiEvents />
-                  Achieved in {daysToAchieve} {daysToAchieve === 1 ? 'day' : 'days'}
+                  Hoàn thành trong {daysToAchieve} {daysToAchieve === 1 ? 'ngày' : 'ngày'}
                 </div>
               )}
             </>
           ) : (
             <>
               <div className={styles.goalCardProgressPercentBig}>{percent}%</div>
-              <div className={styles.goalCardProgressLabel}>Complete</div>
+              <div className={styles.goalCardProgressLabel}>Hoàn thành</div>
             </>
           )}
         </div>
@@ -157,8 +157,8 @@ export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
       {isCompleted && (
         <div className={styles.goalCardCompletionBadge}>
           <FiCalendar style={{ marginRight: 6, verticalAlign: 'middle' }} />
-          Completed on{' '}
-          {new Date(goal.due).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+          Hoàn thành vào{' '}
+          {new Date(goal.due).toLocaleDateString('vi-VN', { year: 'numeric', month: 'short', day: 'numeric' })}
         </div>
       )}
       {!isCompleted && (
@@ -166,24 +166,24 @@ export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
           <div className={styles.goalCardStatsTopRow}>
             <div className={styles.goalCardStatTopBox}>
               <div className={styles.goalCardStatTop}>
-                <div className={styles.goalCardStatLabel}>CURRENT</div>
+                <div className={styles.goalCardStatLabel}>HIỆN TẠI</div>
                 <div className={styles.goalCardStatValue}>{formatCurrency(goal.current)}</div>
               </div>
               <div className={styles.goalCardStatTop}>
-                <div className={styles.goalCardStatLabel}>TARGET</div>
+                <div className={styles.goalCardStatLabel}>MỤC TIÊU</div>
                 <div className={styles.goalCardStatValue}>{formatCurrency(goal.target)}</div>
               </div>
             </div>
           </div>
           <div className={styles.goalCardStatRemainingBox}>
-            <div className={styles.goalCardStatRemainingLabel}>REMAINING</div>
+            <div className={styles.goalCardStatRemainingLabel}>CÒN LẠI</div>
             <div className={styles.goalCardStatRemainingValue}>{formatCurrency(goal.remaining)}</div>
           </div>
         </>
       )}
       {isOverdue && !isCompleted && (
         <div className={styles.goalCardOverdue}>
-          <FiCalendar /> Overdue
+          <FiCalendar /> Quá hạn
         </div>
       )}
     </div>

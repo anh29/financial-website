@@ -22,7 +22,7 @@ export const useBudgets = () => {
     try {
       await dispatch(fetchBudgetsAsync()).unwrap()
     } catch (error) {
-      console.error('Failed to fetch budgets:', error)
+      console.error('Không thể lấy danh sách ngân sách:', error)
     }
   }, [dispatch])
 
@@ -31,7 +31,7 @@ export const useBudgets = () => {
       try {
         await dispatch(createBudgetAsync(budget)).unwrap()
       } catch (error) {
-        console.error('Failed to create budget:', error)
+        console.error('Không thể tạo ngân sách:', error)
       }
     },
     [dispatch]
@@ -42,7 +42,7 @@ export const useBudgets = () => {
       try {
         await dispatch(updateBudgetAsync(budget)).unwrap()
       } catch (error) {
-        console.error('Failed to update budget:', error)
+        console.error('Không thể cập nhật ngân sách:', error)
       }
     },
     [dispatch]
@@ -52,7 +52,7 @@ export const useBudgets = () => {
     try {
       await dispatch(fetchHistoricalExpendituresAsync()).unwrap()
     } catch (error) {
-      console.error('Failed to fetch historical expenditures:', error)
+      console.error('Không thể lấy lịch sử chi tiêu:', error)
     }
   }, [dispatch])
 
@@ -62,7 +62,7 @@ export const useBudgets = () => {
         await saveMonthlyBudget(monthlyBudget)
         await fetchBudgets()
       } catch (error) {
-        console.error('Failed to save monthly budget:', error)
+        console.error('Không thể lưu ngân sách hàng tháng:', error)
       }
     },
     [fetchBudgets]
@@ -74,7 +74,7 @@ export const useBudgets = () => {
         await saveMonthlyBudgetAllocation(allocation)
         await fetchBudgets()
       } catch (error) {
-        console.error('Failed to save monthly budget allocation:', error)
+        console.error('Không thể lưu phân bổ ngân sách hàng tháng:', error)
       }
     },
     [fetchBudgets]
@@ -85,7 +85,7 @@ export const useBudgets = () => {
       const { data } = await fetchMonthlyBudgetWithAllocations(month)
       return data
     } catch (error) {
-      console.error('Failed to fetch monthly budget allocations:', error)
+      console.error('Không thể lấy phân bổ ngân sách hàng tháng:', error)
       return {} as Budget
     }
   }, [])
@@ -95,7 +95,7 @@ export const useBudgets = () => {
       try {
         await dispatch(fetchRemainingBudgetAsync(month)).unwrap()
       } catch (error) {
-        console.error('Failed to get remaining budget:', error)
+        console.error('Không thể lấy ngân sách còn lại:', error)
       }
     },
     [dispatch]

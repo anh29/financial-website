@@ -18,8 +18,8 @@ interface TransactionTableProps {
 const groupByDate = (transactions: Transaction[]) => {
   return transactions.reduce((groups: Record<string, Transaction[]>, tx) => {
     const date = tx.date
-      ? new Date(tx.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
-      : new Date(tx.created_at || '').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+      ? new Date(tx.date).toLocaleDateString('vi-VN', { weekday: 'long', month: 'long', day: 'numeric' })
+      : new Date(tx.created_at || '').toLocaleDateString('vi-VN', { weekday: 'long', month: 'long', day: 'numeric' })
     if (!groups[date]) groups[date] = []
     groups[date].push(tx)
     return groups
@@ -102,7 +102,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
               <button
                 className={styles.expandBtn}
                 onClick={() => handleToggleGroup(date)}
-                aria-label={expanded ? 'Collapse group' : 'Expand group'}
+                aria-label={expanded ? 'Thu gọn nhóm' : 'Mở rộng nhóm'}
               >
                 <FontAwesomeIcon
                   icon={expanded ? faChevronDown : faChevronRight}
@@ -112,20 +112,20 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
               <div className={styles.groupDateWrapper}>
                 <div className={styles.groupDate}>{date}</div>
                 <div className={styles.groupCount}>
-                  <span className={styles.groupCountIcon}>👥</span> {summary.count} transactions
+                  <span className={styles.groupCountIcon}>👥</span> {summary.count} giao dịch
                 </div>
               </div>
               <div className={styles.groupIncome}>
-                +{summary.income.toLocaleString(undefined, { minimumFractionDigits: 2 })} VND
+                +{summary.income.toLocaleString('vi-VN', { minimumFractionDigits: 2 })} VND
               </div>
               <div className={styles.groupExpense}>
-                -{summary.expense.toLocaleString(undefined, { minimumFractionDigits: 2 })} VND
+                -{summary.expense.toLocaleString('vi-VN', { minimumFractionDigits: 2 })} VND
               </div>
               <div className={styles.groupNetAmount + ' ' + (summary.net < 0 ? styles.negative : styles.positive)}>
                 {summary.net < 0
-                  ? `-${Math.abs(summary.net).toLocaleString(undefined, { minimumFractionDigits: 2 })} VND`
-                  : `+${summary.net.toLocaleString(undefined, { minimumFractionDigits: 2 })} VND`}
-                <span className={styles.groupNetLabel}>Net amount</span>
+                  ? `-${Math.abs(summary.net).toLocaleString('vi-VN', { minimumFractionDigits: 2 })} VND`
+                  : `+${summary.net.toLocaleString('vi-VN', { minimumFractionDigits: 2 })} VND`}
+                <span className={styles.groupNetLabel}>Số dư</span>
               </div>
             </div>
             <div className={styles.transactionList + ' ' + (expanded ? styles.show : styles.hide)}>
@@ -146,13 +146,13 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                       )
                     })()}
                     <div className={styles.transactionMain}>
-                      <div className={styles.transactionTitle}>{transaction.description || 'Transaction'}</div>
+                      <div className={styles.transactionTitle}>{transaction.description || 'Giao dịch'}</div>
                       {transaction.is_amortized && transaction.amortized_days && transaction.date && (
                         <div className={styles.amortizedInfo}>
-                          Amortized: {format(new Date(transaction.date), 'MMM dd, yyyy')} -{' '}
+                          Phân bổ: {format(new Date(transaction.date), 'dd/MM/yyyy')} -{' '}
                           {format(
                             addDays(new Date(transaction.date), Number(transaction.amortized_days)),
-                            'MMM dd, yyyy'
+                            'dd/MM/yyyy'
                           )}
                         </div>
                       )}
@@ -166,7 +166,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                             </span>
                           )
                         })()}
-                        <span className={styles.transactionAccount}>{transaction.source || 'manual'}</span>
+                        <span className={styles.transactionAccount}>{transaction.source || 'thủ công'}</span>
                       </div>
                     </div>
                     <div
@@ -177,12 +177,12 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                       }
                     >
                       {transaction.type === 'income' ? '+' : '-'}
-                      {transaction.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} VND
+                      {transaction.amount.toLocaleString('vi-VN', { minimumFractionDigits: 2 })} VND
                     </div>
                     <button
                       className={styles.editButton}
                       onClick={() => handleEditClick(transaction)}
-                      aria-label='Edit transaction'
+                      aria-label='Chỉnh sửa giao dịch'
                     >
                       <FontAwesomeIcon icon={faPencilAlt} />
                     </button>

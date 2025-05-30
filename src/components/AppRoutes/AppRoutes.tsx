@@ -14,16 +14,8 @@ import ExpensesPage from '../../pages/ExpensesPage/ExpensesPage'
 import SettingsPage from '../../pages/SettingsPage/SettingsPage'
 import BudgetPage from '../../pages/BudgetPage/BudgetPage'
 import { CustomerLayout } from '../CustomerComponents/CustomerLayout/CustomerLayout'
-import ValueAnalysis from '../CustomerComponents/FeaturesSection/ValueAnalysis'
-import DailyTracking from '../CustomerComponents/FeaturesSection/DailyTracking'
-import DailyCost from '../CustomerComponents/FeaturesSection/DailyCost'
-import ExpenseScore from '../CustomerComponents/FeaturesSection/ExpenseScore'
-import SmartDecisions from '../CustomerComponents/FeaturesSection/SmartDecisions'
-import AIAlerts from '../CustomerComponents/FeaturesSection/AIAlerts'
-import EmotionTags from '../CustomerComponents/FeaturesSection/EmotionTags'
 import CustomerPage from '../../pages/CustomerPage/CustomerPage'
 import GoalPage from '../../pages/GoalPage/GoalPage'
-import FeaturesPage from '../CustomerComponents/FeaturesSection/FeaturesPage'
 import BlogPage from '../CustomerComponents/BlogSection/BlogPage'
 import SupportPage from '../CustomerComponents/SupportSection/SupportPage'
 
@@ -37,15 +29,6 @@ const AppRoutes: React.FC = () => (
         </CustomerLayout>
       }
     >
-      <Route path='features' element={<FeaturesPage />}>
-        <Route path='daily-tracking' element={<DailyTracking />} />
-        <Route path='daily-cost' element={<DailyCost />} />
-        <Route path='value-analysis' element={<ValueAnalysis />} />
-        <Route path='smart-decisions' element={<SmartDecisions />} />
-        <Route path='ai-alerts' element={<AIAlerts />} />
-        <Route path='expense-score' element={<ExpenseScore />} />
-        <Route path='emotion-tags' element={<EmotionTags />} />
-      </Route>
       <Route path='blog' element={<BlogPage />} />
       <Route path='support' element={<SupportPage />} />
     </Route>

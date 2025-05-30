@@ -41,7 +41,7 @@ const SignupPage = () => {
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
     } catch (error) {
-      setLogData({ message: `Error fetching Google user info: ${error}`, status: 'error' })
+      setLogData({ message: `Lỗi khi lấy thông tin người dùng Google: ${error}`, status: 'error' })
     } finally {
       setLoading(false)
     }
@@ -58,7 +58,7 @@ const SignupPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (formData.password !== formData.confirmPassword) {
-      setLogData({ message: 'Passwords do not match.', status: 'error' })
+      setLogData({ message: 'Mật khẩu không khớp.', status: 'error' })
       return
     }
     setLoading(true)
@@ -67,7 +67,7 @@ const SignupPage = () => {
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
     } catch {
-      setLogData({ message: 'An error occurred.', status: 'error' })
+      setLogData({ message: 'Đã xảy ra lỗi.', status: 'error' })
     } finally {
       setLoading(false)
     }
@@ -90,20 +90,20 @@ const SignupPage = () => {
             Finance<span>Hub</span>
           </p>
         </div>
-        <div className={styles.heading}>Create your account</div>
-        <div className={styles.subtitle}>Join us and take control of your finances</div>
+        <div className={styles.heading}>Tạo tài khoản của bạn</div>
+        <div className={styles.subtitle}>Tham gia cùng chúng tôi và kiểm soát tài chính của bạn</div>
         {logData && <div className={`${styles.feedback} ${styles[logData.status]}`}>{logData.message}</div>}
         <form onSubmit={handleSubmit} className={styles.form} autoComplete='on'>
           <div className={styles.inputWrapper}>
             <input
               id='username'
               type='text'
-              placeholder='Username'
+              placeholder='Tên đăng nhập'
               value={formData.username}
               onChange={handleInputChange}
               required
               autoComplete='username'
-              aria-label='Username'
+              aria-label='Tên đăng nhập'
             />
           </div>
           <div className={styles.inputWrapper}>
@@ -122,19 +122,19 @@ const SignupPage = () => {
             <input
               id='password'
               type={showPassword ? 'text' : 'password'}
-              placeholder='Password'
+              placeholder='Mật khẩu'
               value={formData.password}
               onChange={handleInputChange}
               required
               autoComplete='new-password'
-              aria-label='Password'
+              aria-label='Mật khẩu'
             />
             <button
               type='button'
               className={styles.passwordToggle}
               onClick={() => setShowPassword((v) => !v)}
               tabIndex={0}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -143,19 +143,19 @@ const SignupPage = () => {
             <input
               id='confirmPassword'
               type={showConfirmPassword ? 'text' : 'password'}
-              placeholder='Confirm Password'
+              placeholder='Xác nhận mật khẩu'
               value={formData.confirmPassword}
               onChange={handleInputChange}
               required
               autoComplete='new-password'
-              aria-label='Confirm Password'
+              aria-label='Xác nhận mật khẩu'
             />
             <button
               type='button'
               className={styles.passwordToggle}
               onClick={() => setShowConfirmPassword((v) => !v)}
               tabIndex={0}
-              aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+              aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
             >
               {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -163,20 +163,20 @@ const SignupPage = () => {
           <div className={styles.terms}>
             <input type='checkbox' id='terms' required checked={formData.terms} onChange={handleInputChange} />
             <label htmlFor='terms'>
-              By continuing, you agree to our <a href='/terms-of-service'>Terms of Service</a>.
+              Hãy đồng ý với <a href='/terms-of-service'>Điều khoản dịch vụ</a> của chúng tôi.
             </label>
           </div>
           <button type='submit' className={styles.signupButton} disabled={!isFormValid || loading}>
-            {loading ? <LoadingSpinner /> : 'Sign Up'}
+            {loading ? <LoadingSpinner /> : 'Đăng Ký'}
           </button>
         </form>
-        <div className={styles.divider}>or sign up with</div>
+        <div className={styles.divider}>hoặc đăng ký bằng</div>
         <button type='button' className={styles.googleButton} onClick={() => handleGoogleLogin()} disabled={loading}>
           <FaGoogle style={{ fontSize: '1.2rem' }} />
-          <span>Continue with Google</span>
+          <span>Tiếp tục với Google</span>
         </button>
         <div className={styles.switchLink}>
-          Already have an account? <a href='/signin'>Sign in here</a>
+          Đã có tài khoản? <a href='/signin'>Đăng nhập tại đây</a>
         </div>
       </div>
     </div>

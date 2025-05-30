@@ -29,7 +29,7 @@ export const fetchTransactionsAsync = createAsyncThunk(
       const { data } = await fetchTransactionsByUser()
       return data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch transactions')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể lấy danh sách giao dịch')
     }
   }
 )
@@ -41,7 +41,7 @@ export const createTransactionAsync = createAsyncThunk(
       const { data } = await fetchTransactionsByUser()
       return data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to create transaction')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể tạo giao dịch')
     }
   }
 )
@@ -53,7 +53,7 @@ export const updateTransactionAsync = createAsyncThunk(
       const { data } = await updateTransactionAPI(transaction)
       return data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to update transaction')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể cập nhật giao dịch')
     }
   }
 )
@@ -65,7 +65,7 @@ export const deleteTransactionAsync = createAsyncThunk(
       await deleteTransactionAPI(id)
       return id
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to delete transaction')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể xóa giao dịch')
     }
   }
 )
@@ -77,7 +77,7 @@ export const importTransactionsAsync = createAsyncThunk(
       const { data } = await importTransactions(newTransactions)
       return data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to import transactions')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể nhập giao dịch')
     }
   }
 )
@@ -89,7 +89,7 @@ export const getLatestTransactionsAsync = createAsyncThunk(
       const { data } = await getLatestTransactions()
       return data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch latest transactions')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể lấy giao dịch mới nhất')
     }
   }
 )
@@ -101,7 +101,7 @@ export const getExpensesTransactionsAsync = createAsyncThunk(
       const { data } = await getExpensesTransactions()
       return data
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Failed to get expenses transactions')
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể lấy giao dịch chi tiêu')
     }
   }
 )

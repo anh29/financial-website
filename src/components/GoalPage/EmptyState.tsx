@@ -12,8 +12,8 @@ export const EmptyState = ({ onAdd, type = 'default' }: EmptyStateProps) => {
       <div className={styles.emptyStateContainer}>
         <div className={styles.cancelledHappyState}>
           <FiSmile size={36} />
-          <h2>No cancelled goals!</h2>
-          <p>Keep up the great work! 🎉</p>
+          <h2>Không có mục tiêu nào bị hủy!</h2>
+          <p>Tiếp tục phát huy! 🎉</p>
         </div>
       </div>
     )
@@ -22,10 +22,10 @@ export const EmptyState = ({ onAdd, type = 'default' }: EmptyStateProps) => {
   return (
     <div className={styles.emptyStateContainer}>
       <div className={styles.emptyStateNoImg}>
-        <h2>No goals yet</h2>
-        <p>Start by adding your first financial goal!</p>
+        <h2>Chưa có mục tiêu nào</h2>
+        <p>Bắt đầu bằng cách thêm mục tiêu tài chính đầu tiên của bạn!</p>
         <button className={styles.addGoalBtn} onClick={onAdd}>
-          <FiPlus /> Add New Goal
+          <FiPlus /> Thêm mục tiêu mới
         </button>
       </div>
     </div>

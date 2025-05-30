@@ -8,18 +8,18 @@ const BudgetSuggestionsPage = () => {
     const incomeAmount = parseFloat(income)
     if (incomeAmount > 0) {
       const suggestedBudget = incomeAmount * 0.5
-      setSuggestion(`Suggested budget for expenses: $${suggestedBudget.toFixed(2)}`)
+      setSuggestion(`Ngân sách đề xuất cho chi tiêu: ${suggestedBudget.toLocaleString('vi-VN')} VND`)
     } else {
-      setSuggestion('Please enter a valid income amount.')
+      setSuggestion('Vui lòng nhập số tiền thu nhập hợp lệ.')
     }
   }
 
   return (
     <div>
-      <h1>Budget Suggestions</h1>
+      <h1>Đề Xuất Ngân Sách</h1>
       <div>
         <label>
-          Monthly Income:
+          Thu nhập hàng tháng:
           <input
             type="number"
             value={income}
@@ -27,7 +27,7 @@ const BudgetSuggestionsPage = () => {
             required
           />
         </label>
-        <button onClick={handleSuggestBudget}>Get Budget Suggestion</button>
+        <button onClick={handleSuggestBudget}>Nhận Đề Xuất Ngân Sách</button>
       </div>
       {suggestion && <p>{suggestion}</p>}
     </div>

@@ -7,47 +7,47 @@ import styles from './BlogPage.module.css'
 const blogPosts = [
   {
     id: 1,
-    title: '10 Essential Financial Habits for 2024',
-    excerpt: 'Discover the key financial habits that will help you achieve your money goals in the new year.',
-    category: 'Financial Tips',
+    title: '10 Thói Quen Tài Chính Cần Thiết Cho Năm 2024',
+    excerpt: 'Khám phá những thói quen tài chính quan trọng sẽ giúp bạn đạt được mục tiêu tiền bạc trong năm mới.',
+    category: 'Mẹo Tài Chính',
     author: 'Sarah Johnson',
-    date: 'March 15, 2024',
-    readTime: '5 min read',
+    date: '15 Tháng 3, 2024',
+    readTime: '5 phút đọc',
     image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 2,
-    title: 'Understanding Investment Strategies for Beginners',
-    excerpt: 'A comprehensive guide to help you start your investment journey with confidence.',
-    category: 'Investing',
+    title: 'Hiểu Về Chiến Lược Đầu Tư Cho Người Mới Bắt Đầu',
+    excerpt: 'Hướng dẫn toàn diện giúp bạn bắt đầu hành trình đầu tư với sự tự tin.',
+    category: 'Đầu Tư',
     author: 'Michael Chen',
-    date: 'March 12, 2024',
-    readTime: '8 min read',
+    date: '12 Tháng 3, 2024',
+    readTime: '8 phút đọc',
     image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 3,
-    title: 'How to Build an Emergency Fund',
-    excerpt: 'Learn the importance of having an emergency fund and how to build one effectively.',
-    category: 'Savings',
+    title: 'Cách Xây Dựng Quỹ Khẩn Cấp',
+    excerpt: 'Tìm hiểu tầm quan trọng của việc có quỹ khẩn cấp và cách xây dựng nó hiệu quả.',
+    category: 'Tiết Kiệm',
     author: 'Emily Rodriguez',
-    date: 'March 10, 2024',
-    readTime: '6 min read',
+    date: '10 Tháng 3, 2024',
+    readTime: '6 phút đọc',
     image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 4,
-    title: 'Smart Budgeting Techniques for Families',
-    excerpt: 'Practical budgeting strategies to help families manage their finances better.',
-    category: 'Budgeting',
+    title: 'Kỹ Thuật Lập Ngân Sách Thông Minh Cho Gia Đình',
+    excerpt: 'Chiến lược lập ngân sách thực tế giúp các gia đình quản lý tài chính tốt hơn.',
+    category: 'Ngân Sách',
     author: 'David Wilson',
-    date: 'March 8, 2024',
-    readTime: '7 min read',
+    date: '8 Tháng 3, 2024',
+    readTime: '7 phút đọc',
     image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
   }
 ]
 
-const categories = ['All Posts', 'Financial Tips', 'Investing', 'Savings', 'Budgeting', 'Retirement']
+const categories = ['Tất Cả Bài Viết', 'Mẹo Tài Chính', 'Đầu Tư', 'Tiết Kiệm', 'Ngân Sách', 'Hưu Trí']
 
 const BlogPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -65,8 +65,8 @@ const BlogPage: React.FC = () => {
     <div className={styles.blogPage}>
       {/* Hero Section */}
       <section className={styles.hero}>
-        <h1>Financial Insights & Tips</h1>
-        <p>Stay informed with the latest financial news, tips, and strategies</p>
+        <h1>Thông Tin & Mẹo Tài Chính</h1>
+        <p>Cập nhật tin tức, mẹo và chiến lược tài chính mới nhất</p>
       </section>
 
       {/* Search and Filter Section */}
@@ -75,7 +75,7 @@ const BlogPage: React.FC = () => {
           <FaSearch className={styles.searchIcon} />
           <input
             type='text'
-            placeholder='Search articles...'
+            placeholder='Tìm kiếm bài viết...'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -116,7 +116,7 @@ const BlogPage: React.FC = () => {
                 </span>
               </div>
               <Link to={`/customer/blog/${post.id}`} className={styles.readMore}>
-                Read More <FaArrowRight />
+                Đọc Thêm <FaArrowRight />
               </Link>
             </div>
           </article>
@@ -126,11 +126,11 @@ const BlogPage: React.FC = () => {
       {/* Newsletter Section */}
       <section className={styles.newsletter}>
         <div className={styles.newsletterContent}>
-          <h2>Stay Updated with Our Newsletter</h2>
-          <p>Get the latest financial tips and insights delivered to your inbox</p>
+          <h2>Đăng Ký Nhận Bản Tin</h2>
+          <p>Nhận các mẹo và thông tin tài chính mới nhất qua email</p>
           <form className={styles.newsletterForm}>
-            <input type='email' placeholder='Enter your email' />
-            <button type='submit'>Subscribe</button>
+            <input type='email' placeholder='Nhập email của bạn' />
+            <button type='submit'>Đăng Ký</button>
           </form>
         </div>
       </section>
