@@ -1,0 +1,240 @@
+.upcomingBillCard {
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(80, 112, 255, 0.07);
+  margin-bottom: 24px;
+  overflow: visible;
+  background: #fff;
+  border: 1.5px solid #e3e8f0;
+  transition: border 0.2s;
+}
+
+.upcomingBillCard.billCardOverdue {
+  border-color: #ff5c5c;
+}
+
+.upcomingBillCard.billCardPaid {
+  border-color: #2ecc71;
+}
+
+.upcomingBillCard.billCardUnpaid {
+  border-color: #e3e8f0;
+}
+
+.upcomingBillCard .billCardContent {
+  display: flex;
+  padding: 20px;
+  align-items: start;
+}
+
+.upcomingBillCard .billIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24px;
+  color: #fff;
+  font-size: 2rem;
+  box-shadow: 0 2px 8px rgba(80, 112, 255, 0.08);
+}
+
+.upcomingBillCard .billInfoSection {
+  flex: 1;
+  min-width: 0;
+}
+
+.upcomingBillCard .billTitleRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 0.5rem;
+}
+
+.upcomingBillCard .billTitle {
+  font-weight: 700;
+  font-size: 1.13rem;
+  color: #222;
+  margin-right: 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.upcomingBillCard .statusPaid {
+  background: #e6f9ed;
+  color: #2ecc71;
+  font-size: 0.98rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.13rem 0.9rem;
+  margin-left: 0.4rem;
+  margin-right: 0.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.upcomingBillCard .statusOverdue {
+  background: #ffeaea;
+  color: #ff5c5c;
+  font-size: 0.98rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.13rem 0.9rem;
+  margin-left: 0.4rem;
+  margin-right: 0.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.upcomingBillCard .statusUnpaid {
+  background: #eaf6ff;
+  color: #4f8cff;
+  font-size: 0.98rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.13rem 0.9rem;
+  margin-left: 0.4rem;
+  margin-right: 0.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.upcomingBillCard .categoryBadge {
+  background: #fff;
+  color: #222;
+  border: 1.5px solid #e3e8f0;
+  border-radius: 999px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  padding: 0.13rem 0.9rem;
+  margin-left: 0.4rem;
+  margin-right: 0.1rem;
+  display: inline-block;
+}
+
+.upcomingBillCard .billMetaRow {
+  display: flex;
+  gap: 18px;
+  color: #666;
+  font-size: 0.97em;
+  margin-bottom: 2px;
+}
+
+.upcomingBillCard .billMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.upcomingBillCard .progressLabel {
+  margin-top: 2rem;
+  font-size: 0.97em;
+  color: #666;
+  font-weight: 500;
+}
+
+.upcomingBillCard .progressBarRow {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+  gap: 10px;
+}
+
+.upcomingBillCard .progressBar {
+  flex: 1;
+  height: 5px;
+  background-color: #ececec;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.upcomingBillCard .progressBarFill {
+  height: 100%;
+  background-color: #222;
+  border-radius: 3px;
+}
+
+.upcomingBillCard .progressBarText {
+  margin-left: 8px;
+  font-size: 0.93em;
+  color: #666;
+  white-space: nowrap;
+}
+
+.upcomingBillCard .billRightSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: 32px;
+  min-width: 160px;
+  gap: 0.5rem;
+}
+
+.upcomingBillCard .billAmount {
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: #222;
+  margin-bottom: 2px;
+}
+
+.upcomingBillCard .billDueDate {
+  color: #888;
+  font-size: 1.01rem;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.upcomingBillCard .markPaidButton {
+  margin-top: 8px;
+  padding: 8px 22px;
+  background-color: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  font-size: 1.01rem;
+  box-shadow: 0 2px 8px rgba(46,204,113,0.08);
+  transition: background 0.18s;
+}
+
+.upcomingBillCard .markPaidButton:hover {
+  background: #27ae60;
+}
+
+.upcomingBillCard .moreButton {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.3em;
+  color: #b0b0b0;
+  padding: 0 6px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.upcomingBillCard .moreButton:hover {
+  background: #f5f5f5;
+}
+
+.upcomingBillCard .overdueWarningFull {
+  background-color: #ffeaea;
+  color: #ff5c5c;
+  padding: 13px 32px 13px 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.01rem;
+  font-weight: 500;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  margin-top: -2px;
+}

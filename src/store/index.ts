@@ -6,6 +6,7 @@ import budgetReducer from './slices/budgetSlice'
 import notificationReducer from './slices/notificationSlice'
 import themeReducer from './slices/themeSlice'
 import goalReducer from './slices/goalSlice'
+import upcomingReducer from './slices/upcomingSlice'
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ export const store = configureStore({
     budgets: budgetReducer,
     notifications: notificationReducer,
     theme: themeReducer,
-    goals: goalReducer
+    goals: goalReducer,
+    upcoming: upcomingReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

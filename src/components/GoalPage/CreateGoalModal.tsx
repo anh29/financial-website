@@ -167,7 +167,7 @@ const CreateGoalModal: React.FC<CreateGoalModalProps> = ({ isOpen, onClose, onSu
               <label htmlFor='category'>Danh mục</label>
               <select id='category' name='category' value={formData.category} onChange={handleChange} required>
                 {expenseCategories.map((category) => (
-                  <option key={category.key} value={category.key}>
+                  <option key={category.key} value={category.label}>
                     {category.label}
                   </option>
                 ))}

@@ -1,0 +1,85 @@
+.markAsPaidModalContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.markAsPaidModalContainer .modalContent {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(80,112,255,0.15);
+  padding: 2.2rem 2rem 1.7rem 2rem;
+  min-width: 340px;
+  max-width: 95vw;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.markAsPaidModalContainer .modalTitle {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #4f8cff;
+  margin-bottom: 1.1rem;
+  text-align: left;
+}
+
+.markAsPaidModalContainer .form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.markAsPaidModalContainer .formLabel {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+  gap: 0.3rem;
+}
+
+.markAsPaidModalContainer .actionsRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.markAsPaidModalContainer .submitButton {
+  background: linear-gradient(90deg, #7b5cff 0%, #4f8cff 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.markAsPaidModalContainer .cancelButton {
+  background: #f5f7fa;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.7rem 1.5rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}

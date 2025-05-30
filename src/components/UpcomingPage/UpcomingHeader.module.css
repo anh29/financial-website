@@ -1,0 +1,40 @@
+.upcomingHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0 0 2.2rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.upcomingHeader .headerIcon {
+  background: linear-gradient(135deg, #7b5cff 0%, #4f8cff 100%);
+  color: #fff;
+  font-size: 2.7rem;
+  border-radius: 16px;
+  padding: 1.2rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(123, 92, 255, 0.12);
+}
+.upcomingHeader .headerTitle {
+  font-size: 2.7rem;
+  font-weight: 800;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+.upcomingHeader .gradientText {
+  background: linear-gradient(90deg, #7b5cff 0%, #4f8cff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.upcomingHeader .headerDesc {
+  color: #6b7a99;
+  font-size: 1.18rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  font-weight: 500;
+}

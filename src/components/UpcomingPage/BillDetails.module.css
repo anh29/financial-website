@@ -1,0 +1,125 @@
+.billDetailsModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.billDetailsModal .modalContent {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.3s ease-in-out;
+}
+
+.billDetailsModal .modalContent h2 {
+  margin: 0 0 1.5rem;
+  color: #333;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.billDetailsModal .billInfo {
+  margin-bottom: 2rem;
+}
+
+.billDetailsModal .infoRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.billDetailsModal .infoRow:last-child {
+  border-bottom: none;
+}
+
+.billDetailsModal .infoRow span:first-child {
+  font-weight: 600;
+  color: #666;
+}
+
+.billDetailsModal .infoRow span:last-child {
+  color: #333;
+}
+
+.billDetailsModal .active {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.billDetailsModal .inactive {
+  color: #9E9E9E;
+  font-weight: 600;
+}
+
+.billDetailsModal .completed {
+  color: #2196F3;
+  font-weight: 600;
+}
+
+.billDetailsModal .paymentForm {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.billDetailsModal .payButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.billDetailsModal .payButton:hover {
+  background-color: #45a049;
+}
+
+.billDetailsModal .cancelButton {
+  background-color: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.billDetailsModal .cancelButton:hover {
+  background-color: #e0e0e0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

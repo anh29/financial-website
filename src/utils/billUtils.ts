@@ -1,3 +1,5 @@
+import { UpcomingBill } from '../types/upcoming'
+
 export interface Bill {
   date: {
     month: string
@@ -9,18 +11,23 @@ export interface Bill {
 }
 
 export interface GroupedBills {
-  [month: string]: Bill[]
+  [key: string]: UpcomingBill[]
 }
 
-export const groupBillsByMonth = (bills: Bill[]): GroupedBills => {
-  return bills.reduce((acc: GroupedBills, bill: Bill) => {
-    const { month } = bill.date
-    if (!acc[month]) acc[month] = []
-    acc[month].push(bill)
-    return acc
+export const groupBillsByMonth = (bills: UpcomingBill[]): GroupedBills => {
+  return bills.reduce((groups: GroupedBills, bill) => {
+    const date = new Date(bill.start_date)
+    const month = date.toLocaleString('default', { month: 'long' })
+
+    if (!groups[month]) {
+      groups[month] = []
+    }
+
+    groups[month].push(bill)
+    return groups
   }, {})
 }
 
-export const calculateTotalAmount = (bills: Bill[]): string => {
-  return bills.reduce((total, bill) => total + parseFloat(bill.amount.replace('$', '')), 0).toFixed(2)
+export const calculateTotalAmount = (bills: UpcomingBill[]): number => {
+  return bills.reduce((total, bill) => total + bill.amount, 0)
 }
