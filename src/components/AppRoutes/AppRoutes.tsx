@@ -12,7 +12,6 @@ import TransactionPage from '../../pages/TransactionPage/TransactionPage'
 import UpcomingPage from '../../pages/UpcomingPage/UpcomingPage'
 import ExpensesPage from '../../pages/ExpensesPage/ExpensesPage'
 import SettingsPage from '../../pages/SettingsPage/SettingsPage'
-import ReportsPage from '../../pages/ReportsPage/ReportsPage'
 import BudgetPage from '../../pages/BudgetPage/BudgetPage'
 import { CustomerLayout } from '../CustomerComponents/CustomerLayout/CustomerLayout'
 import ValueAnalysis from '../CustomerComponents/FeaturesSection/ValueAnalysis'
@@ -135,14 +134,6 @@ const AppRoutes: React.FC = () => (
       element={
         <PrivateRoute>
           <BudgetPage />
-        </PrivateRoute>
-      }
-    />
-    <Route
-      path='/reports'
-      element={
-        <PrivateRoute>
-          <ReportsPage />
         </PrivateRoute>
       }
     />
