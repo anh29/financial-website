@@ -10,9 +10,9 @@ const SettingsPage = () => {
         <h1 className={styles.title}>Cài đặt tài khoản</h1>
         <p className={styles.subtitle}>Quản lý thông tin cá nhân và bảo mật</p>
       </header>
-      <div className={styles.settingsGrid}>
+      <div className={`${styles.settingsGrid} settings-section`}>
         {/* Profile Card */}
-        <section className={styles.profileCard}>
+        <section className={`${styles.profileCard} profile-settings`}>
           <div className={styles.avatarSection}>
             {user && user.avatar ? (
               <img src={user.avatar} alt={user.username} className={styles.avatarImg} />
@@ -58,7 +58,7 @@ const SettingsPage = () => {
         </section>
 
         {/* Preferences Section */}
-        <section className={styles.preferencesCard}>
+        <section className={`${styles.preferencesCard} notification-settings`}>
           <h2>Tùy chọn</h2>
           <div className={styles.preferenceRow}>
             <span>Giao diện:</span>

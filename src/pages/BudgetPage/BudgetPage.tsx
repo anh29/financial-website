@@ -5,9 +5,12 @@ import SetupTab from '../../components/BudgetPage/SetupTab'
 import ExistingTab from '../../components/BudgetPage/ExistingTab'
 import HistoryTab from '../../components/BudgetPage/HistoryTab'
 import OverviewTab from '../../components/BudgetPage/OverviewTab'
+import AddBudgetModal from '../../components/BudgetPage/AddBudgetModal'
 import { useBudgets } from '../../hooks/features/useBudgets'
 import { Budget, BudgetAllocation } from '../../types/budgets'
 import { LoadingSpinner } from '../../components/common'
+import { createBudget } from '../../services/features/budgetService'
+import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
 
 const BudgetPage = () => {
   const {
@@ -31,11 +34,11 @@ const BudgetPage = () => {
 
   const [budgetAllocations, setBudgetAllocations] = useState<BudgetAllocation[]>([])
   const [monthlyBudget, setMonthlyBudget] = useState<number>(0)
+  const [showAddModal, setShowAddModal] = useState(false)
 
   useEffect(() => {
     const fetchAllocations = async () => {
       const monthlyBudget = await fetchMonthlyBudgetAllocations(month)
-
       setMonthlyBudget(monthlyBudget?.amount)
       setBudgetAllocations(monthlyBudget?.allocations)
     }
@@ -93,6 +96,15 @@ const BudgetPage = () => {
     setMonthlyBudget(value)
   }
 
+  const handleAddBudget = async (newBudgets: Budget[]) => {
+    try {
+      await createBudget(newBudgets)
+      await fetchBudgets() // Refresh the budgets list
+    } catch (error) {
+      console.error('Lỗi khi tạo ngân sách mới:', error)
+    }
+  }
+
   const formatCurrency = (value?: number) => (value ? value.toLocaleString('vi-VN') + 'đ' : '0đ')
 
   const mappedPastBudgets = pastBudgets.map((budget) => ({
@@ -101,36 +113,42 @@ const BudgetPage = () => {
   }))
 
   return (
-    <div className={styles.budgetPage}>
+    <div className={styles.budgetPage} data-tour='budget-page'>
       <h1 className={styles.budgetTitle}>💰 Quản lý Ngân sách</h1>
       {isLoading ? (
         <div className={styles.loadingContainer}>
           <LoadingSpinner />
         </div>
       ) : (
-        <>
+        <div className='budget-section'>
           <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
           {activeTab === 'setup' && (
-            <SetupTab
-              totalBudget={totalBudget}
-              totalAllocated={totalAllocated}
-              remaining={remaining}
-              remainingMonthlyBudget={remainingMonthlyBudget}
-              budgetAllocations={budgetAllocations}
-              suggestedCategories={['Ăn uống', 'Đi lại', 'Tiện ích', 'Giải trí', 'Sức khỏe', 'Giáo dục', 'Tiết kiệm']}
-              formatCurrency={formatCurrency}
-              handleMonthlyBudgetChange={handleMonthlyBudgetChange}
-              monthlyBudget={monthlyBudget}
-              savings={savings}
-              handleSavingsChange={setSavings}
-              handleSaveBudget={(newAllocation: BudgetAllocation[]) => handleSaveAllocationBudget(newAllocation)}
-              isBudgetSaved={isBudgetSaved}
-              remainingBudget={remainingBudget}
-            />
+            <div className='budget-progress'>
+              <SetupTab
+                totalBudget={totalBudget}
+                totalAllocated={totalAllocated}
+                remaining={remaining}
+                remainingMonthlyBudget={remainingMonthlyBudget}
+                budgetAllocations={budgetAllocations}
+                suggestedCategories={['Ăn uống', 'Đi lại', 'Tiện ích', 'Giải trí', 'Sức khỏe', 'Giáo dục', 'Tiết kiệm']}
+                formatCurrency={formatCurrency}
+                handleMonthlyBudgetChange={handleMonthlyBudgetChange}
+                monthlyBudget={monthlyBudget}
+                savings={savings}
+                handleSavingsChange={setSavings}
+                handleSaveBudget={(newAllocation: BudgetAllocation[]) => handleSaveAllocationBudget(newAllocation)}
+                isBudgetSaved={isBudgetSaved}
+                remainingBudget={remainingBudget}
+              />
+            </div>
           )}
 
-          {activeTab === 'existing' && <ExistingTab income={income} existingBudgets={existingBudgets} />}
+          {activeTab === 'existing' && (
+            <div className='budget-categories'>
+              <ExistingTab income={income} existingBudgets={existingBudgets} />
+            </div>
+          )}
 
           {activeTab === 'history' && (
             <HistoryTab
@@ -142,8 +160,12 @@ const BudgetPage = () => {
           )}
 
           {activeTab === 'overview' && <OverviewTab pastBudgets={mappedPastBudgets} />}
-        </>
+        </div>
       )}
+
+      <AddBudgetModal isOpen={showAddModal} onClose={() => setShowAddModal(false)} onSave={handleAddBudget} />
+
+      <FloatingActionButton onClick={() => setShowAddModal(true)} />
     </div>
   )
 }

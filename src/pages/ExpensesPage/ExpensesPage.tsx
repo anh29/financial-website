@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react'
 import styles from './ExpensesPage.module.css'
-import { faPlus, faChartLine, faList, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faChartLine, faList, faHome } from '@fortawesome/free-solid-svg-icons'
 import {
   Chart as ChartJS,
   ArcElement,
@@ -16,7 +16,6 @@ import { Tabs } from '../../components/common/Tabs/Tabs'
 import OverviewSummary from '../../components/ExpensesPage/OverviewSummary'
 import ExpensesTable from '../../components/ExpensesPage/ExpensesTable'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useNavigate } from 'react-router-dom'
 import AnalyticsDashboard from '../../components/ExpensesPage/AnalyticsDashboard'
 import { useExpenses } from '../../hooks/features/useExpenses'
@@ -303,9 +302,9 @@ const ExpensesPage: React.FC = () => {
       )
     }
   ]
-  console.log('expensesData', expensesData)
+
   return (
-    <div className={styles.expensesPage}>
+    <div className={styles.expensesPage} data-tour='expenses-page'>
       <div className={styles.header}>
         <h1>Chi tiêu</h1>
       </div>

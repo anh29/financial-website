@@ -6,6 +6,7 @@ import Sidebar from './components/Sidebar/Sidebar'
 import Header from './components/Header/Header'
 import AppRoutes from './components/AppRoutes/AppRoutes'
 import { LoadingSpinner } from './components/common'
+import { TourGuide } from './components/Tour/TourGuide'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -42,15 +43,17 @@ function App() {
   )
 
   return (
-    <div className='appContainer'>
-      {!isIndividualPage() && (
-        <>
-          {renderSidebarToggle()}
-          <Sidebar className={sidebarOpen ? 'open' : ''} />
-        </>
-      )}
-      {renderMainContent()}
-    </div>
+    <TourGuide>
+      <div className='appContainer'>
+        {!isIndividualPage() && (
+          <>
+            {renderSidebarToggle()}
+            <Sidebar className={sidebarOpen ? 'open' : ''} />
+          </>
+        )}
+        {renderMainContent()}
+      </div>
+    </TourGuide>
   )
 }
 

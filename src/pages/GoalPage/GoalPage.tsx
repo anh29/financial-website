@@ -86,33 +86,38 @@ const GoalPage = () => {
         />
       )}
 
-      <HeroBanner totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
-      <FloatingActionButton onClick={() => setIsCreateModalOpen(true)} />
-      <StatusTabs activeTab={activeTab} onTabChange={setActiveTab} />
-      <StatsRow totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
+      <div className="goals-section">
+        <HeroBanner totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
+        <StatusTabs activeTab={activeTab} onTabChange={setActiveTab} />
+        <StatsRow totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
 
-      {filteredGoals.length === 0 ? (
-        <EmptyState onAdd={() => {}} type={activeTab === 'cancelled' ? 'cancelled' : 'default'} />
-      ) : (
-        <div className={styles.goalsGrid}>
-          {filteredGoals.map((goal) => (
-            <GoalCard
-              key={goal.id}
-              goal={goal}
-              onEdit={() => handleEditGoal(goal.id)}
-              onDelete={() => handleDeleteGoal(goal.id)}
-            />
-          ))}
-        </div>
-      )}
+        {filteredGoals.length === 0 ? (
+          <EmptyState onAdd={() => {}} type={activeTab === 'cancelled' ? 'cancelled' : 'default'} />
+        ) : (
+          <div className={`${styles.goalsGrid} goal-progress`}>
+            {filteredGoals.map((goal) => (
+              <GoalCard
+                key={goal.id}
+                goal={goal}
+                onEdit={() => handleEditGoal(goal.id)}
+                onDelete={() => handleDeleteGoal(goal.id)}
+              />
+            ))}
+          </div>
+        )}
 
-      {activeTab === 'active' && filteredGoals.length > 0 && (
-        <div className={styles.addContributionCommonWrapper}>
-          <button className={styles.addContributionBtnCommon} onClick={() => navigate('/budget')}>
-            <FiPlus /> Thêm đóng góp
-          </button>
-        </div>
-      )}
+        {activeTab === 'active' && filteredGoals.length > 0 && (
+          <div className={styles.addContributionCommonWrapper}>
+            <button className={styles.addContributionBtnCommon} onClick={() => navigate('/budget')}>
+              <FiPlus /> Thêm đóng góp
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="goal-actions">
+        <FloatingActionButton onClick={() => setIsCreateModalOpen(true)} />
+      </div>
 
       <CreateGoalModal
         isOpen={isCreateModalOpen}

@@ -63,12 +63,6 @@
   text-align: center;
 }
 
-.setupTab .allocationRow {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
 .setupTab .percentInput {
   width: 60px;
 }

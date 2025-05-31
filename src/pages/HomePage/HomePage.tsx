@@ -13,8 +13,8 @@ const HomePage = () => {
   ]
 
   return (
-    <div className={styles.homePage}>
-      <section className={styles.welcomeSection}>
+    <div className={`${styles.homePage} quick-actions`}>
+      <section className={`${styles.welcomeSection} home-features`}>
         <h1>Chào mừng đến với Bảng Điều Khiển Tài Chính</h1>
         <p>Quản lý tài chính của bạn với các công cụ và thông tin chi tiết toàn diện</p>
       </section>
@@ -30,7 +30,7 @@ const HomePage = () => {
         ))}
       </section>
 
-      <section className={styles.recentTransactionsSection}>
+      <section className={`${styles.recentTransactionsSection} recent-transactions`}>
         <RecentTransaction />
       </section>
     </div>

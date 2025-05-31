@@ -93,20 +93,6 @@ input[type="number"]::placeholder {
   background-color: #f0f0f0;
 }
 
-.budgetPage .addButton {
-  padding: 10px 16px;
-  background-color: #9bddcc;
-  color: #585858;
-  font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.budgetPage .addButton:hover {
-  background-color: #00a374;
-}
 .budgetPage .chartRow {
   display: flex;
   gap: 2rem;

@@ -7,7 +7,7 @@ interface FloatingActionButtonProps {
 
 export const FloatingActionButton = ({ onClick }: FloatingActionButtonProps) => {
   return (
-    <div className={styles.fabContainer}>
+    <div className={`${styles.fabContainer} add-button`}>
       <button className={styles.fab} onClick={onClick}>
         <FiPlus />
       </button>

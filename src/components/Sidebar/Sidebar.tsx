@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   ]
 
   return (
-    <aside className={`${styles.sidebar} ${className}`}>
+    <aside className={`${styles.sidebar} ${className}`} data-tour='sidebar'>
       <div className={styles.brand}>
         <p>
           Finance<span>Hub</span>
@@ -37,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         <ul className={styles.menuList}>
           {menuItems.map((item) => (
             <li key={item.path} className={location.pathname === item.path ? styles.active : ''}>
-              <Link to={item.path} className={styles.menuLink}>
+              <Link to={item.path} className={styles.menuLink} data-tour={`menu-${item.path.slice(1)}`}>
                 <span className={styles.icon}>{item.icon}</span>
                 <span className={styles.label}>{item.label}</span>
               </Link>

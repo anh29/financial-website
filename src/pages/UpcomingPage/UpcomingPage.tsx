@@ -10,6 +10,7 @@ import SummaryCards from '../../components/UpcomingPage/SummaryCards'
 import UpcomingFiltersBar from '../../components/UpcomingPage/UpcomingFiltersBar'
 import AddBillModal from '../../components/UpcomingPage/AddBillModal'
 import MarkAsPaidModal from '../../components/UpcomingPage/MarkAsPaidModal'
+import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
 
 const getStatusBadge = (bill: UpcomingBill) => {
   if (bill.is_overdue)
@@ -96,45 +97,50 @@ const UpcomingPage = () => {
   }
 
   return (
-    <div className={styles.upcomingPage}>
-      {/* Header */}
-      <UpcomingHeader />
-      {/* Summary Cards */}
-      <SummaryCards
-        overdueCount={overdueCount}
-        dueSoonCount={dueSoonCount}
-        paidCount={paidCount}
-        totalDue={totalDue}
-        formatCurrency={formatCurrency}
-      />
-      {/* Search & Filters Bar */}
-      <UpcomingFiltersBar
-        search={search}
-        onSearchChange={setSearch}
-        statusFilter={statusFilter}
-        onStatusFilterChange={setStatusFilter}
-        categoryFilter={categoryFilter}
-        onCategoryFilterChange={setCategoryFilter}
-      />
+    <div className={styles.upcomingPage} data-tour='upcoming-section'>
+      <div className='upcoming-section'>
+        {/* Header */}
+        <UpcomingHeader />
+        {/* Summary Cards */}
+        <SummaryCards
+          overdueCount={overdueCount}
+          dueSoonCount={dueSoonCount}
+          paidCount={paidCount}
+          totalDue={totalDue}
+          formatCurrency={formatCurrency}
+        />
+        {/* Search & Filters Bar */}
+        <UpcomingFiltersBar
+          search={search}
+          onSearchChange={setSearch}
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
+          categoryFilter={categoryFilter}
+          onCategoryFilterChange={setCategoryFilter}
+        />
 
-      {/* Bill List */}
-      <div className={styles.billList}>
-        {filteredBills.map((bill) => (
-          <BillListItem
-            key={bill.bill_id}
-            bill={bill}
-            getStatusBadge={getStatusBadge}
-            getCategoryBadge={getCategoryBadge}
-            formatCurrency={formatCurrency}
-            onMarkAsPaid={handleMarkAsPaid}
-          />
-        ))}
+        {/* Bill List */}
+        <div className={styles.billList}>
+          {filteredBills.map((bill) => (
+            <BillListItem
+              key={bill.bill_id}
+              bill={bill}
+              getStatusBadge={getStatusBadge}
+              getCategoryBadge={getCategoryBadge}
+              formatCurrency={formatCurrency}
+              onMarkAsPaid={handleMarkAsPaid}
+            />
+          ))}
+        </div>
+
+        {/* Bill Details Modal */}
+        {selectedBill && <BillDetails selectedBill={selectedBill} handleCloseModal={() => setSelectedBill(null)} />}
+
+        <AddBillModal isOpen={showAddModal} onClose={() => setShowAddModal(false)} />
       </div>
 
-      {/* Bill Details Modal */}
-      {selectedBill && <BillDetails selectedBill={selectedBill} handleCloseModal={() => setSelectedBill(null)} />}
+      <FloatingActionButton onClick={() => setShowAddModal(true)} />
 
-      <AddBillModal isOpen={showAddModal} onClose={() => setShowAddModal(false)} />
       <MarkAsPaidModal
         isOpen={showMarkAsPaidModal && !!selectedMarkAsPaidBill}
         onClose={() => {
@@ -150,9 +156,6 @@ const UpcomingPage = () => {
           name: selectedMarkAsPaidBill?.title || ''
         }}
       />
-      <button className={styles.fab} onClick={() => setShowAddModal(true)}>
-        +
-      </button>
     </div>
   )
 }

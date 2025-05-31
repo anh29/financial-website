@@ -89,7 +89,7 @@ const SetupTab: React.FC<SetupTabProps> = ({
           <label className={styles.inputLabel}>🏷 Mô tả:</label>
           <input
             type='text'
-            value={item.description}
+            value={item.description || ''}
             onChange={(e) => isEditable && handleAllocationChange(index, 'description', e.target.value)}
             placeholder='Ví dụ: Ăn uống'
             className={styles.inputField}
@@ -101,7 +101,7 @@ const SetupTab: React.FC<SetupTabProps> = ({
           <label className={styles.inputLabel}>💵 Số tiền:</label>
           <input
             type='number'
-            value={item.amount || ''}
+            value={item.amount !== undefined ? item.amount : ''}
             onChange={(e) => {
               if (isEditable) {
                 const newAmount = Number(e.target.value)
@@ -125,7 +125,7 @@ const SetupTab: React.FC<SetupTabProps> = ({
           <label className={styles.inputLabel}>📊 Tỷ lệ ngân sách (%):</label>
           <input
             type='number'
-            value={percent || ''}
+            value={percent !== undefined ? percent : ''}
             onChange={(e) => isEditable && handleAllocationChange(index, 'percent', e.target.value)}
             placeholder='0'
             className={styles.inputField}

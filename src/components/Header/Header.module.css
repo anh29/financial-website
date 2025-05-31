@@ -62,16 +62,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 1.2rem;
 }
 
 .headerContainer .headerRight .userProfile img {
-  width: 45px;
+  width: 50px;
   height: 45px;
   border-radius: 50%;
 }
 
 .headerContainer .headerRight .avatarStyle {
-  width: 40px;
+  width: 50px;
   height: 40px;
   border-radius: 50%;
   background-color: var(--primary-color);

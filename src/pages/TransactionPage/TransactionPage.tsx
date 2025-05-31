@@ -20,7 +20,7 @@ const TransactionPage = () => {
   })
 
   useEffect(() => {
-    fetchTransactions() // Fetch transactions when the component mounts
+    fetchTransactions()
   }, [fetchTransactions])
 
   const handleTransactionUpdate = (transactions: Transaction[]) => {
@@ -33,7 +33,6 @@ const TransactionPage = () => {
 
   const handleFabClose = () => setShowFabModal(false)
 
-  // Filtering/search logic
   const getFilteredTransactions = () => {
     let txs = transactions
     if (filter.typeFilter !== 'all') {
@@ -60,29 +59,34 @@ const TransactionPage = () => {
         <p>Nhập, xem và quản lý các giao dịch tài chính của bạn một cách dễ dàng.</p>
       </header>
 
-      <div className={styles.controls}>
+      <div className={`${styles.controls} transaction-filters`}>
         <SearchFilter onFilterChange={setFilter} />
       </div>
 
-      {isLoading && <LoadingSpinner />}
-      {!isLoading && transactions.length === 0 && <p>Không tìm thấy giao dịch nào.</p>}
-      {!isLoading && transactions.length > 0 && (
-        <TransactionTable
-          transactions={getFilteredTransactions()}
-          updatedTransactions={updatedTransactions}
-          onTransactionUpdate={handleTransactionUpdate}
-          viewMode={filter.viewMode}
-        />
-      )}
-      <FloatingActionButton onClick={handleAddTransaction} />
-      {showFabModal && (
-        <div className={styles.floatingActionModalWrapper} onClick={handleFabClose}>
-          <div className={styles.floatingActionModalContent} onClick={(e) => e.stopPropagation()}>
-            <ImportButton onImport={handleImport} />
-            <OCRUpload onUpload={handleImport} />
+      <div className='transactions-section'>
+        {isLoading && <LoadingSpinner />}
+        {!isLoading && transactions.length === 0 && <p>Không tìm thấy giao dịch nào.</p>}
+        {!isLoading && transactions.length > 0 && (
+          <TransactionTable
+            transactions={getFilteredTransactions()}
+            updatedTransactions={updatedTransactions}
+            onTransactionUpdate={handleTransactionUpdate}
+            viewMode={filter.viewMode}
+          />
+        )}
+      </div>
+
+      <div className='transaction-actions'>
+        <FloatingActionButton onClick={handleAddTransaction} />
+        {showFabModal && (
+          <div className={styles.floatingActionModalWrapper} onClick={handleFabClose}>
+            <div className={styles.floatingActionModalContent} onClick={(e) => e.stopPropagation()}>
+              <ImportButton onImport={handleImport} />
+              <OCRUpload onUpload={handleImport} />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
