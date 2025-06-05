@@ -23,6 +23,7 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
   const { allocateSavingToGoalsHandler, allocateSavingToGoals, addGoalContributionsAsync } = useGoal()
   const dispatch = useDispatch<AppDispatch>()
   const [isAllocating, setIsAllocating] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [pendingAllocations, setPendingAllocations] = useState<AllocateSavingToGoals[]>([])
   const [editingGoalId, setEditingGoalId] = useState<string | null>(null)
@@ -53,6 +54,7 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
 
   const handleConfirmSave = async () => {
     try {
+      setIsSaving(true)
       const contributions = pendingAllocations.map((item) => ({
         ...item,
         month
@@ -67,6 +69,8 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
     } catch (error) {
       console.error('Failed to save goal contributions:', error)
       setLog({ message: 'Có lỗi khi lưu phân bổ mục tiêu!', status: 'error' })
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -171,6 +175,7 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
         onCancelModal={handleCancelModal}
         onConfirmSave={handleConfirmSave}
         onEditErrorClose={() => setEditError(null)}
+        isSaving={isSaving}
       />
     </div>
   )

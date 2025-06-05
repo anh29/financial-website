@@ -20,6 +20,7 @@ interface RemainingBudgetAllocationModalProps {
   onCancelModal: () => void
   onConfirmSave: () => void
   onEditErrorClose: () => void
+  isSaving?: boolean
 }
 
 const RemainingBudgetAllocationModal: React.FC<RemainingBudgetAllocationModalProps> = ({
@@ -38,7 +39,8 @@ const RemainingBudgetAllocationModal: React.FC<RemainingBudgetAllocationModalPro
   onEditValueChange,
   onCancelModal,
   onConfirmSave,
-  onEditErrorClose
+  onEditErrorClose,
+  isSaving = false
 }) => {
   if (!showModal) return null
 
@@ -126,11 +128,21 @@ const RemainingBudgetAllocationModal: React.FC<RemainingBudgetAllocationModalPro
           })}
         </div>
         <div className={modalStyles.modalActions}>
-          <button className={modalStyles.cancelButton} onClick={onCancelModal}>
+          <button className={modalStyles.cancelButton} onClick={onCancelModal} disabled={isSaving}>
             Huỷ
           </button>
-          <button className={modalStyles.confirmButton} onClick={onConfirmSave}>
-            <span>✔</span> Xác nhận
+          <button
+            className={`${modalStyles.confirmButton} ${isSaving ? modalStyles.saving : ''}`}
+            onClick={onConfirmSave}
+            disabled={isSaving}
+          >
+            {isSaving ? (
+              '⏳ Đang lưu...'
+            ) : (
+              <>
+                <span>✔</span> Xác nhận
+              </>
+            )}
           </button>
         </div>
       </div>

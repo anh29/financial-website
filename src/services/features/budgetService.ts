@@ -1,4 +1,4 @@
-import { Budget, BudgetAllocation, HistoryBudgets, RemainingBudget } from '../../types/budgets'
+import { Budget, BudgetAllocation, HistoryBudgets, MonthlyBudget, RemainingBudget } from '../../types/budgets'
 import { SERVER_URL } from '../../utils/constants'
 import { getUser } from '../../utils/userUtils'
 
@@ -38,8 +38,8 @@ export const updateBudget = async (budget: Budget): Promise<void> => {
   await handleResponse(response)
 }
 
-export const createMonthlyBudget = async (budget: Budget[]): Promise<void> => {
-  const body = budget.map((item) => ({
+export const createMonthlyBudget = async (monthlyBudget: Omit<MonthlyBudget, 'id'>[]): Promise<void> => {
+  const body = monthlyBudget.map((item) => ({
     userId: getUser().id,
     ...item
   }))

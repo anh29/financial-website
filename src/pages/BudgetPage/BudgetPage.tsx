@@ -86,7 +86,7 @@ const BudgetPage = () => {
       await saveMonthlyBudgetAllocationHandler(payload)
 
       setIsBudgetSaved(true)
-      setBudgetAllocations((prev) => [...prev, ...newAllocation])
+      setBudgetAllocations((prev) => [...(prev || []), ...newAllocation])
     } catch (error) {
       console.error('Lỗi khi lưu phân bổ mới:', error)
     }

@@ -4,6 +4,7 @@ import styles from './SetupTab.module.css'
 import RemainingBudgetAllocation from './RemainingBudgetAllocation'
 import Confetti from 'react-confetti'
 import Log from '../common/Log/Log'
+import { createMonthlyBudget } from '../../services/features/budgetService'
 
 interface SetupTabProps {
   totalBudget: number
@@ -41,6 +42,7 @@ const SetupTab: React.FC<SetupTabProps> = ({
   const [showCategoryManagement, setShowCategoryManagement] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
   const [log, setLog] = useState<{ message: string; status: 'success' | 'error' } | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     if (remainingBudget && remainingBudget.remainingBudget <= 0) {
@@ -50,6 +52,21 @@ const SetupTab: React.FC<SetupTabProps> = ({
       return () => clearTimeout(timer)
     }
   }, [remainingBudget])
+
+  const handleSaveMonthlyBudget = async () => {
+    try {
+      const currentMonth = new Date().toISOString().slice(0, 7)
+      await createMonthlyBudget([
+        {
+          month: currentMonth,
+          amount: monthlyBudget
+        }
+      ])
+      setLog({ message: 'Đã lưu ngân sách tháng thành công!', status: 'success' })
+    } catch {
+      setLog({ message: 'Không thể lưu ngân sách tháng!', status: 'error' })
+    }
+  }
 
   const handleAdd = (description?: string) => {
     const newAllocation: BudgetAllocation = {
@@ -74,9 +91,16 @@ const SetupTab: React.FC<SetupTabProps> = ({
     setAllocations(updated)
   }
 
-  const handleSave = () => {
-    handleSaveBudget(allocations)
-    setAllocations([])
+  const handleSave = async () => {
+    try {
+      setIsSaving(true)
+      await handleSaveBudget(allocations)
+      setAllocations([])
+    } catch (error) {
+      console.error('Error saving budget:', error)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const renderAllocationCard = (item: BudgetAllocation, index: number, isEditable: boolean) => {
@@ -173,13 +197,18 @@ const SetupTab: React.FC<SetupTabProps> = ({
             <label className={styles.label} htmlFor='monthlyBudgetInput'>
               Ngân sách tháng:
             </label>
-            <input
-              id='monthlyBudgetInput'
-              type='number'
-              className={styles.totalInput}
-              value={monthlyBudget}
-              onChange={(e) => handleMonthlyBudgetChange(Number(e.target.value))}
-            />
+            <div className={styles.inputWithIcon}>
+              <input
+                id='monthlyBudgetInput'
+                type='number'
+                className={styles.totalInput}
+                value={monthlyBudget}
+                onChange={(e) => handleMonthlyBudgetChange(Number(e.target.value))}
+              />
+              <button className={styles.saveIconButton} onClick={handleSaveMonthlyBudget} title='Lưu ngân sách tháng'>
+                💾
+              </button>
+            </div>
           </div>
         </div>
         <div className={styles.progressGroup}>
@@ -257,8 +286,12 @@ const SetupTab: React.FC<SetupTabProps> = ({
               <button className={styles.addButton} onClick={() => handleAdd()}>
                 + Thêm danh mục
               </button>
-              <button className={styles.saveButton} onClick={handleSave}>
-                💾 Lưu ngân sách
+              <button 
+                className={`${styles.saveButton} ${isSaving ? styles.saving : ''}`} 
+                onClick={handleSave}
+                disabled={isSaving}
+              >
+                {isSaving ? '⏳ Đang lưu...' : '💾 Lưu ngân sách'}
               </button>
             </div>
             {isBudgetSaved && <p className={styles.saveConfirmation}>✅ Ngân sách đã được lưu thành công!</p>}

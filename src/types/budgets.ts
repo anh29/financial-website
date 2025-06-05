@@ -6,6 +6,12 @@ export interface Budget {
   [key: string]: string | number | undefined | BudgetAllocation[]
 }
 
+export interface MonthlyBudget {
+  id: string
+  amount: number
+  month: string
+}
+
 export interface RemainingBudget {
   remainingBudget: number
   totalSpent: number
