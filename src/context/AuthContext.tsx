@@ -24,7 +24,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (storedUser && storedIsAuth === 'true') {
         const parsedUser = JSON.parse(storedUser)
         // Validate that the parsed user has required fields
-        if (parsedUser && parsedUser.id && parsedUser.email && parsedUser.name) {
+        if (parsedUser && parsedUser.id && parsedUser.email && (parsedUser.name || parsedUser.username)) {
           setUser(parsedUser)
         } else {
           // If user data is invalid, clear storage
@@ -44,9 +44,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = (userData: User) => {
     try {
-      console.log('userData', userData)
       // Validate user data before saving
-      if (!userData || !userData.id || !userData.username) {
+      if (!userData || !userData.id || !userData.email) {
         throw new Error('Invalid user data')
       }
 
@@ -80,7 +79,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       const parsedUser = JSON.parse(storedUser)
-      return !!(parsedUser && parsedUser.id && parsedUser.email && parsedUser.name)
+      return !!(parsedUser && parsedUser.id && parsedUser.email && (parsedUser.name || parsedUser.username))
     } catch {
       return false
     }
