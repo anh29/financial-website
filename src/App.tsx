@@ -1,59 +1,37 @@
-import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useAuth } from './hooks/useAuth'
-import './App.css'
-import Sidebar from './components/Sidebar/Sidebar'
-import Header from './components/Header/Header'
-import AppRoutes from './components/AppRoutes/AppRoutes'
-import { LoadingSpinner } from './components/common'
+import { Sidebar } from './components/Sidebar/Sidebar'
+import { Header } from './components/Header/Header'
+import { LanguageProvider } from './context/LanguageContext'
 import { TourGuide } from './components/Tour/TourGuide'
+import AppRoutes from './components/AppRoutes/AppRoutes'
+import { ErrorBoundary } from './components/common/ErrorBoundary/ErrorBoundary'
+import './App.css'
+import { useLocation } from 'react-router-dom'
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
-  const { isLoading } = useAuth()
-
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-
-  const isIndividualPage = () =>
-    ['/signin', '/signup'].includes(location.pathname) || location.pathname.startsWith('/customer')
-
-  const renderSidebarToggle = () => (
-    <button className='sidebar-toggle' onClick={toggleSidebar} aria-label='Toggle sidebar'>
-      ☰
-    </button>
-  )
-
-  const renderMainContent = () => (
-    <div className={`main-content ${isIndividualPage() ? 'full-screen' : ''}`}>
-      {!isIndividualPage() && <Header />}
-      <div
-        className={`${isIndividualPage() ? 'individual-page' : 'content scroll'}`}
-        onClick={() => setSidebarOpen(false)}
-      >
-        {isLoading ? (
-          <div className='loading-container'>
-            <LoadingSpinner />
-          </div>
-        ) : (
-          <AppRoutes />
-        )}
-      </div>
-    </div>
-  )
+  const isCustomerPage = location.pathname.startsWith('/customer')
+  const isAuthPage = ['/signin', '/signup'].includes(location.pathname)
 
   return (
-    <TourGuide>
-      <div className='appContainer'>
-        {!isIndividualPage() && (
-          <>
-            {renderSidebarToggle()}
-            <Sidebar className={sidebarOpen ? 'open' : ''} />
-          </>
-        )}
-        {renderMainContent()}
-      </div>
-    </TourGuide>
+    <LanguageProvider>
+      <ErrorBoundary>
+        <TourGuide>
+          <div className='appContainer'>
+            {!isCustomerPage && !isAuthPage && (
+              <>
+                <Sidebar />
+                <Header title='dashboard' />
+              </>
+            )}
+            <div className='main'>
+              <main className='content'>
+                <AppRoutes />
+              </main>
+            </div>
+          </div>
+        </TourGuide>
+      </ErrorBoundary>
+    </LanguageProvider>
   )
 }
 

@@ -7,9 +7,11 @@ import { useAuth } from '../../context/AuthContext'
 import { LoadingSpinner } from '../../components/common'
 import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa'
 import { User } from '../../types'
+import { useNavigate } from 'react-router-dom'
 
-const SignupPage = () => {
+const SignUpPage = () => {
   const { login } = useAuth()
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({ username: '', email: '', password: '', confirmPassword: '', terms: false })
   const [loading, setLoading] = useState(false)
   const [logData, setLogData] = useState<{ message: string; status: 'success' | 'error' | 'warning' | 'info' } | null>(
@@ -40,7 +42,7 @@ const SignupPage = () => {
         via_google: true
       })
       const userData: User = {
-        id: response.data.data.id,
+        id: response.data.data[0].id,
         email: email,
         name: name,
         username: name,
@@ -48,9 +50,10 @@ const SignupPage = () => {
         email_verified: email_verified,
         via_google: true
       }
-      setLogData({ message: response.data.message, status: 'success' })
+      setLogData({ message: 'Đăng ký thành công', status: 'success' })
 
       login(userData)
+      navigate('/')
     } catch (error) {
       setLogData({ message: `Lỗi khi lấy thông tin người dùng Google: ${error}`, status: 'error' })
     } finally {
@@ -75,10 +78,9 @@ const SignupPage = () => {
     setLoading(true)
     try {
       const response = await axios.post(SERVER_ENDPOINT.AUTH.CREATE_USER, formData)
-      setLogData({ message: response.data.message, status: 'success' })
-
+      setLogData({ message: 'Đăng ký thành công', status: 'success' })
       const userData: User = {
-        id: response.data.data.id,
+        id: response.data.data[0].id,
         email: formData.email,
         name: formData.username,
         username: formData.username,
@@ -87,10 +89,11 @@ const SignupPage = () => {
         via_google: false
       }
 
-      setLogData({ message: response.data.message, status: 'success' })
+      setLogData({ message: 'Đăng ký thành công', status: 'success' })
       login(userData)
+      navigate('/')
     } catch {
-      setLogData({ message: 'Đã xảy ra lỗi.', status: 'error' })
+      setLogData({ message: 'Email đã tồn tại', status: 'error' })
     } finally {
       setLoading(false)
     }
@@ -206,4 +209,4 @@ const SignupPage = () => {
   )
 }
 
-export default SignupPage
+export default SignUpPage

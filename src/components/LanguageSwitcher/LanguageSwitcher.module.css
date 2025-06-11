@@ -1,0 +1,17 @@
+.languageButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.languageButton:hover {
+  transform: scale(1.1);
+}
+
+.languageButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+} 

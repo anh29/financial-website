@@ -2,6 +2,7 @@
 .upcomingPage {
   background: linear-gradient(180deg, #f7faff 0%, #f2f6fc 100%);
   padding: 3rem;
+  margin: 4rem 0 0 250px;
 }
 
 /** BILL LIST **/

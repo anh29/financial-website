@@ -153,3 +153,48 @@
     opacity: 1;
   }
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #2196f3;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.small {
+  width: 20px;
+  height: 20px;
+}
+
+.medium {
+  width: 30px;
+  height: 30px;
+}
+
+.large {
+  width: 40px;
+  height: 40px;
+}
+
+.text {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

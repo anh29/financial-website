@@ -6,6 +6,7 @@ import { Transaction } from '../../types/transaction'
 import { getCategoryInfo, categoryColors } from '../../utils/categoryUtils'
 import { faChevronRight, faChevronDown, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 import { format, addDays } from 'date-fns'
+import { useLanguage } from '../../context/LanguageContext'
 
 interface TransactionTableProps {
   transactions: Transaction[]
@@ -40,6 +41,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   updatedTransactions.forEach((tx) => transactionMap.set(tx.id, tx)) // updated takes precedence
   const totalTransactions = Array.from(transactionMap.values())
   const grouped = groupByDate(totalTransactions)
+  const { t } = useLanguage()
 
   // Ensure all groups are collapsed initially
   React.useEffect(() => {
@@ -102,7 +104,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
               <button
                 className={styles.expandBtn}
                 onClick={() => handleToggleGroup(date)}
-                aria-label={expanded ? 'Thu gọn nhóm' : 'Mở rộng nhóm'}
+                aria-label={expanded ? t('transaction', 'collapseGroup') : t('transaction', 'expandGroup')}
               >
                 <FontAwesomeIcon
                   icon={expanded ? faChevronDown : faChevronRight}
@@ -112,7 +114,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
               <div className={styles.groupDateWrapper}>
                 <div className={styles.groupDate}>{date}</div>
                 <div className={styles.groupCount}>
-                  <span className={styles.groupCountIcon}>👥</span> {summary.count} giao dịch
+                  <span className={styles.groupCountIcon}>👥</span> {summary.count} {t('transaction', 'transactions')}
                 </div>
               </div>
               <div className={styles.groupIncome}>
@@ -125,7 +127,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                 {summary.net < 0
                   ? `-${Math.abs(summary.net).toLocaleString('vi-VN', { minimumFractionDigits: 2 })} VND`
                   : `+${summary.net.toLocaleString('vi-VN', { minimumFractionDigits: 2 })} VND`}
-                <span className={styles.groupNetLabel}>Số dư</span>
+                <span className={styles.groupNetLabel}>{t('transaction', 'balance')}</span>
               </div>
             </div>
             <div className={styles.transactionList + ' ' + (expanded ? styles.show : styles.hide)}>
@@ -146,10 +148,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                       )
                     })()}
                     <div className={styles.transactionMain}>
-                      <div className={styles.transactionTitle}>{transaction.description || 'Giao dịch'}</div>
+                      <div className={styles.transactionTitle}>{transaction.description || t('transaction', 'transaction')}</div>
                       {transaction.is_amortized && transaction.amortized_days && transaction.date && (
                         <div className={styles.amortizedInfo}>
-                          Phân bổ: {format(new Date(transaction.date), 'dd/MM/yyyy')} -{' '}
+                          {t('transaction', 'amortized')} {format(new Date(transaction.date), 'dd/MM/yyyy')} -{' '}
                           {format(
                             addDays(new Date(transaction.date), Number(transaction.amortized_days)),
                             'dd/MM/yyyy'
@@ -166,7 +168,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                             </span>
                           )
                         })()}
-                        <span className={styles.transactionAccount}>{transaction.source || 'thủ công'}</span>
+                        <span className={styles.transactionAccount}>{transaction.source || t('transaction', 'manual')}</span>
                       </div>
                     </div>
                     <div
@@ -182,7 +184,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                     <button
                       className={styles.editButton}
                       onClick={() => handleEditClick(transaction)}
-                      aria-label='Chỉnh sửa giao dịch'
+                      aria-label={t('transaction', 'editTransaction')}
                     >
                       <FontAwesomeIcon icon={faPencilAlt} />
                     </button>

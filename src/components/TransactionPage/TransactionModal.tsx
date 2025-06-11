@@ -3,6 +3,7 @@ import styles from './TransactionModal.module.css'
 import { expenseCategories, incomeCategories } from '../../utils/categoryUtils'
 import { Transaction } from '../../types/transaction'
 import { classifyTransaction } from '../../services/features/transactionService'
+import { useLanguage } from '../../context/LanguageContext'
 
 const TransactionModal = ({
   onClose,
@@ -19,6 +20,7 @@ const TransactionModal = ({
   const descriptionDebounceRef = useRef<NodeJS.Timeout | null>(null)
   const hasPredicted = useRef<Record<number, boolean>>({})
   const modalRef = useRef<HTMLDivElement>(null)
+  const { t } = useLanguage()
 
   useEffect(() => {
     setTransactions(initialTransactions)
@@ -135,8 +137,8 @@ const TransactionModal = ({
     <div className={styles.transactionModal}>
       <div className={styles.modalContent} ref={modalRef}>
         <div className={styles.modalHeader}>
-          <h2>Xem Lại Giao Dịch</h2>
-          <button className={styles.closeButton} onClick={onClose} aria-label='Close'>
+          <h2>{t('transaction', 'transaction_modal_title')}</h2>
+          <button className={styles.closeButton} onClick={onClose} aria-label={t('common', 'close')}>
             &times;
           </button>
         </div>
@@ -151,12 +153,12 @@ const TransactionModal = ({
           <table className={styles.transactionTable}>
             <thead>
               <tr>
-                <th>Ngày</th>
-                <th>Mô Tả</th>
-                <th>Loại</th>
-                <th>Danh Mục</th>
-                <th>Số Tiền</th>
-                <th>Thao Tác</th>
+                <th>{t('transaction', 'date')}</th>
+                <th>{t('transaction', 'description')}</th>
+                <th>{t('transaction', 'type')}</th>
+                <th>{t('transaction', 'category')}</th>
+                <th>{t('transaction', 'amount')}</th>
+                <th>{t('transaction', 'actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -168,7 +170,7 @@ const TransactionModal = ({
                       value={transaction.date}
                       onChange={(e) => handleInputChange(index, 'date', e)}
                       required
-                      aria-label='Transaction date'
+                      aria-label={t('transaction', 'transaction_date')}
                     />
                   </td>
                   <td>
@@ -176,32 +178,32 @@ const TransactionModal = ({
                       type='text'
                       value={transaction.description}
                       onChange={(e) => handleInputChange(index, 'description', e)}
-                      placeholder='Nhập mô tả'
+                      placeholder={t('transaction', 'enter_description')}
                       required
-                      aria-label='Transaction description'
+                      aria-label={t('transaction', 'transaction_description')}
                     />
                   </td>
                   <td>
                     <select
                       value={transaction.type}
                       onChange={(e) => handleInputChange(index, 'type', e)}
-                      aria-label='Transaction type'
+                      aria-label={t('transaction', 'transaction_type')}
                     >
-                      <option value='expense'>Chi Tiêu</option>
-                      <option value='income'>Thu Nhập</option>
+                      <option value='expense'>{t('transaction', 'expense')}</option>
+                      <option value='income'>{t('transaction', 'income')}</option>
                     </select>
                   </td>
                   <td>
                     {transaction.isClassifying ? (
                       <div className={styles.loadingSpinner}>
                         <span className={styles.spinner}></span>
-                        Đang phân loại...
+                        {t('transaction', 'classifying')}...
                       </div>
                     ) : (
                       <select
                         value={transaction.category}
                         onChange={(e) => handleInputChange(index, 'category', e)}
-                        aria-label='Transaction category'
+                        aria-label={t('transaction', 'transaction_category')}
                       >
                         {(transaction.type === 'expense' ? expenseCategories : incomeCategories).map((category) => (
                           <option key={category.key} value={category.key}>
@@ -212,7 +214,7 @@ const TransactionModal = ({
                     )}
                     {transaction.classificationError && (
                       <div className={styles.errorText} role='alert'>
-                        ⚠ Phân loại thất bại
+                        ⚠ {t('transaction', 'classification_error')}
                       </div>
                     )}
                   </td>
@@ -224,7 +226,7 @@ const TransactionModal = ({
                       min='0'
                       step='0.01'
                       required
-                      aria-label='Transaction amount'
+                      aria-label={t('transaction', 'transaction_amount')}
                       className={transaction.type === 'expense' ? styles.expenseInput : styles.incomeInput}
                     />
                   </td>
@@ -232,9 +234,9 @@ const TransactionModal = ({
                     <button
                       className={styles.deleteButton}
                       onClick={() => handleDeleteTransaction(index)}
-                      aria-label='Delete transaction'
+                      aria-label={t('transaction', 'delete_transaction')}
                     >
-                      Xóa
+                      {t('transaction', 'delete')}
                     </button>
                   </td>
                 </tr>
@@ -244,16 +246,16 @@ const TransactionModal = ({
         </div>
 
         <div className={styles.modalFooter}>
-          <button className={styles.addButton} onClick={handleAddTransaction} aria-label='Add new transaction'>
+          <button className={styles.addButton} onClick={handleAddTransaction} aria-label={t('transaction', 'add_new_transaction')}>
             +
           </button>
           <button
             className={styles.saveButton}
             onClick={handleSaveAllTransactions}
             disabled={isSaving}
-            aria-label='Save all transactions'
+            aria-label={t('transaction', 'save_all_transactions')}
           >
-            {isSaving ? 'Đang Lưu...' : 'Lưu Tất Cả'}
+            {isSaving ? t('transaction', 'saving') : t('transaction', 'save_all')}
           </button>
         </div>
       </div>

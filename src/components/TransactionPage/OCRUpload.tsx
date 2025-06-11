@@ -4,11 +4,14 @@ import TransactionModal from './TransactionModal'
 import { Transaction } from '../../types/transaction'
 import { expenseCategories } from '../../utils/categoryUtils'
 import { classifyTransaction } from '../../services/features/transactionService'
+import { useLanguage } from '../../context/LanguageContext'
+import { LoadingSpinner } from '../common'
 
 const OCRUpload = ({ onUpload }: { onUpload: (transactions: Transaction[]) => void }) => {
   const [ocrTransactions, setOcrTransactions] = useState<Transaction[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const { t } = useLanguage()
 
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
@@ -90,7 +93,7 @@ const OCRUpload = ({ onUpload }: { onUpload: (transactions: Transaction[]) => vo
   return (
     <div className={styles.ocrUploadContainer}>
       <label htmlFor='ocr-upload' className={styles.uploadLabel}>
-        Tải Hóa Đơn
+        {isLoading ? <LoadingSpinner /> : t('transaction', 'uploadBill')}
       </label>
       <input
         type='file'
@@ -99,7 +102,6 @@ const OCRUpload = ({ onUpload }: { onUpload: (transactions: Transaction[]) => vo
         onChange={handleUpload}
         className={styles.uploadInput}
       />
-      {isLoading && <div className={styles.loading}>Processing OCR & Classifying...</div>}
       {isModalOpen && (
         <TransactionModal onClose={handleModalClose} onSave={handleModalSave} initialTransactions={ocrTransactions} />
       )}

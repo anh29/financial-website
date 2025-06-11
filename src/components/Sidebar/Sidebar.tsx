@@ -1,33 +1,44 @@
 import React from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useLanguage } from '../../context/LanguageContext'
+import { translations } from '../../constants/translations'
 import styles from './Sidebar.module.css'
-import { FaHome, FaCog, FaExchangeAlt, FaFileInvoiceDollar, FaWallet, FaChartPie, FaBullseye } from 'react-icons/fa'
+import { FaHome, FaCog, FaExchangeAlt, FaWallet, FaChartPie, FaFileAlt, FaFileInvoiceDollar } from 'react-icons/fa'
+
+type NavigationKey = keyof typeof translations.navigation
+
+interface MenuItem {
+  path: string
+  label: NavigationKey
+  icon: React.ReactNode
+}
 
 interface SidebarProps {
   className?: string
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ className }) => {
-  const navigate = useNavigate()
+export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { t } = useLanguage()
 
   const handleLogout = () => {
     localStorage.clear()
     navigate('/signin')
   }
 
-  const menuItems = [
-    { path: '/', label: 'Trang chủ', icon: <FaHome /> },
-    { path: '/transactions', label: 'Giao dịch', icon: <FaExchangeAlt /> },
-    { path: '/expenses', label: 'Chi tiêu', icon: <FaWallet /> },
-    { path: '/upcoming', label: 'Hóa đơn', icon: <FaFileInvoiceDollar /> },
-    { path: '/budget', label: 'Ngân sách', icon: <FaChartPie /> },
-    { path: '/goal', label: 'Mục tiêu', icon: <FaBullseye /> },
-    { path: '/settings', label: 'Cài đặt', icon: <FaCog /> }
+  const menuItems: MenuItem[] = [
+    { path: '/', label: 'dashboard', icon: <FaHome /> },
+    { path: '/transactions', label: 'transactions', icon: <FaExchangeAlt /> },
+    { path: '/expenses', label: 'expenses', icon: <FaWallet /> },
+    { path: '/bills', label: 'bills', icon: <FaFileInvoiceDollar /> },
+    { path: '/budget', label: 'budget', icon: <FaChartPie /> },
+    { path: '/goals', label: 'goals', icon: <FaFileAlt /> },
+    { path: '/settings', label: 'settings', icon: <FaCog /> }
   ]
 
   return (
-    <aside className={`${styles.sidebar} ${className}`} data-tour='sidebar'>
+    <aside className={`${styles.sidebar} ${className || ''}`} data-tour='sidebar'>
       <div className={styles.brand}>
         <p>
           Finance<span>Hub</span>
@@ -37,17 +48,19 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         <ul className={styles.menuList}>
           {menuItems.map((item) => (
             <li key={item.path} className={location.pathname === item.path ? styles.active : ''}>
-              <Link to={item.path} className={styles.menuLink} data-tour={`menu-${item.path.slice(1)}`}>
+              <button className={styles.menuItem} onClick={() => navigate(item.path)}>
                 <span className={styles.icon}>{item.icon}</span>
-                <span className={styles.label}>{item.label}</span>
-              </Link>
+                <span className={styles.label}>{t('navigation', item.label)}</span>
+              </button>
             </li>
           ))}
         </ul>
       </nav>
-      <button className={styles.logout} onClick={handleLogout}>
-        Đăng xuất
-      </button>
+      <div className={styles.logoutContainer}>
+        <button className={styles.logout} onClick={handleLogout}>
+          {t('navigation', 'logout')}
+        </button>
+      </div>
     </aside>
   )
 }

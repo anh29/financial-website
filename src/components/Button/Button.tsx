@@ -1,20 +1,37 @@
 import React from 'react'
+import { useLanguage } from '../../context/LanguageContext'
+import { translations } from '../../constants/translations'
 import styles from './Button.module.css'
 
+type ButtonText = keyof typeof translations.common
+
 interface ButtonProps {
-  type: 'button' | 'submit'
+  children: ButtonText
   onClick?: () => void
+  type?: 'button' | 'submit' | 'reset'
+  variant?: 'primary' | 'secondary' | 'danger'
   disabled?: boolean
   className?: string
-  children: React.ReactNode
 }
 
-const Button: React.FC<ButtonProps> = ({ type, onClick, disabled, className, children }) => {
+export const Button: React.FC<ButtonProps> = ({
+  children,
+  onClick,
+  type = 'button',
+  variant = 'primary',
+  disabled = false,
+  className = '',
+}) => {
+  const { t } = useLanguage()
+
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={`${styles.button} ${className}`}>
-      {children}
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={`${styles.button} ${styles[variant]} ${className}`}
+    >
+      {t('common', children)}
     </button>
   )
 }
-
-export default Button

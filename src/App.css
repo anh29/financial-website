@@ -1,24 +1,35 @@
+body {
+  margin: 0;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  background: #fafbfc;
+  color: #222;
+}
+
 .appContainer {
   display: flex;
+  min-height: 100vh;
+  background: #fafbfc;
 }
 
-.appContainer .main-content {
-  transition: margin-left 0.3s ease;
-  width: -webkit-fill-available;
-}
-
-.appContainer .main-content.full-screen {
-  margin-left: 0;
-  width: 100%;
+.main {
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left 0.2s;
 }
 
-.appContainer .content {
-  padding-top: 1rem;
-  margin-top: 5rem;
-  height: calc(100vh - 6rem);
+.content {
+  flex: 1;
+  padding: 0 32px;
+  background: #fafbfc;
+  min-height: 0;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 16px 4px 0 4px;
+  }
 }
 
 .appContainer .scroll {

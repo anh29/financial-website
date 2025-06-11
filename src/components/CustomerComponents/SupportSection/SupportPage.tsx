@@ -1,62 +1,10 @@
 import React, { useState } from 'react'
 import { FaHeadset, FaEnvelope, FaComments, FaBook, FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import styles from './SupportPage.module.css'
-
-const faqs = [
-  {
-    question: 'Làm thế nào để bắt đầu với nền tảng?',
-    answer:
-      'Bắt đầu rất dễ dàng! Chỉ cần đăng ký tài khoản, hoàn thành hồ sơ của bạn, và bạn có thể bắt đầu theo dõi tài chính ngay lập tức. Giao diện trực quan của chúng tôi sẽ hướng dẫn bạn qua quá trình thiết lập.'
-  },
-  {
-    question: 'Bạn chấp nhận những phương thức thanh toán nào?',
-    answer:
-      'Chúng tôi chấp nhận tất cả các loại thẻ tín dụng chính, PayPal và chuyển khoản ngân hàng. Tất cả các giao dịch đều được bảo mật và mã hóa để đảm bảo an toàn cho bạn.'
-  },
-  {
-    question: 'Dữ liệu tài chính của tôi được bảo mật như thế nào?',
-    answer:
-      'Chúng tôi rất coi trọng vấn đề bảo mật. Tất cả dữ liệu được mã hóa bằng các giao thức tiêu chuẩn ngành, và chúng tôi thường xuyên trải qua các cuộc kiểm tra bảo mật để đảm bảo thông tin của bạn luôn được bảo vệ.'
-  },
-  {
-    question: 'Tôi có thể xuất dữ liệu tài chính của mình không?',
-    answer:
-      'Có, bạn có thể xuất dữ liệu của mình ở nhiều định dạng khác nhau bao gồm CSV, PDF và Excel. Tính năng này có sẵn trong cài đặt tài khoản của bạn.'
-  }
-]
-
-const supportOptions = [
-  {
-    icon: <FaHeadset />,
-    title: 'Hỗ Trợ Trò Chuyện Trực Tiếp',
-    description: 'Nhận trợ giúp ngay lập tức từ đội ngũ hỗ trợ của chúng tôi',
-    action: 'Bắt Đầu Trò Chuyện',
-    available: true
-  },
-  {
-    icon: <FaEnvelope />,
-    title: 'Hỗ Trợ Qua Email',
-    description: 'Gửi cho chúng tôi một tin nhắn chi tiết',
-    action: 'Gửi Email',
-    available: true
-  },
-  {
-    icon: <FaComments />,
-    title: 'Diễn Đàn Cộng Đồng',
-    description: 'Kết nối với người dùng khác',
-    action: 'Truy Cập Diễn Đàn',
-    available: true
-  },
-  {
-    icon: <FaBook />,
-    title: 'Cơ Sở Kiến Thức',
-    description: 'Duyệt qua các bài viết hướng dẫn của chúng tôi',
-    action: 'Xem Bài Viết',
-    available: true
-  }
-]
+import { useLanguage } from '../../../context/LanguageContext'
 
 const SupportPage: React.FC = () => {
+  const { t } = useLanguage()
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
   const [formData, setFormData] = useState({
     name: '',
@@ -64,6 +12,60 @@ const SupportPage: React.FC = () => {
     subject: '',
     message: ''
   })
+
+  const faqs = [
+    {
+      question: 'Làm thế nào để bắt đầu với nền tảng?',
+      answer:
+        'Bắt đầu rất dễ dàng! Chỉ cần đăng ký tài khoản, hoàn thành hồ sơ của bạn, và bạn có thể bắt đầu theo dõi tài chính ngay lập tức. Giao diện trực quan của chúng tôi sẽ hướng dẫn bạn qua quá trình thiết lập.'
+    },
+    {
+      question: 'Bạn chấp nhận những phương thức thanh toán nào?',
+      answer:
+        'Chúng tôi chấp nhận tất cả các loại thẻ tín dụng chính, PayPal và chuyển khoản ngân hàng. Tất cả các giao dịch đều được bảo mật và mã hóa để đảm bảo an toàn cho bạn.'
+    },
+    {
+      question: 'Dữ liệu tài chính của tôi được bảo mật như thế nào?',
+      answer:
+        'Chúng tôi rất coi trọng vấn đề bảo mật. Tất cả dữ liệu được mã hóa bằng các giao thức tiêu chuẩn ngành, và chúng tôi thường xuyên trải qua các cuộc kiểm tra bảo mật để đảm bảo thông tin của bạn luôn được bảo vệ.'
+    },
+    {
+      question: 'Tôi có thể xuất dữ liệu tài chính của mình không?',
+      answer:
+        'Có, bạn có thể xuất dữ liệu của mình ở nhiều định dạng khác nhau bao gồm CSV, PDF và Excel. Tính năng này có sẵn trong cài đặt tài khoản của bạn.'
+    }
+  ]
+
+  const supportOptions = [
+    {
+      icon: <FaHeadset />,
+      title: t('support', 'liveChatTitle'),
+      description: t('support', 'liveChatDesc'),
+      action: t('support', 'liveChatAction'),
+      available: true
+    },
+    {
+      icon: <FaEnvelope />,
+      title: t('support', 'emailTitle'),
+      description: t('support', 'emailDesc'),
+      action: t('support', 'emailAction'),
+      available: true
+    },
+    {
+      icon: <FaComments />,
+      title: t('support', 'communityTitle'),
+      description: t('support', 'communityDesc'),
+      action: t('support', 'communityAction'),
+      available: true
+    },
+    {
+      icon: <FaBook />,
+      title: t('support', 'knowledgeTitle'),
+      description: t('support', 'knowledgeDesc'),
+      action: t('support', 'knowledgeAction'),
+      available: true
+    }
+  ]
 
   const handleFaqClick = (index: number) => {
     setExpandedFaq(expandedFaq === index ? null : index)

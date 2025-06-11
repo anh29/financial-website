@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import PrivateRoute from '../PrivateRoute/PrivateRoute'
 import HomePage from '../../pages/HomePage/HomePage'
 import SignInPage from '../../pages/SignInPage/SignInPage'
-import SignupPage from '../../pages/SignUpPage/SignUpPage'
 import TransactionPage from '../../pages/TransactionPage/TransactionPage'
 import UpcomingPage from '../../pages/UpcomingPage/UpcomingPage'
 import ExpensesPage from '../../pages/ExpensesPage/ExpensesPage'
@@ -14,6 +13,7 @@ import CustomerPage from '../../pages/CustomerPage/CustomerPage'
 import GoalPage from '../../pages/GoalPage/GoalPage'
 import BlogPage from '../CustomerComponents/BlogSection/BlogPage'
 import SupportPage from '../CustomerComponents/SupportSection/SupportPage'
+import SignUpPage from '../../pages/SignUpPage/SignUpPage'
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -45,7 +45,7 @@ const AppRoutes: React.FC = () => (
       }
     />
     <Route
-      path='/upcoming'
+      path='/bills'
       element={
         <PrivateRoute>
           <UpcomingPage />
@@ -61,7 +61,7 @@ const AppRoutes: React.FC = () => (
       }
     />
     <Route
-      path='/goal'
+      path='/goals'
       element={
         <PrivateRoute>
           <GoalPage />
@@ -85,7 +85,7 @@ const AppRoutes: React.FC = () => (
       }
     />
     <Route path='/signin' element={<SignInPage />} />
-    <Route path='/signup' element={<SignupPage />} />
+    <Route path='/signup' element={<SignUpPage />} />
     <Route path='*' element={<Navigate to='/customer' replace />} />
   </Routes>
 )

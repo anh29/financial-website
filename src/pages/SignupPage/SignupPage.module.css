@@ -82,6 +82,7 @@
   border: 1.5px solid #e0e0e0;
   font-size: 1rem;
   background: #f7fafc;
+  color: black;
   transition: border 0.2s, box-shadow 0.2s;
 }
 

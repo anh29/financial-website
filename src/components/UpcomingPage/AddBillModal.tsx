@@ -5,19 +5,15 @@ import { AddBillForm } from '../../types/upcoming'
 import { FaTimes, FaCalendarAlt, FaMoneyBillWave, FaListUl, FaHashtag } from 'react-icons/fa'
 import { classifyTransaction } from '../../services/features/transactionService'
 import { useUpcoming } from '../../hooks/features/useUpcoming'
+import { useLanguage } from '../../context/LanguageContext'
 
 interface AddBillModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const repeatTypes = [
-  { value: 'monthly', label: 'Hàng tháng' },
-  { value: 'quarterly', label: 'Hàng quý' },
-  { value: 'yearly', label: 'Hàng năm' }
-]
-
 const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
+  const { t } = useLanguage()
   const [form, setForm] = useState<AddBillForm>({
     title: '',
     amount: 0,
@@ -53,7 +49,7 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
           const { predictedCategory } = await classifyTransaction({ description: value })
           setForm((prev) => ({ ...prev, category: predictedCategory.label }))
         } catch {
-          setClassificationError('⚠ Classification failed')
+          setClassificationError(t('common', 'classificationFailed'))
         } finally {
           setIsClassifying(false)
         }
@@ -71,66 +67,74 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
       onClose()
     } catch {
       setIsSubmitting(false)
-      setSubmitError('Không thể thêm hóa đơn. Vui lòng thử lại.')
+      setSubmitError(t('common', 'cannotAddBill'))
     }
   }
+
+  const repeatTypes = [
+    { value: 'monthly', label: t('common', 'monthly') },
+    { value: 'quarterly', label: t('common', 'quarterly') },
+    { value: 'yearly', label: t('common', 'yearly') }
+  ]
 
   return (
     <div className={styles.addBillModalContainer}>
       <div className={styles.modalContent}>
-        <button className={styles.closeButton} onClick={onClose} type='button' aria-label='Đóng'>
+        <button className={styles.closeButton} onClick={onClose} type='button' aria-label={t('common', 'close')}>
           <FaTimes />
         </button>
-        <h2 className={styles.modalTitle}>Thêm hóa đơn mới</h2>
+        <h2 className={styles.modalTitle}>{t('common', 'addBill')}</h2>
         <form onSubmit={handleSubmit} className={styles.form} autoComplete='off'>
-          <div className={styles.sectionHeader}>Thông tin hóa đơn</div>
+          <div className={styles.sectionHeader}>{t('common', 'billInfo')}</div>
           <div className={styles.formGrid}>
             <label className={styles.formLabel}>
-              Tiêu đề
+              {t('common', 'title')}
               <div className={styles.inputWrapper}>
-                <FaListUl className={styles.inputIcon} aria-label='Tiêu đề' />
+                <FaListUl className={styles.inputIcon} aria-label={t('common', 'title')} />
                 <input
                   name='title'
                   value={form.title}
                   onChange={handleChange}
                   required
-                  placeholder='Nhập tiêu đề'
+                  placeholder={t('common', 'enterTitle')}
                   autoComplete='off'
                 />
               </div>
             </label>
             <label className={styles.formLabel}>
-              Số tiền
+              {t('common', 'amount')}
               <div className={styles.inputWrapper}>
-                <FaMoneyBillWave className={styles.inputIcon} aria-label='Số tiền' />
+                <FaMoneyBillWave className={styles.inputIcon} aria-label={t('common', 'amount')} />
                 <input
                   name='amount'
                   type='number'
                   value={form.amount}
                   onChange={handleChange}
                   required
-                  placeholder='0'
+                  placeholder={t('common', 'enterAmount')}
                   autoComplete='off'
                 />
               </div>
             </label>
             <label className={styles.formLabel}>
-              Danh mục
-              {isClassifying ? <span className={styles.spinner} aria-label='Đang phân loại' /> : null}
+              {t('common', 'category')}
+              {isClassifying ? <span className={styles.spinner} aria-label={t('common', 'classifying')} /> : null}
               <select name='category' value={form.category} onChange={handleChange} required disabled={isClassifying}>
-                <option value=''>Chọn danh mục</option>
+                <option value=''>{t('common', 'selectCategory')}</option>
                 {expenseCategories.map((cat) => (
                   <option key={cat.label} value={cat.label}>
                     {cat.label}
                   </option>
                 ))}
               </select>
-              {classificationError && <div className={styles.classificationError}>{classificationError}</div>}
+              {classificationError && (
+                <div className={styles.classificationError}>{t('common', 'classificationFailed')}</div>
+              )}
             </label>
             <label className={styles.formLabel}>
-              Tần suất
+              {t('common', 'frequency')}
               <select name='frequency' value={form.frequency} onChange={handleChange} required>
-                <option value=''>Chọn tần suất</option>
+                <option value=''>{t('common', 'selectFrequency')}</option>
                 {repeatTypes.map((f) => (
                   <option key={f.value} value={f.value}>
                     {f.label}
@@ -139,41 +143,41 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
               </select>
             </label>
           </div>
-          <div className={styles.sectionHeader}>Lịch thanh toán</div>
+          <div className={styles.sectionHeader}>{t('common', 'paymentSchedule')}</div>
           <div className={styles.formGrid}>
             <label className={styles.formLabel}>
-              Ngày bắt đầu
+              {t('common', 'startDate')}
               <div className={styles.inputWrapper}>
-                <FaCalendarAlt className={styles.inputIcon} aria-label='Ngày bắt đầu' />
+                <FaCalendarAlt className={styles.inputIcon} aria-label={t('common', 'startDate')} />
                 <input
                   name='start_date'
                   type='date'
                   value={form.start_date}
                   onChange={handleChange}
                   required
-                  placeholder='dd/mm/yyyy'
+                  placeholder={t('common', 'enterStartDate')}
                   autoComplete='off'
                 />
               </div>
             </label>
             <label className={styles.formLabel}>
-              Ngày kết thúc
+              {t('common', 'endDate')}
               <div className={styles.inputWrapper}>
-                <FaCalendarAlt className={styles.inputIcon} aria-label='Ngày kết thúc' />
+                <FaCalendarAlt className={styles.inputIcon} aria-label={t('common', 'endDate')} />
                 <input
                   name='end_date'
                   type='date'
                   value={form.end_date || ''}
                   onChange={handleChange}
-                  placeholder='dd/mm/yyyy'
+                  placeholder={t('common', 'enterEndDate')}
                   autoComplete='off'
                 />
               </div>
             </label>
             <label className={styles.formLabel}>
-              Ngày thanh toán
+              {t('common', 'dayOfMonth')}
               <div className={styles.inputWrapper}>
-                <FaHashtag className={styles.inputIcon} aria-label='Ngày thanh toán' />
+                <FaHashtag className={styles.inputIcon} aria-label={t('common', 'dayOfMonth')} />
                 <input
                   name='day_of_month'
                   type='number'
@@ -182,7 +186,7 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
                   value={form.day_of_month}
                   onChange={handleChange}
                   required
-                  placeholder='# 1'
+                  placeholder={t('common', 'enterDayOfMonth')}
                   autoComplete='off'
                 />
               </div>
@@ -190,14 +194,14 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
           </div>
           <div className={styles.actionsRow}>
             <button type='submit' className={styles.submitButton} disabled={isSubmitting}>
-              {isSubmitting ? 'Đang lưu...' : 'Thêm'}
+              {isSubmitting ? t('common', 'saving') : t('common', 'add')}
             </button>
             <button type='button' onClick={onClose} className={styles.cancelButton}>
-              Hủy
+              {t('common', 'cancel')}
             </button>
           </div>
         </form>
-        {submitError && <div className={styles.classificationError}>{submitError}</div>}
+        {submitError && <div className={styles.classificationError}>{t('common', 'cannotAddBill')}</div>}
       </div>
     </div>
   )

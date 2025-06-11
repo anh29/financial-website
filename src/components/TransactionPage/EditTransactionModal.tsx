@@ -6,6 +6,7 @@ import { Modal, Button } from '../common'
 import { Transaction } from '../../types/transaction'
 import { useTransactions } from '../../hooks/features/useTransactions'
 import styles from './EditTransactionModal.module.css'
+import { useLanguage } from '../../context/LanguageContext'
 
 interface EditTransactionModalProps {
   transaction: Transaction
@@ -14,6 +15,7 @@ interface EditTransactionModalProps {
 }
 
 const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction, onClose, onTransactionUpdated }) => {
+  const { t } = useLanguage()
   const [current, setCurrent] = useState<Transaction>(() => {
     // Convert category label to key when initializing
     const allCategories = [...expenseCategories, ...incomeCategories]
@@ -105,7 +107,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
       const transactionToUpdate = { ...current, category: categoryLabel }
 
       await updateTransactionHandler(transactionToUpdate)
-      showNotification('Transaction updated successfully', 'success')
+      showNotification(t('common', 'transactionUpdated'), 'success')
 
       if (onTransactionUpdated) {
         onTransactionUpdated(transactionToUpdate)
@@ -113,7 +115,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
 
       onClose()
     } catch (error) {
-      showNotification(error instanceof Error ? error.message : 'Failed to update transaction', 'error')
+      showNotification(t('common', 'failedToUpdate'), 'error')
     } finally {
       setIsSubmitting(false)
     }
@@ -131,10 +133,10 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
   const footer = (
     <>
       <Button variant='outline' onClick={onClose} disabled={isSubmitting}>
-        Cancel
+        {t('common', 'cancel')}
       </Button>
       <Button onClick={handleSubmit} isLoading={isSubmitting} disabled={isSubmitting}>
-        {isSubmitting ? 'Saving...' : 'Save Changes'}
+        {isSubmitting ? t('common', 'savingChanges') : t('common', 'saveChanges')}
       </Button>
     </>
   )
@@ -143,10 +145,9 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
     <Modal
       isOpen={true}
       onClose={onClose}
-      title='Edit Transaction'
+      title={t('common', 'editTransaction')}
       size='medium'
       footer={footer}
-      closeOnEsc={!isSubmitting}
       closeOnOverlayClick={!isSubmitting}
     >
       <form
@@ -158,11 +159,11 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
       >
         {current.classificationError && (
           <div className={styles.errorMessage}>
-            <span>⚠</span> {current.classificationError}
+            <span>⚠</span> {t('common', 'classificationFailed')}
           </div>
         )}
         <label>
-          Date:
+          {t('common', 'date')}:
           <input
             type='date'
             name='date'
@@ -172,7 +173,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
           />
         </label>
         <label>
-          Amount:
+          {t('common', 'amount')}:
           <input
             type='number'
             name='amount'
@@ -183,16 +184,16 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
           />
         </label>
         <label>
-          Type:
+          {t('common', 'type')}:
           <select name='type' value={current.type} onChange={handleChange} disabled={isSubmitting}>
-            <option value='expense'>Expense</option>
-            <option value='income'>Income</option>
+            <option value='expense'>{t('common', 'expense')}</option>
+            <option value='income'>{t('common', 'income')}</option>
           </select>
         </label>
         <label>
-          Category:
+          {t('common', 'category')}:
           {isClassifying ? (
-            <span className={styles.loadingSpinner}>Classifying...</span>
+            <span className={styles.loadingSpinner}>{t('common', 'classifying')}</span>
           ) : (
             <select name='category' value={current.category} onChange={handleChange} disabled={isSubmitting}>
               {(current.type === 'expense' ? expenseCategories : incomeCategories).map((cat) => (
@@ -204,7 +205,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
           )}
         </label>
         <label>
-          Description:
+          {t('common', 'description')}:
           <input
             type='text'
             name='description'
@@ -214,11 +215,11 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
           />
         </label>
         <label>
-          Source:
+          {t('common', 'source')}:
           <input type='text' name='source' value={current.source} onChange={handleChange} disabled={isSubmitting} />
         </label>
         <label className={styles.checkboxField}>
-          Amortized:
+          {t('common', 'amortized')}:
           <input
             type='checkbox'
             name='is_amortized'
@@ -229,7 +230,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
         </label>
         {current.is_amortized && (
           <label>
-            Amortized Days:
+            {t('common', 'amortizedDays')}:
             <input
               type='number'
               name='amortized_days'
@@ -237,7 +238,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
               onChange={handleChange}
               min={1}
               disabled={isSubmitting || isPredicting}
-              placeholder={isPredicting ? 'Predicting...' : ''}
+              placeholder={isPredicting ? t('common', 'predict') : ''}
             />
           </label>
         )}
