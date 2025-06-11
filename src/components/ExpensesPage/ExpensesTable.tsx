@@ -3,6 +3,7 @@ import styles from './ExpensesTable.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
 import { Transaction } from '../../types/transaction'
+import { formatCurrency, formatDate } from '../../utils/helpers'
 
 type Props = {
   expenses: Transaction[]
@@ -61,7 +62,7 @@ const ExpensesTable: React.FC<Props> = ({ expenses, onSearch, onFilterCategory, 
           {expenses.map((e, index) => (
             <>
               <tr key={e.id} className={e.is_amortized ? styles.smartAllocatedRow : styles.singleExpenseRow}>
-                <td>{new Date(e.date).toLocaleDateString('vi-VN')}</td>
+                <td>{formatDate(e.date)}</td>
                 <td>{e.category}</td>
                 <td>{e.amount.toLocaleString('vi-VN')}đ</td>
                 <td>{e.description}</td>
@@ -100,13 +101,15 @@ const ExpensesTable: React.FC<Props> = ({ expenses, onSearch, onFilterCategory, 
                       </div>
                       <div className={styles.amortizedInfoContent}>
                         <span className={styles.amortizedDateRange}>
-                          {new Date(e.date).toLocaleDateString('vi-VN')} →{' '}
-                          {new Date(
-                            new Date(e.date).getTime() + ((e.amortized_days || 0) - 1) * 24 * 60 * 60 * 1000
-                          ).toLocaleDateString('vi-VN')}
+                          {formatDate(e.date)} →{' '}
+                          {formatDate(
+                            new Date(
+                              new Date(e.date).getTime() + ((e.amortized_days || 0) - 1) * 24 * 60 * 60 * 1000
+                            ).toISOString()
+                          )}
                         </span>
                         <span className={styles.amortizedPerDay}>
-                          💸 {(e.amount / (e.amortized_days || 0)).toLocaleString('vi-VN')}đ{' '}
+                          💸 {formatCurrency(e.amount / (e.amortized_days || 0))}
                           <span className={styles.perDayText}>mỗi ngày</span>
                         </span>
                       </div>

@@ -12,8 +12,8 @@ import { EmptyState } from '../../components/GoalPage/EmptyState'
 import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
 import CreateGoalModal from '../../components/GoalPage/CreateGoalModal'
 import { Goals } from '../../types/goals'
-import { useLanguage } from '../../context/LanguageContext'
 import Log from '../../components/common/Log/Log'
+import { formatCurrency, formatDate } from '../../utils/helpers'
 
 const goalIcons = [<FiHome />, <FiBook />, <FiGlobe />, <FiTarget />, <FiTrendingUp />]
 
@@ -26,15 +26,6 @@ const GoalPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [goalToDelete, setGoalToDelete] = useState<string | null>(null)
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
-
-  const { t } = useLanguage()
-
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString('vi-VN') + t('common', 'currency')
-  }
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('vi-VN')
-  }
 
   useEffect(() => {
     getGoals()

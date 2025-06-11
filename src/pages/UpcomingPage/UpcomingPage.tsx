@@ -11,7 +11,6 @@ import UpcomingFiltersBar from '../../components/UpcomingPage/UpcomingFiltersBar
 import AddBillModal from '../../components/UpcomingPage/AddBillModal'
 import MarkAsPaidModal from '../../components/UpcomingPage/MarkAsPaidModal'
 import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
-import { useLanguage } from '../../context/LanguageContext'
 
 const getStatusBadge = (bill: UpcomingBill) => {
   if (bill.is_overdue)
@@ -32,9 +31,6 @@ const getStatusBadge = (bill: UpcomingBill) => {
 const getCategoryBadge = (category: string) => <span className={styles.categoryBadge}>{category}</span>
 
 const UpcomingPage = () => {
-  const { t } = useLanguage()
-  const formatCurrency = (amount: number) => amount.toLocaleString('vi-VN') + t('common', 'currency')
-
   const [selectedBill, setSelectedBill] = useState<UpcomingBill | null>(null)
   const { bills, getUpcomingBills, addBillContribution } = useUpcoming()
   const [search, setSearch] = useState('')
@@ -109,7 +105,6 @@ const UpcomingPage = () => {
           dueSoonCount={dueSoonCount}
           paidCount={paidCount}
           totalDue={totalDue}
-          formatCurrency={formatCurrency}
         />
         {/* Search & Filters Bar */}
         <UpcomingFiltersBar
@@ -129,7 +124,6 @@ const UpcomingPage = () => {
               bill={bill}
               getStatusBadge={getStatusBadge}
               getCategoryBadge={getCategoryBadge}
-              formatCurrency={formatCurrency}
               onMarkAsPaid={handleMarkAsPaid}
             />
           ))}

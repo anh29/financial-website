@@ -2,11 +2,12 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useNotifications } from '../../hooks/useNotifications'
 import { classifyTransaction, predictUsageDuration } from '../../services/features/transactionService'
 import { expenseCategories, incomeCategories } from '../../utils/categoryUtils'
-import { Modal, Button } from '../common'
+import { Modal } from '../common'
 import { Transaction } from '../../types/transaction'
 import { useTransactions } from '../../hooks/features/useTransactions'
 import styles from './EditTransactionModal.module.css'
 import { useLanguage } from '../../context/LanguageContext'
+import { formatDate } from '../../utils/helpers'
 
 interface EditTransactionModalProps {
   transaction: Transaction
@@ -114,7 +115,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
       }
 
       onClose()
-    } catch (error) {
+    } catch {
       showNotification(t('common', 'failedToUpdate'), 'error')
     } finally {
       setIsSubmitting(false)
@@ -132,12 +133,12 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
 
   const footer = (
     <>
-      <Button variant='outline' onClick={onClose} disabled={isSubmitting}>
+      <button onClick={onClose} disabled={isSubmitting}>
         {t('common', 'cancel')}
-      </Button>
-      <Button onClick={handleSubmit} isLoading={isSubmitting} disabled={isSubmitting}>
+      </button>
+      <button onClick={handleSubmit} disabled={isSubmitting}>
         {isSubmitting ? t('common', 'savingChanges') : t('common', 'saveChanges')}
-      </Button>
+      </button>
     </>
   )
 
@@ -167,7 +168,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
           <input
             type='date'
             name='date'
-            value={current.date ? new Date(current.date).toISOString().split('T')[0] : ''}
+            value={current.date ? formatDate(current.date) : ''}
             onChange={handleChange}
             disabled={isSubmitting}
           />

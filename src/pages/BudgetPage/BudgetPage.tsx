@@ -105,8 +105,6 @@ const BudgetPage = () => {
     }
   }
 
-  const formatCurrency = (value?: number) => (value ? value.toLocaleString('vi-VN') + 'đ' : '0đ')
-
   const mappedPastBudgets = pastBudgets.map((budget) => ({
     ...budget,
     spent: Object.fromEntries(Object.entries(budget.spent).map(([key, value]) => [key, value || 0]))
@@ -132,7 +130,6 @@ const BudgetPage = () => {
                 remainingMonthlyBudget={remainingMonthlyBudget}
                 budgetAllocations={budgetAllocations}
                 suggestedCategories={['Ăn uống', 'Đi lại', 'Tiện ích', 'Giải trí', 'Sức khỏe', 'Giáo dục', 'Tiết kiệm']}
-                formatCurrency={formatCurrency}
                 handleMonthlyBudgetChange={handleMonthlyBudgetChange}
                 monthlyBudget={monthlyBudget}
                 savings={savings}
@@ -155,7 +152,6 @@ const BudgetPage = () => {
               pastBudgets={mappedPastBudgets}
               selectedMonth={selectedMonth}
               setSelectedMonth={setSelectedMonth}
-              formatCurrency={formatCurrency}
             />
           )}
 

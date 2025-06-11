@@ -18,6 +18,7 @@ import CalendarHeatmapCard from './CalendarHeatmapCard'
 import DayDetailModal from './DayDetailModal'
 import { Transaction } from '../../types/transaction'
 import { categoryColors } from '../../utils/categoryUtils'
+import { formatDate } from '../../utils/helpers'
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 type Props = {
@@ -136,7 +137,7 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
     const dailyAverages = allExpenses.reduce(
       (acc, expense) => {
         const date = new Date(expense.date)
-        const dayOfWeek = date.toLocaleDateString('vi-VN', { weekday: 'long' })
+        const dayOfWeek = formatDate(date, 'vi-VN', { weekday: 'long' })
         if (!acc[dayOfWeek]) {
           acc[dayOfWeek] = { total: 0, count: 0 }
         }

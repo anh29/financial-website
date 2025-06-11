@@ -21,6 +21,7 @@ import AnalyticsDashboard from '../../components/ExpensesPage/AnalyticsDashboard
 import { useExpenses } from '../../hooks/features/useExpenses'
 import { LoadingSpinner } from '../../components/common/LoadingSpinner/LoadingSpinner'
 import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
+import { formatDate } from '../../utils/helpers'
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement)
 
@@ -130,7 +131,7 @@ const ExpensesPage: React.FC = () => {
     const weeklyData = expensesData.reduce(
       (acc, expense) => {
         const date = new Date(expense.date)
-        const dayOfWeek = date.toLocaleDateString('vi-VN', { weekday: 'short' })
+        const dayOfWeek = formatDate(date, 'vi-VN', { weekday: 'short' })
         acc[dayOfWeek] = (acc[dayOfWeek] || 0) + expense.amount
         return acc
       },

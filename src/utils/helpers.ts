@@ -1,11 +1,12 @@
-import { useEffect, useRef } from 'react'
+export function formatCurrency(amount: number, locale = 'vi-VN', currency = 'VND'): string {
+  return amount.toLocaleString(locale, { style: 'currency', currency })
+}
 
-export const useDebouncedEffect = (callback: () => void, deps: any[], delay: number) => {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  useEffect(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    timeoutRef.current = setTimeout(callback, delay)
-    return () => clearTimeout(timeoutRef.current as NodeJS.Timeout | undefined)
-  }, deps)
+export function formatDate(
+  date: string | Date,
+  locale = 'vi-VN',
+  options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' }
+): string {
+  const d = typeof date === 'string' ? new Date(date) : date
+  return d.toLocaleDateString(locale, options)
 }

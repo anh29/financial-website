@@ -3,8 +3,19 @@ import { Link } from 'react-router-dom'
 import { FaSearch, FaCalendarAlt, FaUser, FaTag, FaArrowRight } from 'react-icons/fa'
 import styles from './BlogPage.module.css'
 
+export interface BlogPost {
+  id: number
+  title: string
+  excerpt: string
+  category: string
+  author: string
+  date: string
+  readTime: string
+  image: string
+}
+
 // Sample blog posts data
-const blogPosts = [
+export const blogPosts: BlogPost[] = [
   {
     id: 1,
     title: '10 Thói Quen Tài Chính Cần Thiết Cho Năm 2024',
@@ -51,13 +62,13 @@ const categories = ['Tất Cả Bài Viết', 'Mẹo Tài Chính', 'Đầu Tư',
 
 const BlogPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All Posts')
+  const [selectedCategory, setSelectedCategory] = useState('Tất Cả Bài Viết')
 
   const filteredPosts = blogPosts.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategory === 'All Posts' || post.category === selectedCategory
+    const matchesCategory = selectedCategory === 'Tất Cả Bài Viết' || post.category === selectedCategory
     return matchesSearch && matchesCategory
   })
 

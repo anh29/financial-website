@@ -8,18 +8,14 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 import RemainingBudgetAllocationModal from './RemainingBudgetAllocationModal'
 import Confetti from 'react-confetti'
+import { formatCurrency } from '../../utils/helpers'
 
 interface RemainingBudgetAllocationProps {
   remainingBudget: number
-  formatCurrency: (value: number) => string
   month: string
 }
 
-const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
-  remainingBudget,
-  formatCurrency,
-  month
-}) => {
+const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({ remainingBudget, month }) => {
   const { allocateSavingToGoalsHandler, allocateSavingToGoals, addGoalContributionsAsync } = useGoal()
   const dispatch = useDispatch<AppDispatch>()
   const [isAllocating, setIsAllocating] = useState(false)
@@ -154,7 +150,7 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
 
       {finalRemainingBudget > 0 && (
         <button className={styles.allocateButton} onClick={handleAllocate} disabled={isAllocating}>
-          {isAllocating ? <LoadingSpinner type='button' size={20} color='#fff' thickness={2} /> : 'Phân bổ ngân sách'}
+          {isAllocating ? <LoadingSpinner size='small' /> : 'Phân bổ ngân sách'}
         </button>
       )}
 
@@ -164,7 +160,6 @@ const RemainingBudgetAllocation: React.FC<RemainingBudgetAllocationProps> = ({
         totalAllocated={totalAllocated}
         finalRemainingBudget={finalRemainingBudget}
         remainingBudget={remainingBudget}
-        formatCurrency={formatCurrency}
         editingGoalId={editingGoalId}
         editValue={editValue}
         editError={editError}

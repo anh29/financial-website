@@ -1,9 +1,10 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 import { LoadingSpinner, Card } from '../../common'
 import styles from './CustomerLayout.module.css'
 
 interface CustomerLayoutProps {
-  children: React.ReactNode
+  children?: React.ReactNode
   isLoading?: boolean
 }
 
@@ -16,7 +17,7 @@ export const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, isLoad
             <LoadingSpinner />
           </div>
         ) : (
-          <Card className={styles.content}>{children}</Card>
+          <Card className={styles.content}>{children || <Outlet />}</Card>
         )}
       </main>
     </div>

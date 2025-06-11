@@ -20,7 +20,7 @@ function App() {
             {!isCustomerPage && !isAuthPage && (
               <>
                 <Sidebar />
-                <Header title='dashboard' />
+                <Header />
               </>
             )}
             <div className='main'>

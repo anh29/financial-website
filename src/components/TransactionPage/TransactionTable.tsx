@@ -5,8 +5,9 @@ import styles from './TransactionTable.module.css'
 import { Transaction } from '../../types/transaction'
 import { getCategoryInfo, categoryColors } from '../../utils/categoryUtils'
 import { faChevronRight, faChevronDown, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
-import { format, addDays } from 'date-fns'
+import { addDays } from 'date-fns'
 import { useLanguage } from '../../context/LanguageContext'
+import { formatDate } from '../../utils/helpers'
 
 interface TransactionTableProps {
   transactions: Transaction[]
@@ -19,8 +20,8 @@ interface TransactionTableProps {
 const groupByDate = (transactions: Transaction[]) => {
   return transactions.reduce((groups: Record<string, Transaction[]>, tx) => {
     const date = tx.date
-      ? new Date(tx.date).toLocaleDateString('vi-VN', { weekday: 'long', month: 'long', day: 'numeric' })
-      : new Date(tx.created_at || '').toLocaleDateString('vi-VN', { weekday: 'long', month: 'long', day: 'numeric' })
+      ? formatDate(tx.date, 'vi-VN', { weekday: 'long', month: 'long', day: 'numeric' })
+      : formatDate(tx.created_at || '', 'vi-VN', { weekday: 'long', month: 'long', day: 'numeric' })
     if (!groups[date]) groups[date] = []
     groups[date].push(tx)
     return groups
@@ -148,14 +149,13 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                       )
                     })()}
                     <div className={styles.transactionMain}>
-                      <div className={styles.transactionTitle}>{transaction.description || t('transaction', 'transaction')}</div>
+                      <div className={styles.transactionTitle}>
+                        {transaction.description || t('transaction', 'transaction')}
+                      </div>
                       {transaction.is_amortized && transaction.amortized_days && transaction.date && (
                         <div className={styles.amortizedInfo}>
-                          {t('transaction', 'amortized')} {format(new Date(transaction.date), 'dd/MM/yyyy')} -{' '}
-                          {format(
-                            addDays(new Date(transaction.date), Number(transaction.amortized_days)),
-                            'dd/MM/yyyy'
-                          )}
+                          {t('transaction', 'amortized')} {formatDate(transaction.date)} -{' '}
+                          {formatDate(addDays(new Date(transaction.date), Number(transaction.amortized_days)))}
                         </div>
                       )}
                       <div className={styles.transactionTags}>
@@ -168,7 +168,9 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                             </span>
                           )
                         })()}
-                        <span className={styles.transactionAccount}>{transaction.source || t('transaction', 'manual')}</span>
+                        <span className={styles.transactionAccount}>
+                          {transaction.source || t('transaction', 'manual')}
+                        </span>
                       </div>
                     </div>
                     <div

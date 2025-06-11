@@ -1,34 +1,55 @@
-import React from 'react'
-import { Card, Button, Badge, LoadingSpinner } from '../../../common'
+import React, { useState, useEffect } from 'react'
+import { Card, Badge, LoadingSpinner } from '../../../common'
 import styles from './BlogDetail.module.css'
+import { useParams, useNavigate } from 'react-router-dom'
+import { blogPosts, BlogPost } from '../BlogPage'
 
-interface BlogDetailProps {
-  post: {
-    id: string
-    title: string
-    content: string
-    date: string
-    category: string
-    author: string
-    image: string
+export const BlogDetail: React.FC = () => {
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [post, setPost] = useState<BlogPost | null>(null)
+
+  useEffect(() => {
+    if (!id || isNaN(Number(id))) {
+      setError('Invalid post ID')
+      setIsLoading(false)
+      return
+    }
+
+    // Simulate loading
+    setIsLoading(true)
+    const foundPost = blogPosts.find((post) => post.id === Number(id))
+    if (!foundPost) {
+      setError('Post not found')
+    } else {
+      setPost(foundPost)
+    }
+    setIsLoading(false)
+  }, [id])
+
+  if (error) {
+    return (
+      <div className={styles.blogDetailPage}>
+        <div className={styles.blogDetailContainer}>
+          <button onClick={() => navigate('/customer/blog')}>← Back to Blog</button>
+          <div className={styles.error}>{error}</div>
+        </div>
+      </div>
+    )
   }
-}
-
-export const BlogDetail: React.FC<BlogDetailProps> = ({ post }) => {
-  const isLoading = false
 
   return (
     <div className={styles.blogDetailPage}>
       <div className={styles.blogDetailContainer}>
-        <Button variant='outline' onClick={() => window.history.back()}>
-          ← Back to Blog
-        </Button>
+        <button onClick={() => navigate('/customer/blog')}>← Back to Blog</button>
 
         {isLoading ? (
           <div className={styles.loadingContainer}>
             <LoadingSpinner />
           </div>
-        ) : (
+        ) : post ? (
           <Card className={styles.blogContent}>
             <div className={styles.blogHeader}>
               <h1>{post.title}</h1>
@@ -43,9 +64,9 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({ post }) => {
               <img src={post.image} alt={post.title} />
             </div>
 
-            <div className={styles.blogBody}>{post.content}</div>
+            <div className={styles.blogBody}>{post.excerpt}</div>
           </Card>
-        )}
+        ) : null}
       </div>
     </div>
   )

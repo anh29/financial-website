@@ -2,6 +2,7 @@ import React from 'react'
 import modalStyles from './RemainingBudgetAllocationModal.module.css'
 import { AllocateSavingToGoals } from '../../types/goals'
 import Log from '../common/Log/Log'
+import { formatCurrency } from '../../utils/helpers'
 
 interface RemainingBudgetAllocationModalProps {
   showModal: boolean
@@ -9,7 +10,6 @@ interface RemainingBudgetAllocationModalProps {
   totalAllocated: number
   finalRemainingBudget: number
   remainingBudget: number
-  formatCurrency: (value: number) => string
   editingGoalId: string | null
   editValue: number | null
   editError: string | null
@@ -29,7 +29,6 @@ const RemainingBudgetAllocationModal: React.FC<RemainingBudgetAllocationModalPro
   totalAllocated,
   finalRemainingBudget,
   remainingBudget,
-  formatCurrency,
   editingGoalId,
   editValue,
   editError,

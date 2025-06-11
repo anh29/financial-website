@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './BillDetails.module.css'
 import { UpcomingBill } from '../../types/upcoming'
+import { formatDate } from '../../utils/helpers'
 
 interface BillDetailsProps {
   selectedBill: UpcomingBill
@@ -43,11 +44,11 @@ const BillDetails: React.FC<BillDetailsProps> = ({ selectedBill, handleCloseModa
           </div>
           <div className={styles.infoRow}>
             <span>Ngày bắt đầu:</span>
-            <span>{selectedBill.start_date ? new Date(selectedBill.start_date).toLocaleDateString('vi-VN') : ''}</span>
+            <span>{selectedBill.start_date ? formatDate(selectedBill.start_date) : ''}</span>
           </div>
           <div className={styles.infoRow}>
             <span>Ngày kết thúc:</span>
-            <span>{selectedBill.end_date ? new Date(selectedBill.end_date).toLocaleDateString('vi-VN') : ''}</span>
+            <span>{selectedBill.end_date ? formatDate(selectedBill.end_date) : ''}</span>
           </div>
           <div className={styles.infoRow}>
             <span>Ngày thanh toán:</span>

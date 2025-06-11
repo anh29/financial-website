@@ -5,6 +5,7 @@ import { getCategoryInfo } from '../../../utils/categoryUtils'
 import { LoadingSpinner } from '../../common'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { useTransactions } from '../../../hooks/features/useTransactions'
+import { formatDate } from '../../../utils/helpers'
 
 const RecentTransaction = () => {
   const [activeTab, setActiveTab] = useState('all')
@@ -64,7 +65,7 @@ const RecentTransaction = () => {
               </div>
               <div className={styles.details}>
                 <p>{transaction.amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
-                <p>{new Date(transaction.date).toLocaleDateString('vi-VN')}</p>
+                <p>{formatDate(transaction.date)}</p>
               </div>
             </li>
           )

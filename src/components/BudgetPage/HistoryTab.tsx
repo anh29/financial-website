@@ -3,6 +3,7 @@ import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, TooltipItem } from 'chart.js'
 import styles from './HistoryTab.module.css'
 import { HistoryBudgets } from '../../types/budgets'
+import { formatCurrency } from '../../utils/helpers'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -10,10 +11,9 @@ interface HistoryTabProps {
   pastBudgets: HistoryBudgets[]
   selectedMonth: string | null
   setSelectedMonth: (month: string | null) => void
-  formatCurrency: (value: number) => string
 }
 
-const HistoryTab: React.FC<HistoryTabProps> = ({ pastBudgets, selectedMonth, setSelectedMonth, formatCurrency }) => {
+const HistoryTab: React.FC<HistoryTabProps> = ({ pastBudgets, selectedMonth, setSelectedMonth }) => {
   const [hoveredRow, setHoveredRow] = useState<number | null>(null)
   const filteredBudgets = selectedMonth ? pastBudgets.filter((b) => b.month === selectedMonth) : pastBudgets
 

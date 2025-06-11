@@ -4,22 +4,16 @@ import { UpcomingBill } from '../../types/upcoming'
 import { getCategoryInfo, categoryColors } from '../../utils/categoryUtils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestionCircle, faCalendarAlt, faExclamationTriangle, faReceipt } from '@fortawesome/free-solid-svg-icons'
+import { formatCurrency } from '../../utils/helpers'
 
 interface BillListItemProps {
   bill: UpcomingBill
   getStatusBadge: (bill: UpcomingBill) => React.ReactNode
   getCategoryBadge: (category: string) => React.ReactNode
-  formatCurrency: (amount: number) => string
   onMarkAsPaid: (bill: UpcomingBill) => void
 }
 
-const BillListItem: React.FC<BillListItemProps> = ({
-  bill,
-  getStatusBadge,
-  getCategoryBadge,
-  formatCurrency,
-  onMarkAsPaid
-}) => {
+const BillListItem: React.FC<BillListItemProps> = ({ bill, getStatusBadge, getCategoryBadge, onMarkAsPaid }) => {
   const categoryInfo = getCategoryInfo(bill.category)
   const icon = categoryInfo ? (
     <FontAwesomeIcon icon={categoryInfo.icon} size='lg' />

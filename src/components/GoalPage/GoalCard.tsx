@@ -1,7 +1,7 @@
 import { FiEdit2, FiTrash2, FiCalendar } from 'react-icons/fi'
 import { MdBolt, MdStar, MdEmojiEvents } from 'react-icons/md'
 import styles from './GoalCard.module.css'
-import { useLanguage } from '../../context/LanguageContext'
+import { formatCurrency, formatDate } from '../../utils/helpers'
 
 interface GoalCardProps {
   goal: {
@@ -23,12 +23,6 @@ interface GoalCardProps {
 }
 
 export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
-  const { t } = useLanguage()
-
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString('vi-VN') + t('common', 'currency')
-  }
-
   const percent = Math.round((goal.current / goal.target) * 100)
   const showStar = percent > 80
   const isOverdue = goal.overdue
@@ -160,8 +154,7 @@ export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
       {isCompleted && (
         <div className={styles.goalCardCompletionBadge}>
           <FiCalendar style={{ marginRight: 6, verticalAlign: 'middle' }} />
-          Hoàn thành vào{' '}
-          {new Date(goal.due).toLocaleDateString('vi-VN', { year: 'numeric', month: 'short', day: 'numeric' })}
+          Hoàn thành vào {formatDate(goal.due, 'vi-VN', { year: 'numeric', month: 'short', day: 'numeric' })}
         </div>
       )}
       {!isCompleted && (

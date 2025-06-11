@@ -1,21 +1,13 @@
-import React from 'react'
 import { useLanguage } from '../../context/LanguageContext'
 import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher'
-import { translations } from '../../constants/translations'
 import styles from './Header.module.css'
 import { useAuth } from '../../context/AuthContext'
 import { generateAvatar } from '../../utils/userUtils'
 import { FaQuestionCircle } from 'react-icons/fa'
 import { useTourControl } from '../../utils/tourContext'
+import { formatDate } from '../../utils/helpers'
 
-type NavigationKey = keyof typeof translations.navigation
-
-interface HeaderProps {
-  title: NavigationKey
-  onMenuClick?: () => void
-}
-
-export const Header: React.FC<HeaderProps> = ({ title, onMenuClick }) => {
+export const Header = () => {
   const { t } = useLanguage()
   const { user } = useAuth()
   const { setTourState, isTourActive } = useTourControl()
@@ -24,17 +16,13 @@ export const Header: React.FC<HeaderProps> = ({ title, onMenuClick }) => {
     setTourState(!isTourActive)
   }
 
-  // Example: show greeting and date
-  const today = new Date()
-  const dateString = today.toLocaleDateString('vi-VN', { day: 'numeric', month: 'long', year: 'numeric' })
-
   return (
     <header className={styles.headerContainer}>
       <div className={styles.headerLeft}>
         <div className={styles.headerGreeting}>
           {t('dashboard', 'welcome')}, {user?.username || t('common', 'user')}
         </div>
-        <div className={styles.headerDate}>{dateString}</div>
+        <div className={styles.headerDate}>{formatDate(new Date())}</div>
       </div>
       <div className={styles.headerRight}>
         <div className={styles.languageSwitcher}>

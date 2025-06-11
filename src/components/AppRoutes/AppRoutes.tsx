@@ -14,6 +14,7 @@ import GoalPage from '../../pages/GoalPage/GoalPage'
 import BlogPage from '../CustomerComponents/BlogSection/BlogPage'
 import SupportPage from '../CustomerComponents/SupportSection/SupportPage'
 import SignUpPage from '../../pages/SignUpPage/SignUpPage'
+import { BlogDetail } from '../CustomerComponents/BlogSection/BlogDetail/BlogDetail'
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -26,6 +27,7 @@ const AppRoutes: React.FC = () => (
       }
     >
       <Route path='blog' element={<BlogPage />} />
+      <Route path='blog/:id' element={<BlogDetail />} />
       <Route path='support' element={<SupportPage />} />
     </Route>
     <Route

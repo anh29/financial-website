@@ -5,6 +5,7 @@ import RemainingBudgetAllocation from './RemainingBudgetAllocation'
 import Confetti from 'react-confetti'
 import Log from '../common/Log/Log'
 import { createMonthlyBudget } from '../../services/features/budgetService'
+import { formatCurrency } from '../../utils/helpers'
 
 interface SetupTabProps {
   totalBudget: number
@@ -12,7 +13,6 @@ interface SetupTabProps {
   remaining: number
   budgetAllocations: BudgetAllocation[]
   suggestedCategories: string[]
-  formatCurrency: (value: number) => string
   handleMonthlyBudgetChange: (value: number) => void
   monthlyBudget: number
   handleSaveBudget: (newAllocation: BudgetAllocation[]) => void
@@ -29,7 +29,6 @@ const SetupTab: React.FC<SetupTabProps> = ({
   remaining,
   budgetAllocations,
   suggestedCategories,
-  formatCurrency,
   handleMonthlyBudgetChange,
   monthlyBudget,
   handleSaveBudget,
@@ -262,11 +261,7 @@ const SetupTab: React.FC<SetupTabProps> = ({
             Bạn có thể phân bổ số tiền còn lại từ tháng trước vào các mục tiêu tiết kiệm của mình. Hệ thống sẽ tự động
             tính toán và đề xuất cách phân bổ tối ưu.
           </div>
-          <RemainingBudgetAllocation
-            remainingBudget={remainingBudget.remainingBudget}
-            formatCurrency={formatCurrency}
-            month={remainingBudget.month}
-          />
+          <RemainingBudgetAllocation remainingBudget={remainingBudget.remainingBudget} month={remainingBudget.month} />
         </div>
       )}
 
@@ -286,8 +281,8 @@ const SetupTab: React.FC<SetupTabProps> = ({
               <button className={styles.addButton} onClick={() => handleAdd()}>
                 + Thêm danh mục
               </button>
-              <button 
-                className={`${styles.saveButton} ${isSaving ? styles.saving : ''}`} 
+              <button
+                className={`${styles.saveButton} ${isSaving ? styles.saving : ''}`}
                 onClick={handleSave}
                 disabled={isSaving}
               >

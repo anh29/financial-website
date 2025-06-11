@@ -1,13 +1,13 @@
 import React from 'react'
 import styles from './SummaryCards.module.css'
 import { FaExclamationTriangle, FaClock, FaCheckCircle, FaHome } from 'react-icons/fa'
+import { formatCurrency } from '../../utils/helpers'
 
 interface SummaryCardsProps {
   overdueCount: number
   dueSoonCount: number
   paidCount: number
   totalDue: number | string
-  formatCurrency?: (amount: number) => string
 }
 
 interface SummaryCardProps {
@@ -31,13 +31,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ icon, label, value, sublabel,
   </div>
 )
 
-const SummaryCards: React.FC<SummaryCardsProps> = ({
-  overdueCount,
-  dueSoonCount,
-  paidCount,
-  totalDue,
-  formatCurrency
-}) => (
+const SummaryCards: React.FC<SummaryCardsProps> = ({ overdueCount, dueSoonCount, paidCount, totalDue }) => (
   <div className={styles.upcomingSummaryCards}>
     <SummaryCard
       icon={<FaExclamationTriangle />}
@@ -63,7 +57,7 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({
     <SummaryCard
       icon={<FaHome />}
       label='Chưa thanh toán'
-      value={typeof totalDue === 'number' && formatCurrency ? formatCurrency(totalDue) : totalDue}
+      value={typeof totalDue === 'number' ? formatCurrency(totalDue) : totalDue}
       sublabel='Tổng cần trả'
       color={styles.blue}
     />
