@@ -8,7 +8,8 @@ import {
   updateGoalAsync,
   deleteGoalAsync,
   fetchAllocateSavingToGoalsAsync,
-  addGoalContributionsAsync
+  addGoalContributionsAsync,
+  cancelGoalAsync
 } from '../../store/slices/goalSlice'
 
 export const useGoal = () => {
@@ -74,6 +75,18 @@ export const useGoal = () => {
     [dispatch]
   )
 
+  const cancelGoal = useCallback(
+    async (goalId: string) => {
+      try {
+        await dispatch(cancelGoalAsync(goalId)).unwrap()
+      } catch (error) {
+        console.error('Failed to cancel goal:', error)
+        throw error
+      }
+    },
+    [dispatch]
+  )
+
   return {
     goals,
     isLoading,
@@ -85,6 +98,7 @@ export const useGoal = () => {
     allocateSavingToGoals,
     allocateSavingToGoalsHandler,
     addGoalContributionsAsync,
-    goalContributions
+    goalContributions,
+    cancelGoal
   }
 }

@@ -87,6 +87,19 @@ export const allocateSavingToGoals = async (
   return handleResponse<{ message: string; data: AllocateSavingToGoals[] }>(response)
 }
 
+export const cancelGoal = async (goalId: string): Promise<{ message: string }> => {
+  const user = getUser()
+  if (!user) throw new APIError('User not found')
+
+  const response = await fetch(`${SERVER_URL}/marketplace/cancelGoal`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId: user.id, goal_id: goalId })
+  })
+
+  return handleResponse<{ message: string }>(response)
+}
+
 export const addGoalContributions = async (
   goalContributions: Omit<GoalContributions[], 'id'>
 ): Promise<{ message: string; data: GoalContributions[] }> => {

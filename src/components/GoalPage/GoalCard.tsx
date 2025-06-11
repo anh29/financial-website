@@ -22,12 +22,13 @@ interface GoalCardProps {
   onDelete?: () => void
 }
 
-const formatCurrency = (amount: number, t: (namespace: string, key: string) => string) => {
-  return amount.toLocaleString('vi-VN') + t('common', 'currency')
-}
-
 export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
   const { t } = useLanguage()
+
+  const formatCurrency = (amount: number) => {
+    return amount.toLocaleString('vi-VN') + t('common', 'currency')
+  }
+
   const percent = Math.round((goal.current / goal.target) * 100)
   const showStar = percent > 80
   const isOverdue = goal.overdue
@@ -135,7 +136,7 @@ export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
             <>
               <div className={styles.goalCardCelebrationIcon}>🎉</div>
               <div className={styles.goalCardCelebrationText}>Đã đạt được mục tiêu!</div>
-              <div className={styles.goalCardCelebrationValue}>{formatCurrency(goal.target, t)}</div>
+              <div className={styles.goalCardCelebrationValue}>{formatCurrency(goal.target)}</div>
               {daysToAchieve && (
                 <div className={styles.goalCardDaysToAchieve}>
                   <MdEmojiEvents />
@@ -169,17 +170,17 @@ export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
             <div className={styles.goalCardStatTopBox}>
               <div className={styles.goalCardStatTop}>
                 <div className={styles.goalCardStatLabel}>HIỆN TẠI</div>
-                <div className={styles.goalCardStatValue}>{formatCurrency(goal.current, t)}</div>
+                <div className={styles.goalCardStatValue}>{formatCurrency(goal.current)}</div>
               </div>
               <div className={styles.goalCardStatTop}>
                 <div className={styles.goalCardStatLabel}>MỤC TIÊU</div>
-                <div className={styles.goalCardStatValue}>{formatCurrency(goal.target, t)}</div>
+                <div className={styles.goalCardStatValue}>{formatCurrency(goal.target)}</div>
               </div>
             </div>
           </div>
           <div className={styles.goalCardStatRemainingBox}>
             <div className={styles.goalCardStatRemainingLabel}>CÒN LẠI</div>
-            <div className={styles.goalCardStatRemainingValue}>{formatCurrency(goal.remaining, t)}</div>
+            <div className={styles.goalCardStatRemainingValue}>{formatCurrency(goal.remaining)}</div>
           </div>
         </>
       )}

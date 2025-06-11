@@ -6,7 +6,8 @@ import {
   updateGoal,
   deleteGoal,
   fetchGoalsByUserId,
-  addGoalContributions
+  addGoalContributions,
+  cancelGoal
 } from '../../services/features/goalService'
 
 interface GoalState {
@@ -84,6 +85,15 @@ export const addGoalContributionsAsync = createAsyncThunk(
     }
   }
 )
+
+export const cancelGoalAsync = createAsyncThunk('goals/cancelGoal', async (goalId: string, { rejectWithValue }) => {
+  try {
+    const response = await cancelGoal(goalId)
+    return response.message
+  } catch (error) {
+    return rejectWithValue(error instanceof Error ? error.message : 'Failed to cancel goal')
+  }
+})
 
 const goalSlice = createSlice({
   name: 'goals',
@@ -163,6 +173,19 @@ const goalSlice = createSlice({
         state.allocateSavingToGoals = action.payload
       })
       .addCase(fetchAllocateSavingToGoalsAsync.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload as string
+      })
+      // Cancel Goal
+      .addCase(cancelGoalAsync.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(cancelGoalAsync.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.goals = state.goals.filter((goal) => goal.id !== action.payload)
+      })
+      .addCase(cancelGoalAsync.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.payload as string
       })

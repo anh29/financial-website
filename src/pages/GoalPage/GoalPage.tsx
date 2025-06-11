@@ -12,15 +12,29 @@ import { EmptyState } from '../../components/GoalPage/EmptyState'
 import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
 import CreateGoalModal from '../../components/GoalPage/CreateGoalModal'
 import { Goals } from '../../types/goals'
+import { useLanguage } from '../../context/LanguageContext'
+import Log from '../../components/common/Log/Log'
 
 const goalIcons = [<FiHome />, <FiBook />, <FiGlobe />, <FiTarget />, <FiTrendingUp />]
 
 const GoalPage = () => {
-  const { goals, getGoals, addGoal } = useGoal()
+  const { goals, getGoals, addGoal, cancelGoal } = useGoal()
   const [activeTab, setActiveTab] = useState('active')
   const navigate = useNavigate()
   const [showConfetti, setShowConfetti] = useState(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [goalToDelete, setGoalToDelete] = useState<string | null>(null)
+  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+
+  const { t } = useLanguage()
+
+  const formatCurrency = (amount: number) => {
+    return amount.toLocaleString('vi-VN') + t('common', 'currency')
+  }
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString('vi-VN')
+  }
 
   useEffect(() => {
     getGoals()
@@ -63,8 +77,23 @@ const GoalPage = () => {
   }
 
   const handleDeleteGoal = (goalId: string) => {
-    // Implement delete functionality
-    console.log('Delete goal:', goalId)
+    setGoalToDelete(goalId)
+    setShowDeleteModal(true)
+  }
+
+  const confirmDeleteGoal = async () => {
+    if (goalToDelete) {
+      try {
+        await cancelGoal(goalToDelete)
+        setNotification({ message: 'Xoá mục tiêu thành công', type: 'success' })
+        getGoals()
+      } catch {
+        setNotification({ message: 'Xoá mục tiêu thất bại', type: 'error' })
+      } finally {
+        setShowDeleteModal(false)
+        setGoalToDelete(null)
+      }
+    }
   }
 
   const handleCreateGoal = async (goalData: Goals) => {
@@ -78,6 +107,9 @@ const GoalPage = () => {
 
   return (
     <div className={styles.goalPageContainer}>
+      {notification && (
+        <Log message={notification.message} status={notification.type} onClose={() => setNotification(null)} />
+      )}
       {showConfetti && (
         <Confetti
           numberOfPieces={220}
@@ -86,7 +118,7 @@ const GoalPage = () => {
         />
       )}
 
-      <div className="goals-section">
+      <div className='goals-section'>
         <HeroBanner totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
         <StatusTabs activeTab={activeTab} onTabChange={setActiveTab} />
         <StatsRow totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
@@ -115,7 +147,7 @@ const GoalPage = () => {
         )}
       </div>
 
-      <div className="goal-actions">
+      <div className='goal-actions'>
         <FloatingActionButton onClick={() => setIsCreateModalOpen(true)} />
       </div>
 
@@ -124,6 +156,41 @@ const GoalPage = () => {
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateGoal}
       />
+
+      {showDeleteModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.confirmModal}>
+            <div className={styles.confirmTitle}>Xác nhận xoá mục tiêu</div>
+            <div className={styles.confirmContent}>
+              <p className={styles.confirmContentTitle}>
+                Mục tiêu: {filteredGoals.find((goal) => goal.id === goalToDelete)?.title}
+              </p>
+              <p className={styles.confirmContentValue}>
+                Số tiền cần đóng: {formatCurrency(filteredGoals.find((goal) => goal.id === goalToDelete)?.target || 0)}
+              </p>
+              <p className={styles.confirmContentValue}>
+                Số tiền đã đóng: {formatCurrency(filteredGoals.find((goal) => goal.id === goalToDelete)?.current || 0)}
+              </p>
+              <p className={styles.confirmContentValue}>
+                Số tiền còn lại:{' '}
+                {formatCurrency(filteredGoals.find((goal) => goal.id === goalToDelete)?.remaining || 0)}
+              </p>
+              <p className={styles.confirmContentValue}>
+                Ngày đến hạn: {formatDate(filteredGoals.find((goal) => goal.id === goalToDelete)?.due || '')}
+              </p>
+            </div>
+            <div className={styles.confirmDesc}>Bạn có chắc chắn muốn xoá mục tiêu này không?</div>
+            <div className={styles.confirmActions}>
+              <button onClick={confirmDeleteGoal} className={styles.confirmBtn}>
+                Xoá
+              </button>
+              <button onClick={() => setShowDeleteModal(false)} className={styles.cancelBtn}>
+                Huỷ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
