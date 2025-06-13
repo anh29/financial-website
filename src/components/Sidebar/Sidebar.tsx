@@ -47,7 +47,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
       <nav className={styles.nav}>
         <ul className={styles.menuList}>
           {menuItems.map((item) => (
-            <li key={item.path} className={location.pathname === item.path ? styles.active : ''}>
+            <li
+              key={item.path}
+              className={location.pathname === item.path ? styles.active : ''}
+              data-tour={`menu-${item.label}`}
+            >
               <button className={styles.menuItem} onClick={() => navigate(item.path)}>
                 <span className={styles.icon}>{item.icon}</span>
                 <span className={styles.label}>{t('navigation', item.label)}</span>

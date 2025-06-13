@@ -95,7 +95,7 @@ const UpcomingPage = () => {
   }
 
   return (
-    <div className={styles.upcomingPage} data-tour='upcoming-section'>
+    <div className={`${styles.upcomingPage} bills-section`}>
       <div className='upcoming-section'>
         {/* Header */}
         <UpcomingHeader />

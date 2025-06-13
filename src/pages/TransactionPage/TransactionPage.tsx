@@ -10,7 +10,7 @@ import { Transaction } from '../../types/transaction'
 import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
 
 const TransactionPage = () => {
-  const { transactions, isLoading, error, handleImport, fetchTransactions } = useTransactions()
+  const { transactions, isLoading, handleImport, fetchTransactions } = useTransactions()
   const [updatedTransactions, setUpdatedTransactions] = useState<Transaction[]>([])
   const [showFabModal, setShowFabModal] = useState(false)
   const [filter, setFilter] = useState<SearchFilterState>({
@@ -49,8 +49,6 @@ const TransactionPage = () => {
     }
     return txs
   }
-
-  if (error) return <div>Lỗi: {error}</div>
 
   return (
     <div className={styles.transactionPage}>

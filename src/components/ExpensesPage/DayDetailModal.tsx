@@ -11,7 +11,7 @@ interface DayDetailModalProps {
   selectedDay: number | null
   calendarMonth: number
   calendarYear: number
-  dayExpenses: Transaction[]
+  dayExpenses: (Transaction & { totalAmount?: number })[]
   monthNames: string[]
   handleAddExpense: () => void
 }
@@ -26,16 +26,21 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({
   monthNames,
   handleAddExpense
 }) => {
+  console.log(dayExpenses)
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size='small'>
+    <Modal isOpen={isOpen} onClose={onClose} size='small' title='Chi tiết ngày'>
       <div className={styles.dayDetailModal}>
         <div className={styles.dayDetailHeader}>
           <h3>
             {monthNames[calendarMonth]} {selectedDay}, {calendarYear}
           </h3>
           <div className={styles.totalAmount}>
-            {dayExpenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString('vi-VN')}đ
-            <span>tổng chi tiêu</span>
+            {dayExpenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString('vi-VN')}đ<span>tổng chi tiêu</span>
+          </div>
+          <div className={styles.dayStats}>
+            <p>
+              {dayExpenses.length} <span>chi tiêu</span>
+            </p>
           </div>
         </div>
 
@@ -71,23 +76,17 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({
                       e.amount < 50000 ? styles.low : e.amount < 150000 ? styles.medium : styles.high
                     }`}
                   >
-                    {e.amount.toLocaleString('vi-VN')}đ
+                    {e.totalAmount ? e.totalAmount.toLocaleString('vi-VN') : e.amount.toLocaleString('vi-VN')}đ
                   </div>
+
+                  {e.is_amortized && (
+                    <div className={styles.amortizedInfo}>
+                      <span className={styles.dailyAmount}>{e.amount.toLocaleString('vi-VN')}đ/ngày</span>
+                      <span className={styles.amortizedTag}>Phân bổ {e.amortized_days} ngày</span>
+                    </div>
+                  )}
                 </div>
               ))}
-
-              <div className={styles.dayStats}>
-                <div className={styles.statItem}>
-                  <span>Trung bình mỗi giao dịch</span>
-                  <strong>
-                    {(dayExpenses.reduce((sum, e) => sum + e.amount, 0) / dayExpenses.length).toLocaleString('vi-VN')}đ
-                  </strong>
-                </div>
-                <div className={styles.statItem}>
-                  <span>Số lượng giao dịch</span>
-                  <strong>{dayExpenses.length}</strong>
-                </div>
-              </div>
             </>
           )}
         </div>

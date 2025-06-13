@@ -90,7 +90,7 @@ export const createTourSteps = (navigate: ReturnType<typeof useNavigate>): TourS
     }
   },
   {
-    selector: '[data-tour="expenses-page"]',
+    selector: '.expenses-page',
     position: 'left' as Position,
     action: () => navigate('/expenses'),
     data: {
@@ -101,22 +101,22 @@ export const createTourSteps = (navigate: ReturnType<typeof useNavigate>): TourS
   },
   // Upcoming Bills Section
   {
-    selector: '[data-tour="menu-upcoming"]',
-    position: 'right' as Position,
-    action: () => navigate('/upcoming'),
-    data: {
-      tip: 'Hóa đơn',
-      title: '📅 Hóa đơn sắp tới',
-      description: 'Hãy kiểm tra phần Hóa đơn sắp tới. Nhấp vào đây để quản lý các khoản thanh toán trong tương lai.'
-    }
-  },
-  {
-    selector: '[data-tour="upcoming-section"]',
+    selector: '[data-tour="menu-bills"]',
     position: 'left' as Position,
-    action: () => navigate('/upcoming'),
+    action: () => navigate('/bills'),
     data: {
       tip: 'Theo dõi',
       title: '📝 Quản lý hóa đơn',
+      description: 'Theo dõi các khoản thanh toán và hóa đơn sắp tới của bạn tại đây.'
+    }
+  },
+  {
+    selector: '.bills-section',
+    position: 'right' as Position,
+    action: () => navigate('/bills'),
+    data: {
+      tip: 'Danh sách hóa đơn',
+      title: '📅 Quản lý hóa đơn',
       description: 'Theo dõi các khoản thanh toán và hóa đơn sắp tới của bạn tại đây.'
     }
   },
@@ -132,8 +132,8 @@ export const createTourSteps = (navigate: ReturnType<typeof useNavigate>): TourS
     }
   },
   {
-    selector: '[data-tour="budget-page"]',
-    position: 'left' as Position,
+    selector: '.budget-page',
+    position: 'right' as Position,
     action: () => navigate('/budget'),
     data: {
       tip: 'Trang ngân sách',
@@ -142,21 +142,11 @@ export const createTourSteps = (navigate: ReturnType<typeof useNavigate>): TourS
         'Chào mừng đến với Quản lý Ngân sách! Tại đây bạn có thể tạo và quản lý ngân sách cho các danh mục chi tiêu khác nhau.'
     }
   },
-  {
-    selector: '.budget-progress',
-    position: 'top' as Position,
-    data: {
-      tip: 'Tiến độ',
-      title: '📊 Theo dõi ngân sách',
-      description:
-        'Theo dõi tiến độ chi tiêu của bạn so với giới hạn ngân sách. Màu xanh lá có nghĩa là bạn đang trong ngân sách, màu đỏ có nghĩa là bạn đã vượt quá.'
-    }
-  },
   // Goals Section
   {
-    selector: '[data-tour="menu-goal"]',
+    selector: '[data-tour="menu-goals"]',
     position: 'right' as Position,
-    action: () => navigate('/goal'),
+    action: () => navigate('/goals'),
     data: {
       tip: 'Mục tiêu',
       title: '🎯 Mục tiêu tài chính',
@@ -166,23 +156,12 @@ export const createTourSteps = (navigate: ReturnType<typeof useNavigate>): TourS
   {
     selector: '.goals-section',
     position: 'left' as Position,
-    action: () => navigate('/goal'),
+    action: () => navigate('/goals'),
     data: {
       tip: 'Danh sách mục tiêu',
       title: '✨ Quản lý mục tiêu',
       description:
         'Thiết lập và theo dõi các mục tiêu tài chính của bạn tại đây. Cho dù là tiết kiệm để mua nhà hay trả nợ, chúng tôi sẽ giúp bạn đạt được mục tiêu.'
-    }
-  },
-  {
-    selector: '.goal-progress',
-    position: 'top' as Position,
-    action: () => navigate('/goal'),
-    data: {
-      tip: 'Tiến độ',
-      title: '📈 Theo dõi mục tiêu',
-      description:
-        'Theo dõi tiến độ của bạn đối với từng mục tiêu. Thanh tiến trình cho thấy bạn đã gần đến mục tiêu đến mức nào.'
     }
   },
   // Settings Section

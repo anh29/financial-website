@@ -47,7 +47,7 @@ const ExistingTab: React.FC<ExistingTabProps> = ({ income, existingBudgets }) =>
               <div className={styles.budgetIcon}>{icon}</div>
               <div className={styles.budgetInfo}>
                 <div className={styles.budgetName}>{item.description}</div>
-                <div className={styles.budgetAmount}>{item.amount.toLocaleString()} đ</div>
+                <div className={styles.budgetAmount}>{item.amount ? item.amount.toLocaleString() : 0} VND</div>
               </div>
             </div>
           )
@@ -66,7 +66,7 @@ const ExistingTab: React.FC<ExistingTabProps> = ({ income, existingBudgets }) =>
         <span className={styles.totalBudgetIcon}>💰</span>
         <div className={styles.totalBudgetInfo}>
           <span className={styles.totalBudgetLabel}>Tổng ngân sách</span>
-          <span className={styles['budgetAmount--large']}>{totalBudget.toLocaleString()} đ</span>
+          <span className={styles['budgetAmount--large']}>{totalBudget ? totalBudget.toLocaleString() : 0} VND</span>
         </div>
       </div>
 

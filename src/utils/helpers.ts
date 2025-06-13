@@ -1,5 +1,5 @@
 export function formatCurrency(amount: number, locale = 'vi-VN', currency = 'VND'): string {
-  return amount.toLocaleString(locale, { style: 'currency', currency })
+  return amount ? amount.toLocaleString(locale, { style: 'currency', currency }) : '0 VND'
 }
 
 export function formatDate(

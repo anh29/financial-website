@@ -35,7 +35,7 @@ const ExpensesPage: React.FC = () => {
   const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear()) // Current year
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
   const [showDayModal, setShowDayModal] = useState(false)
-  const { expenses: expensesData, error, fetchExpenses, isLoading } = useExpenses()
+  const { expenses: expensesData, fetchExpenses, isLoading } = useExpenses()
 
   useEffect(() => {
     fetchExpenses()
@@ -70,10 +70,41 @@ const ExpensesPage: React.FC = () => {
   // Expenses for selected day
   const dayExpenses = useMemo(() => {
     if (selectedDay == null) return []
-    return expensesData.filter((e) => {
-      const date = new Date(e.date)
-      return date.getDate() === selectedDay && date.getMonth() === calendarMonth && date.getFullYear() === calendarYear
-    })
+    return expensesData
+      .filter((e) => {
+        const date = new Date(e.date)
+        const transactionDay = date.getDate()
+        const transactionMonth = date.getMonth()
+        const transactionYear = date.getFullYear()
+
+        // For non-amortized transactions, check exact date match
+        if (!e.is_amortized) {
+          return (
+            transactionDay === selectedDay && transactionMonth === calendarMonth && transactionYear === calendarYear
+          )
+        }
+
+        // For amortized transactions, check if the selected day falls within the amortization period
+        if (e.is_amortized && e.amortized_days) {
+          const endDate = new Date(date.getTime() + (e.amortized_days - 1) * 24 * 60 * 60 * 1000)
+          const selectedDate = new Date(calendarYear, calendarMonth, selectedDay)
+
+          return selectedDate >= date && selectedDate <= endDate
+        }
+
+        return false
+      })
+      .map((e) => {
+        // For amortized transactions, calculate the daily amount
+        if (e.is_amortized && e.amortized_days) {
+          return {
+            ...e,
+            amount: Math.round(e.amount / e.amortized_days),
+            totalAmount: e.amount
+          }
+        }
+        return e
+      })
   }, [selectedDay, calendarMonth, calendarYear, expensesData])
 
   // Compute analytics data
@@ -204,7 +235,7 @@ const ExpensesPage: React.FC = () => {
       const date = new Date(e.date)
       if (date.getMonth() === calendarMonth && date.getFullYear() === calendarYear) {
         const day = date.getDate()
-        data[day - 1].amount += e.amount
+        data[day - 1].amount += e.amount / (e.amortized_days || 1)
       }
     })
     return data
@@ -244,15 +275,6 @@ const ExpensesPage: React.FC = () => {
     a.download = 'expenses.csv'
     a.click()
   }, [filteredData])
-
-  const handleCloseModal = useCallback(() => {
-    setShowDayModal(false)
-    setSelectedDay(null)
-  }, [])
-
-  if (error) {
-    return <div>Lỗi khi tải chi tiêu: {error}</div>
-  }
 
   const tabs = [
     {
@@ -305,7 +327,7 @@ const ExpensesPage: React.FC = () => {
   ]
 
   return (
-    <div className={styles.expensesPage} data-tour='expenses-page'>
+    <div className={`${styles.expensesPage} expenses-page`}>
       <div className={styles.header}>
         <h1>Chi tiêu</h1>
       </div>
@@ -327,27 +349,6 @@ const ExpensesPage: React.FC = () => {
           </motion.div>
         </AnimatePresence>
       )}
-      {showDayModal && selectedDay !== null && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h2>
-              Chi tiêu cho ngày {selectedDay} {monthNames[calendarMonth]}
-            </h2>
-            <div className={styles.dayExpenses}>
-              {dayExpenses.map((expense) => (
-                <div key={expense.id} className={styles.expenseItem}>
-                  <span className={styles.expenseDescription}>{expense.description}</span>
-                  <span className={styles.expenseAmount}>{expense.amount.toLocaleString()} VND</span>
-                </div>
-              ))}
-            </div>
-            <button className={styles.closeButton} onClick={handleCloseModal}>
-              Đóng
-            </button>
-          </div>
-        </div>
-      )}
-
       <FloatingActionButton onClick={() => navigate('/transactions')} />
     </div>
   )

@@ -5,6 +5,7 @@
 .dayDetailModal .dayDetailHeader {
   text-align: center;
   margin-bottom: 2rem;
+  position: relative;
 }
 
 .dayDetailModal .dayDetailHeader h3 {
@@ -104,6 +105,9 @@
   font-weight: 600;
   font-size: 1rem;
   color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .dayDetailModal .expenseTags {
@@ -145,33 +149,37 @@
   background: #fee2e2;
 }
 
-.dayDetailModal .dayStats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+.dayDetailModal .amortizedTag {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  background: #e6fcf5;
+  color: #099268;
+  border-radius: 12px;
+  font-weight: 500;
+  border: 1px solid #38d9a9;
 }
 
-.dayDetailModal .statItem {
-  text-align: center;
-  padding: 1rem;
-  background: #f8fafc;
-  border-radius: 16px;
-}
-
-.dayDetailModal .statItem span {
-  font-size: 0.85rem;
+.dayDetailModal .dailyAmount {
+  font-size: 0.8rem;
   color: #64748b;
-  display: block;
-  margin-bottom: 0.5rem;
+  margin-left: 0.3rem;
+  font-weight: 500;
 }
 
-.dayDetailModal .statItem strong {
-  font-size: 1.1rem;
-  color: #1a1f36;
-  font-weight: 700;
+.dayDetailModal .amortizedInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dayDetailModal .dayStats {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  background-color: #145d4e;
+  color: white;
+  padding: 6px;
+  border-radius: 50px;
 }
 
 /* Responsive styles */
@@ -207,4 +215,4 @@
     font-size: 1rem;
     padding: 0.4rem 0.8rem;
   }
-} 
+}
