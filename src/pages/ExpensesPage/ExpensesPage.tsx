@@ -41,21 +41,6 @@ const ExpensesPage: React.FC = () => {
     fetchExpenses()
   }, [fetchExpenses])
 
-  const monthNames = [
-    'Tháng 1',
-    'Tháng 2',
-    'Tháng 3',
-    'Tháng 4',
-    'Tháng 5',
-    'Tháng 6',
-    'Tháng 7',
-    'Tháng 8',
-    'Tháng 9',
-    'Tháng 10',
-    'Tháng 11',
-    'Tháng 12'
-  ]
-
   const filteredData = useMemo(() => {
     return expensesData.filter(
       (e) =>
@@ -231,11 +216,26 @@ const ExpensesPage: React.FC = () => {
       day: i + 1,
       amount: 0
     }))
+
     expensesData.forEach((e) => {
       const date = new Date(e.date)
-      if (date.getMonth() === calendarMonth && date.getFullYear() === calendarYear) {
-        const day = date.getDate()
-        data[day - 1].amount += e.amount / (e.amortized_days || 1)
+      if (!e.is_amortized) {
+        // Chi tiêu thường
+        if (date.getMonth() === calendarMonth && date.getFullYear() === calendarYear) {
+          const day = date.getDate()
+          data[day - 1].amount += e.amount
+        }
+      } else if (e.is_amortized && e.amortized_days) {
+        // Chi tiêu phân bổ
+        const startDate = new Date(date)
+        for (let i = 0; i < e.amortized_days; i++) {
+          const d = new Date(startDate)
+          d.setDate(d.getDate() + i)
+          if (d.getMonth() === calendarMonth && d.getFullYear() === calendarYear) {
+            const day = d.getDate()
+            data[day - 1].amount += Math.round(e.amount / e.amortized_days)
+          }
+        }
       }
     })
     return data
@@ -297,7 +297,6 @@ const ExpensesPage: React.FC = () => {
           selectedDay={selectedDay}
           setSelectedDay={setSelectedDay}
           dayExpenses={dayExpenses}
-          monthNames={monthNames}
           handleAddExpense={() => navigate('/expenses/add')}
           onShowListTab={() => handleTabChange('list')}
         />

@@ -10,28 +10,27 @@
 
 .dayDetailModal .dayDetailHeader h3 {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #1a1f36;
-  margin: 0 0 0.5rem;
-  background: linear-gradient(135deg, #1abc9c 0%, #3498db 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  color: var(--secondary-color);
+  background: none;
+  -webkit-text-fill-color: unset;
+  letter-spacing: 1px;
 }
 
 .dayDetailModal .totalAmount {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #1abc9c;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--color-high);
+  text-shadow: 0 2px 8px #ffeaea;
+  margin-bottom: 0.2rem;
 }
 
 .dayDetailModal .totalAmount span {
-  font-size: 0.9rem;
-  color: #64748b;
+  font-size: 1rem;
+  color: var(--dark-gray);
   font-weight: 500;
+  margin-top: 0.2rem;
 }
 
 .dayDetailModal .expensesList {
@@ -74,16 +73,17 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 16px;
-  margin-bottom: 1rem;
-  transition: transform 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 1.1rem;
+  background: #fff;
+  border-radius: 18px;
+  margin-bottom: 1.2rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 2px 10px rgba(52,152,219,0.08);
 }
 
 .dayDetailModal .expenseItem:hover {
-  transform: translateX(4px);
+  box-shadow: 0 8px 24px rgba(52,152,219,0.13);
+  transform: translateY(-2px) scale(1.01);
 }
 
 .dayDetailModal .expenseIcon {
@@ -93,7 +93,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8fafc;
+  background: var(--background);
   border-radius: 12px;
 }
 
@@ -126,60 +126,148 @@
 }
 
 .dayDetailModal .expenseAmount {
-  font-weight: 700;
   font-size: 1.1rem;
-  padding: 0.5rem 1rem;
+  min-width: 90px;
   border-radius: 12px;
-  min-width: 100px;
-  text-align: center;
+  padding: 0.5rem 1rem;
+  font-weight: 800;
+  background: var(--light-gray);
+  color: var(--secondary-color);
+  box-shadow: 0 1px 4px #e3f0fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
 }
 
 .dayDetailModal .expenseAmount.low {
-  color: #10b981;
-  background: #d1fae5;
+  background: #fff6f6;
+  color: var(--color-medium);
 }
-
 .dayDetailModal .expenseAmount.medium {
-  color: #f59e0b;
-  background: #fef3c7;
+  background: #fff3ed;
+  color: var(--color-medium);
 }
-
 .dayDetailModal .expenseAmount.high {
-  color: #ef4444;
-  background: #fee2e2;
+  background: #fff0f0;
+  color: var(--color-high);
 }
 
-.dayDetailModal .amortizedTag {
-  font-size: 0.8rem;
-  padding: 0.2rem 0.6rem;
-  background: #e6fcf5;
-  color: #099268;
-  border-radius: 12px;
-  font-weight: 500;
-  border: 1px solid #38d9a9;
-}
-
-.dayDetailModal .dailyAmount {
-  font-size: 0.8rem;
-  color: #64748b;
-  margin-left: 0.3rem;
-  font-weight: 500;
+.dayDetailModal .amortizedExpense {
+  border: 1.5px solid #e0f2fe;
+  background: var(--color-empty);
+  border-radius: 16px;
+  box-shadow: none;
 }
 
 .dayDetailModal .amortizedInfo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.dayDetailModal .amortizedIcon {
+  font-size: 1.1em;
+}
+
+.dayDetailModal .dailyAmount {
+  color: #0ea5e9;
+  font-weight: 500;
+  font-size: 0.95em;
+}
+
+.dayDetailModal .amortizedTag {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 0.95em;
+  margin-left: 4px;
+  border: none;
+  font-weight: 500;
 }
 
 .dayDetailModal .dayStats {
   position: absolute;
-  top: 0.5rem;
-  right: 1rem;
-  background-color: #145d4e;
-  color: white;
-  padding: 6px;
-  border-radius: 50px;
+  top: -1rem;
+  right: 0;
+  background: var(--primary-color);
+  color: #fff;
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px #e3f0fa;
+  display: flex;
+  align-items: center;
+  height: 28px;
+}
+
+/* Info icon and tooltip for amortized */
+.dayDetailModal .infoIcon {
+  margin-left: 6px;
+  color: var(--color-high);
+  font-size: 1em;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.dayDetailModal .infoIcon svg {
+  vertical-align: middle;
+}
+
+.dayDetailModal .tooltip {
+  position: absolute;
+  left: 50%;
+  top: 120%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #222;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.98em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  white-space: normal;
+  max-width: 220px;
+  text-align: center;
+  z-index: 10;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.18s;
+}
+
+.dayDetailModal .infoIcon:not(:hover) .tooltip {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dayDetailModal .expenseContent {
+  display: flex;
+}
+
+.dayDetailModal .expenseContainer {
+  flex: 1;
+}
+
+/* Close button style */
+.closeButton {
+  font-weight: 700;
+  color: var(--color-high);
+  background: #e0f2fe;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(20,93,78,0.08);
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 1.5rem auto 0 auto;
+  display: block;
+}
+.closeButton:hover {
+  background: #b6e0fe;
 }
 
 /* Responsive styles */
@@ -215,4 +303,16 @@
     font-size: 1rem;
     padding: 0.4rem 0.8rem;
   }
+}
+
+.amortizedDetailBox {
+  margin-top: 0.5rem;
+  background: var(--color-empty);
+  color: var(--primary-color);
+  border-radius: 10px;
+  padding: 7px 14px;
+  font-size: 0.98em;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 1px 4px #b6e0fe;
 }

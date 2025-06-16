@@ -11,6 +11,7 @@ import { Budget, BudgetAllocation } from '../../types/budgets'
 import { LoadingSpinner } from '../../components/common'
 import { createBudget } from '../../services/features/budgetService'
 import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
+import { expenseCategories } from '../../utils/categoryUtils'
 
 const BudgetPage = () => {
   const {
@@ -129,7 +130,7 @@ const BudgetPage = () => {
                 remaining={remaining}
                 remainingMonthlyBudget={remainingMonthlyBudget}
                 budgetAllocations={budgetAllocations}
-                suggestedCategories={['Ăn uống', 'Đi lại', 'Tiện ích', 'Giải trí', 'Sức khỏe', 'Giáo dục', 'Tiết kiệm']}
+                suggestedCategories={expenseCategories.map((category) => category.label)}
                 handleMonthlyBudgetChange={handleMonthlyBudgetChange}
                 monthlyBudget={monthlyBudget}
                 savings={savings}

@@ -13,7 +13,7 @@ interface CalendarHeatmapCardProps {
 }
 
 const getIntensityClass = (amount: number) => {
-  if (amount === 0) return styles.empty
+  if (amount < 10000) return styles.empty
   if (amount < 50000) return styles.low
   if (amount < 150000) return styles.medium
   if (amount < 300000) return styles.high

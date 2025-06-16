@@ -40,18 +40,21 @@
 }
 
 .closeButton {
-  background: none;
+  font-weight: 700;
+  color: var(--accent, #145d4e);
+  background: #e0f2fe;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
   border: none;
-  font-size: 1.5rem;
-  color: #666;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(20,93,78,0.08);
   cursor: pointer;
-  padding: 0.25rem;
-  line-height: 1;
-  transition: color 0.2s ease;
+  transition: background 0.2s;
+  margin-left: 1rem;
 }
 
 .closeButton:hover {
-  color: #333;
+  background: #b6e0fe;
 }
 
 .content {

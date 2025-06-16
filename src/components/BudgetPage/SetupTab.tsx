@@ -110,14 +110,18 @@ const SetupTab: React.FC<SetupTabProps> = ({
       <div key={index} className={`${styles.allocationCard} ${warning ? styles.warningCard : ''}`}>
         <div className={styles.inputGroup}>
           <label className={styles.inputLabel}>🏷 Mô tả:</label>
-          <input
-            type='text'
-            value={item.description || ''}
-            onChange={(e) => isEditable && handleAllocationChange(index, 'description', e.target.value)}
-            placeholder='Ví dụ: Ăn uống'
+          <select
             className={styles.inputField}
-            readOnly={!isEditable}
-          />
+            value={item.description}
+            onChange={(e) => isEditable && handleAllocationChange(index, 'description', e.target.value)}
+          >
+            <option value=''>Chọn danh mục</option>
+            {suggestedCategories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className={styles.inputGroup}>

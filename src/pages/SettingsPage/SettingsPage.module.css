@@ -13,7 +13,7 @@
 .settingsPage .title {
   font-size: 2.3rem;
   font-weight: 800;
-  color: #4f8cff;
+  color: var(--primary-color);
   margin-bottom: 0.3rem;
 }
 
@@ -93,7 +93,7 @@
 
 .settingsPage .avatarChangeBtn {
   background: #f5f7fa;
-  color: #4f8cff;
+  color: var(--primary-color);
   border: none;
   border-radius: 7px;
   padding: 0.4rem 1.1rem;
@@ -118,6 +118,9 @@
   color: #2c3e50;
   font-weight: 600;
   margin-bottom: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .settingsPage .profileForm input[type="text"],
@@ -137,7 +140,7 @@
 }
 
 .settingsPage .saveBtn {
-  background: linear-gradient(90deg, #7b5cff 0%, #4f8cff 100%);
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-color-blur) 100%);
   color: #fff;
   font-weight: 700;
   font-size: 1.08rem;
@@ -149,7 +152,7 @@
   transition: background 0.18s;
 }
 .settingsPage .saveBtn:hover {
-  background: linear-gradient(90deg, #4f8cff 0%, #7b5cff 100%);
+  background: linear-gradient(90deg, var(--primary-color-blur) 0%, var(--primary-color) 100%);
 }
 
 .settingsPage .securityCard, .preferencesCard, .dangerZoneCard {
@@ -160,7 +163,7 @@
 .settingsPage .preferencesCard h2,
 .settingsPage .dangerZoneCard h2 {
   font-size: 1.25rem;
-  color: #4f8cff;
+  color: var(--primary-color);
   font-weight: 700;
   margin-bottom: 1.1rem;
 }
@@ -175,6 +178,9 @@
   font-size: 1rem;
   color: #2c3e50;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .settingsPage .securityForm input[type="password"] {
@@ -189,7 +195,7 @@
   transition: border 0.18s;
 }
 .settingsPage .securityForm input:focus {
-  border: 1.5px solid #7b5cff;
+  border: 1.5px solid var(--primary-color);
 }
 
 .settingsPage .preferencesCard {
@@ -210,6 +216,11 @@
   border-radius: 7px;
   padding: 0.7rem 1.1rem;
   margin-bottom: 0.5rem;
+  width: -webkit-fill-available;
+}
+
+.settingsPage .preferenceRow span {
+  width: -webkit-fill-available;
 }
 
 .settingsPage .preferenceRow select {

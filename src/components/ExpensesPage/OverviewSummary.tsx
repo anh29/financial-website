@@ -64,7 +64,6 @@ type OverviewSummaryProps = Props & {
   selectedDay: number | null
   setSelectedDay: (day: number | null) => void
   dayExpenses: Transaction[]
-  monthNames: string[]
   handleAddExpense: () => void
   onShowListTab: () => void
 }
@@ -84,7 +83,6 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
   selectedDay,
   setSelectedDay,
   dayExpenses,
-  monthNames,
   handleAddExpense,
   onShowListTab
 }) => {
@@ -232,7 +230,6 @@ const OverviewSummary: React.FC<OverviewSummaryProps> = ({
         calendarMonth={calendarMonth}
         calendarYear={calendarYear}
         dayExpenses={dayExpenses}
-        monthNames={monthNames}
         handleAddExpense={handleAddExpense}
       />
       <div className={styles.detailedAnalytics}>
