@@ -28,8 +28,23 @@ export const TourGuide = ({ children }: { children: React.ReactNode }) => {
   const [isTourActive, setIsTourActive] = useState(false)
 
   const startTour = useCallback(() => setIsTourActive(true), [])
-  const stopTour = useCallback(() => setIsTourActive(false), [])
-  const setTourState = useCallback((state: boolean) => setIsTourActive(state), [])
+  const stopTour = useCallback(() => {
+    setIsTourActive(false)
+    localStorage.setItem('hasSeenTour', 'true')
+  }, [])
+  const setTourState = useCallback((state: boolean) => {
+    setIsTourActive(state)
+    if (!state) {
+      localStorage.setItem('hasSeenTour', 'true')
+    }
+  }, [])
+
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem('hasSeenTour')
+    if (!hasSeenTour) {
+      setIsTourActive(true)
+    }
+  }, [])
 
   return (
     <TourProvider
