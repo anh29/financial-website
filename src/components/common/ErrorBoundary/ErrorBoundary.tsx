@@ -1,5 +1,4 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react'
-import { useLanguage } from '../../../context/LanguageContext'
 import styles from './ErrorBoundary.module.css'
 
 interface Props {
@@ -22,7 +21,7 @@ class ErrorBoundaryClass extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo)
+    console.error(error, errorInfo)
   }
 
   public render() {
@@ -35,18 +34,13 @@ class ErrorBoundaryClass extends Component<Props, State> {
 }
 
 const ErrorDisplay: React.FC<{ error: Error | null }> = ({ error }) => {
-  const { t } = useLanguage()
-
   return (
     <div className={styles.errorContainer}>
-      <h2>{t('common', 'errorBoundary.title')}</h2>
-      <p>{t('common', 'errorBoundary.message')}</p>
+      <h2>Lỗi</h2>
+      <p>Đã xảy ra lỗi khi hiển thị thành phần này.</p>
       {error && <pre className={styles.errorDetails}>{error.message}</pre>}
-      <button
-        className={styles.retryButton}
-        onClick={() => window.location.reload()}
-      >
-        {t('common', 'errorBoundary.retry')}
+      <button className={styles.retryButton} onClick={() => window.location.reload()}>
+        Thử lại
       </button>
     </div>
   )

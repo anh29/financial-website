@@ -17,7 +17,7 @@ export const useAuth = () => {
   }
 
   const logoutUser = () => {
-    handleDispatch(dispatch, logout, null)
+    handleDispatch(dispatch, logout, undefined)
   }
 
   const setLoadingState = (loading: boolean) => {

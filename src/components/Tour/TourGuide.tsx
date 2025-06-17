@@ -1,4 +1,4 @@
-import { TourProvider, useTour } from '@reactour/tour'
+import { StepType, TourProvider, useTour } from '@reactour/tour'
 import { TourContext } from '../../utils/tourContext'
 import { createTourSteps } from '../../utils/tourSteps'
 import { useEffect, useState, useCallback } from 'react'
@@ -13,7 +13,7 @@ const TourController = ({ isTourActive }: { isTourActive: boolean }) => {
     if (isTourActive) {
       const steps = createTourSteps(navigate)
       if (setSteps) {
-        setSteps(steps)
+        setSteps(steps as StepType[])
       }
       setIsOpen(true)
     } else {

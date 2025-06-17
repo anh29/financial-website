@@ -115,7 +115,7 @@ const GoalPage = () => {
         <StatsRow totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
 
         {filteredGoals.length === 0 ? (
-          <EmptyState onAdd={() => {}} type={activeTab === 'cancelled' ? 'cancelled' : 'default'} />
+          <EmptyState type={activeTab === 'cancelled' ? 'cancelled' : 'default'} />
         ) : (
           <div className={`${styles.goalsGrid} goal-progress`}>
             {filteredGoals.map((goal) => (

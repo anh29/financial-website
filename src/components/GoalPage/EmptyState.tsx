@@ -1,12 +1,11 @@
-import { FiPlus, FiSmile } from 'react-icons/fi'
+import { FiSmile } from 'react-icons/fi'
 import styles from './EmptyState.module.css'
 
 interface EmptyStateProps {
-  onAdd: () => void
   type?: 'default' | 'cancelled'
 }
 
-export const EmptyState = ({ onAdd, type = 'default' }: EmptyStateProps) => {
+export const EmptyState = ({ type = 'default' }: EmptyStateProps) => {
   if (type === 'cancelled') {
     return (
       <div className={styles.emptyStateContainer}>
