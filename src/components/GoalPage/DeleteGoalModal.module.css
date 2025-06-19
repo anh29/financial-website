@@ -1,0 +1,175 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.25);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s;
+}
+
+.confirmModal {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 2.5rem 2.2rem 1.7rem 2.2rem;
+  min-width: 340px;
+  max-width: 95vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: popIn 0.25s cubic-bezier(.4,1,.4,1);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.headerIcon {
+  margin-right: 0.2rem;
+}
+
+.confirmTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #222;
+  text-align: left;
+  margin-bottom: 0.1rem;
+}
+
+.goalName {
+  font-size: 1.18rem;
+  color: #e74c3c;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+  text-align: left;
+}
+
+.infoBox {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+  margin: 1.1rem 0 1.2rem 0;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+}
+
+.label {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.value {
+  font-weight: 700;
+  color: #222f3e;
+  font-size: 1.05rem;
+}
+
+.warningBox {
+  display: flex;
+  align-items: flex-start;
+  background: #fff8e1;
+  border-left: 4px solid #e74c3c;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  margin: 1.2rem 0 1.2rem 0;
+  font-size: 1.05rem;
+  color: #e67e22;
+  font-weight: 500;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 1.2rem;
+  width: 100%;
+  margin-top: 1.2rem;
+}
+
+.confirmBtn, .cancelBtn, .dangerBtn, .secondaryBtn {
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 8px;
+  padding: 0.7rem 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+  border: none;
+}
+
+.confirmBtn {
+  background: #1abc9c;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(26,188,156,0.10);
+}
+.confirmBtn:hover {
+  background: #159c85;
+}
+
+.cancelBtn, .secondaryBtn {
+  background: #f5f5f5;
+  color: #333;
+}
+.cancelBtn:hover, .secondaryBtn:hover {
+  background: #e0e0e0;
+}
+
+.dangerBtn {
+  background: #e74c3c;
+  color: #fff;
+}
+.dangerBtn:hover {
+  background: #c0392b;
+}
+
+.confirmDesc {
+  font-size: 1.08rem;
+  color: #555;
+  margin: 1.2rem 0 1.2rem 0;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .confirmModal {
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+    min-width: 90vw;
+  }
+  .infoBox, .warningBox {
+    max-width: 98vw;
+    padding: 0.7rem 0.5rem;
+  }
+  .buttonRow {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

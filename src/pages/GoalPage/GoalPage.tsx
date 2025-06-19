@@ -14,7 +14,7 @@ import { LoadingSpinner } from '../../components/common/LoadingSpinner/LoadingSp
 import CreateGoalModal from '../../components/GoalPage/CreateGoalModal'
 import { Goals } from '../../types/goals'
 import Log from '../../components/common/Log/Log'
-import { formatCurrency, formatDate } from '../../utils/helpers'
+import DeleteGoalModal from '../../components/GoalPage/DeleteGoalModal'
 
 const goalIcons = [<FiHome />, <FiBook />, <FiGlobe />, <FiTarget />, <FiTrendingUp />]
 
@@ -26,6 +26,7 @@ const GoalPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [goalToDelete, setGoalToDelete] = useState<string | null>(null)
+  const [deleteStep, setDeleteStep] = useState(1)
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   useEffect(() => {
@@ -62,14 +63,10 @@ const GoalPage = () => {
   const totalTarget = filteredGoals.reduce((sum, g) => sum + g.target, 0)
   const totalCurrent = filteredGoals.reduce((sum, g) => sum + g.current, 0)
   const overallProgress = totalTarget > 0 ? (totalCurrent / totalTarget) * 100 : 0
-
-  const handleEditGoal = (goalId: string) => {
-    // Implement edit functionality
-    console.log('Edit goal:', goalId)
-  }
-
+      
   const handleDeleteGoal = (goalId: string) => {
     setGoalToDelete(goalId)
+    setDeleteStep(1)
     setShowDeleteModal(true)
   }
 
@@ -127,7 +124,6 @@ const GoalPage = () => {
                   <GoalCard
                     key={goal.id}
                     goal={goal}
-                    onEdit={() => handleEditGoal(goal.id)}
                     onDelete={() => handleDeleteGoal(goal.id)}
                   />
                 ))}
@@ -156,38 +152,13 @@ const GoalPage = () => {
       />
 
       {showDeleteModal && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.confirmModal}>
-            <div className={styles.confirmTitle}>Xác nhận xoá mục tiêu</div>
-            <div className={styles.confirmContent}>
-              <p className={styles.confirmContentTitle}>
-                Mục tiêu: {filteredGoals.find((goal) => goal.id === goalToDelete)?.title}
-              </p>
-              <p className={styles.confirmContentValue}>
-                Số tiền cần đóng: {formatCurrency(filteredGoals.find((goal) => goal.id === goalToDelete)?.target || 0)}
-              </p>
-              <p className={styles.confirmContentValue}>
-                Số tiền đã đóng: {formatCurrency(filteredGoals.find((goal) => goal.id === goalToDelete)?.current || 0)}
-              </p>
-              <p className={styles.confirmContentValue}>
-                Số tiền còn lại:{' '}
-                {formatCurrency(filteredGoals.find((goal) => goal.id === goalToDelete)?.remaining || 0)}
-              </p>
-              <p className={styles.confirmContentValue}>
-                Ngày đến hạn: {formatDate(filteredGoals.find((goal) => goal.id === goalToDelete)?.due || '')}
-              </p>
-            </div>
-            <div className={styles.confirmDesc}>Bạn có chắc chắn muốn xoá mục tiêu này không?</div>
-            <div className={styles.confirmActions}>
-              <button onClick={confirmDeleteGoal} className={styles.confirmBtn}>
-                Xoá
-              </button>
-              <button onClick={() => setShowDeleteModal(false)} className={styles.cancelBtn}>
-                Huỷ
-              </button>
-            </div>
-          </div>
-        </div>
+        <DeleteGoalModal
+          deleteStep={deleteStep}
+          setDeleteStep={setDeleteStep}
+          goal={goals.find((goal) => goal.id === goalToDelete)}
+          confirmDeleteGoal={confirmDeleteGoal}
+          onClose={() => setShowDeleteModal(false)}
+        />
       )}
     </div>
   )

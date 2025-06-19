@@ -1,4 +1,4 @@
-import { FiEdit2, FiTrash2, FiCalendar } from 'react-icons/fi'
+import { FiTrash2, FiCalendar } from 'react-icons/fi'
 import { MdBolt, MdStar, MdEmojiEvents } from 'react-icons/md'
 import styles from './GoalCard.module.css'
 import { formatCurrency, formatDate } from '../../utils/helpers'
@@ -18,11 +18,10 @@ interface GoalCardProps {
     overdue?: boolean
     created?: string // start date for days to achieve
   }
-  onEdit?: () => void
   onDelete?: () => void
 }
 
-export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
+export const GoalCard = ({ goal, onDelete }: GoalCardProps) => {
   const percent = Math.round((goal.current / goal.target) * 100)
   const showStar = percent > 80
   const isOverdue = goal.overdue
