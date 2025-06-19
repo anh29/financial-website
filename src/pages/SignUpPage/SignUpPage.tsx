@@ -204,6 +204,14 @@ const SignUpPage = () => {
         <div className={styles.switchLink}>
           Đã có tài khoản? <a href='/signin'>Đăng nhập tại đây</a>
         </div>
+        <button
+          type='button'
+          className={styles.guestButton}
+          onClick={() => navigate('/customer')}
+          style={{ marginTop: '1rem', background: 'transparent', color: '#3498db', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+        >
+          Tiếp tục với tư cách khách
+        </button>
       </div>
     </div>
   )

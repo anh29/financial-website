@@ -89,7 +89,10 @@ const GoalPage = () => {
     try {
       await addGoal(goalData)
       setIsCreateModalOpen(false)
+      setNotification({ message: 'Tạo mục tiêu thành công', type: 'success' })
+      getGoals()
     } catch (error) {
+      setNotification({ message: 'Không thể tạo mục tiêu', type: 'error' })
       console.error('Không thể tạo mục tiêu:', error)
     }
   }

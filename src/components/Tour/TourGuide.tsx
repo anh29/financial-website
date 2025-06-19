@@ -2,7 +2,7 @@ import { StepType, TourProvider, useTour } from '@reactour/tour'
 import { TourContext } from '../../utils/tourContext'
 import { createTourSteps } from '../../utils/tourSteps'
 import { useEffect, useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { CustomTourContent } from './CustomTourContent'
 
 const TourController = ({ isTourActive }: { isTourActive: boolean }) => {
@@ -26,6 +26,7 @@ const TourController = ({ isTourActive }: { isTourActive: boolean }) => {
 
 export const TourGuide = ({ children }: { children: React.ReactNode }) => {
   const [isTourActive, setIsTourActive] = useState(false)
+  const location = useLocation()
 
   const startTour = useCallback(() => setIsTourActive(true), [])
   const stopTour = useCallback(() => {
@@ -41,10 +42,12 @@ export const TourGuide = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const hasSeenTour = localStorage.getItem('hasSeenTour')
-    if (!hasSeenTour) {
+    const path = location.pathname
+    const isAuthOrCustomer = path === '/signin' || path === '/signup' || path.startsWith('/customer')
+    if (!hasSeenTour && !isAuthOrCustomer) {
       setIsTourActive(true)
     }
-  }, [])
+  }, [location.pathname])
 
   return (
     <TourProvider

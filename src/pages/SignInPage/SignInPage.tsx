@@ -7,9 +7,11 @@ import { useAuth } from '../../context/AuthContext'
 import { GOOGLE_INFO_API_KEY, SERVER_ENDPOINT } from '../../utils/constants'
 import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa'
 import { User } from '../../types'
+import { useNavigate } from 'react-router-dom'
 
 const SignInPage: React.FC = () => {
   const { login } = useAuth()
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({ username: '', password: '', remember: false })
   const [loading, setLoading] = useState(false)
   const [logData, setLogData] = useState<{ message: string; status: 'success' | 'error' | 'warning' | 'info' } | null>(
@@ -136,6 +138,14 @@ const SignInPage: React.FC = () => {
         <div className={styles.switchLink}>
           Chưa có tài khoản? <a href='/signup'>Đăng ký tại đây</a>
         </div>
+        <button
+          type='button'
+          className={styles.guestButton}
+          onClick={() => navigate('/customer')}
+          style={{ marginTop: '1rem', background: 'transparent', color: '#3498db', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+        >
+          Tiếp tục với tư cách khách
+        </button>
       </div>
     </div>
   )
