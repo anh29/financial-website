@@ -33,6 +33,8 @@ const BillListItem: React.FC<BillListItemProps> = ({ bill, getStatusBadge, getCa
     progressText = `${paidMonths}/${totalMonths} tháng (còn ${bill.months_left} tháng)`
   }
 
+  const isOverdue = bill.is_overdue && bill.overdue_days !== null
+
   return (
     <div className={cardClass}>
       <div className={styles.billCardContent}>
@@ -83,16 +85,19 @@ const BillListItem: React.FC<BillListItemProps> = ({ bill, getStatusBadge, getCa
         {/* Right: Amount, Due, Button, Menu */}
         <div className={styles.billRightSection}>
           <div className={styles.billAmount}>{formatCurrency(bill.amount)}</div>
-          <div className={styles.billDueDate}>Kỳ tới: {bill.next_due_date ? bill.next_due_date : bill.due_date}</div>
+          <div className={styles.billDueDate}>Kỳ tới: {isOverdue ? bill.next_due_date : bill.due_date}</div>
           {bill.payment_status !== 'paid' && (
-            <button className={styles.markPaidButton} onClick={() => onMarkAsPaid(bill)}>
-              <span className={styles.markPaidIcon}></span> Đánh dấu đã trả
-            </button>
+            <div className={styles.billDueDate}>
+              {isOverdue && <p>Kỳ cần thanh toán: {bill.due_date}</p>}
+              <button className={styles.markPaidButton} onClick={() => onMarkAsPaid(bill)}>
+                <span className={styles.markPaidIcon}></span> Đánh dấu đã trả
+              </button>
+            </div>
           )}
         </div>
       </div>
       {/* Overdue warning: full width below card content */}
-      {bill.is_overdue && bill.overdue_days !== null && (
+      {isOverdue && (
         <div className={styles.overdueWarningFull}>
           <i className='fa fa-exclamation-triangle' /> Hóa đơn này đã quá hạn {bill.overdue_days} ngày. Vui lòng thanh
           toán sớm để tránh phí phạt.

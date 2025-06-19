@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styles from './MarkAsPaidModal.module.css'
 import { AddBillContributionForm } from '../../types/upcoming'
+import { getMonths } from '../../utils/helpers'
+import { LoadingSpinner } from '../common'
 
 type BillContributionInfo = AddBillContributionForm & {
   name: string
@@ -24,13 +26,19 @@ const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({ isOpen, onClose, onCo
     setDatePaid(bill.date_paid)
     setMonthPaid(bill.month_paid)
   }, [bill])
+
   if (!isOpen) return null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (isSubmitting) return
+    
     setIsSubmitting(true)
-    onConfirm({ bill_id: bill.bill_id, amount, date_paid: datePaid, month_paid: monthPaid })
-    setIsSubmitting(false)
+    try {
+      await onConfirm({ bill_id: bill.bill_id, amount, date_paid: datePaid, month_paid: monthPaid })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -40,26 +48,55 @@ const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({ isOpen, onClose, onCo
         <form className={styles.form} onSubmit={handleSubmit}>
           <label className={styles.formLabel}>
             Số tiền
-            <input type='number' value={amount} onChange={(e) => setAmount(Number(e.target.value))} required min={0} />
+            <input 
+              type='number' 
+              value={amount} 
+              onChange={(e) => setAmount(Number(e.target.value))} 
+              required 
+              min={0}
+              disabled={isSubmitting}
+            />
           </label>
           <label className={styles.formLabel}>
             Ngày thanh toán
-            <input type='date' value={datePaid} onChange={(e) => setDatePaid(e.target.value)} required />
+            <input 
+              type='date' 
+              value={datePaid} 
+              onChange={(e) => setDatePaid(e.target.value)} 
+              required
+              disabled={isSubmitting}
+            />
           </label>
           <label className={styles.formLabel}>
             Tháng thanh toán
-            <input
-              type='month'
-              value={monthPaid && new Date(monthPaid).toISOString().slice(0, 7)}
+            <select
+              value={new Date(bill.month_paid).toISOString().slice(0, 7)}
               onChange={(e) => setMonthPaid(e.target.value)}
               required
-            />
+              disabled={isSubmitting}
+            >
+              <option value=''>-- Chọn tháng --</option>
+              {getMonths().map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
           </label>
           <div className={styles.actionsRow}>
             <button type='submit' className={styles.submitButton} disabled={isSubmitting}>
-              {isSubmitting ? 'Đang lưu...' : 'Xác nhận'}
+              {isSubmitting ? (
+                  <LoadingSpinner />
+              ) : (
+                'Xác nhận'
+              )}
             </button>
-            <button type='button' className={styles.cancelButton} onClick={onClose}>
+            <button 
+              type='button' 
+              className={styles.cancelButton} 
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
               Hủy
             </button>
           </div>

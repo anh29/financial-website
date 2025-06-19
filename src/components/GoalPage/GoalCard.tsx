@@ -62,9 +62,9 @@ export const GoalCard = ({ goal, onEdit, onDelete }: GoalCardProps) => {
           </span>
           {!isCompleted && (
             <>
-              <button className={styles.iconBtn} onClick={onEdit} aria-label='Chỉnh sửa mục tiêu'>
+              {/* <button className={styles.iconBtn} onClick={onEdit} aria-label='Chỉnh sửa mục tiêu'>
                 <FiEdit2 />
-              </button>
+              </button> */}
               <button className={styles.iconBtn} onClick={onDelete} aria-label='Xóa mục tiêu'>
                 <FiTrash2 />
               </button>

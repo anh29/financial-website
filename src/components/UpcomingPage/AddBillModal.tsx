@@ -6,14 +6,17 @@ import { FaTimes, FaCalendarAlt, FaMoneyBillWave, FaListUl, FaHashtag } from 're
 import { classifyTransaction } from '../../services/features/transactionService'
 import { useUpcoming } from '../../hooks/features/useUpcoming'
 import { useLanguage } from '../../context/LanguageContext'
+import { useNotifications } from '../../hooks/useNotifications'
 
 interface AddBillModalProps {
   isOpen: boolean
   onClose: () => void
+  onSuccess?: () => void
 }
 
-const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
+const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const { t } = useLanguage()
+  const { showNotification } = useNotifications()
   const [form, setForm] = useState<AddBillForm>({
     title: '',
     amount: 0,
@@ -61,13 +64,17 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitError(null)
+    
     try {
       await addUpcomingBill(form)
-      setIsSubmitting(false)
+      showNotification('Thêm hóa đơn thành công', 'success')
+      onSuccess?.() // Call the success callback to refresh data
       onClose()
-    } catch {
-      setIsSubmitting(false)
+    } catch (error) {
+      showNotification('Không thể thêm hóa đơn. Vui lòng thử lại.', 'error')
       setSubmitError(t('common', 'cannotAddBill'))
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -98,6 +105,7 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
                   required
                   placeholder={t('common', 'enterTitle')}
                   autoComplete='off'
+                  disabled={isSubmitting}
                 />
               </div>
             </label>
@@ -113,13 +121,14 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
                   required
                   placeholder={t('common', 'enterAmount')}
                   autoComplete='off'
+                  disabled={isSubmitting}
                 />
               </div>
             </label>
             <label className={styles.formLabel}>
               {t('common', 'category')}
               {isClassifying ? <span className={styles.spinner} aria-label={t('common', 'classifying')} /> : null}
-              <select name='category' value={form.category} onChange={handleChange} required disabled={isClassifying}>
+              <select name='category' value={form.category} onChange={handleChange} required disabled={isClassifying || isSubmitting}>
                 <option value=''>{t('common', 'selectCategory')}</option>
                 {expenseCategories.map((cat) => (
                   <option key={cat.label} value={cat.label}>
@@ -133,7 +142,7 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
             </label>
             <label className={styles.formLabel}>
               {t('common', 'frequency')}
-              <select name='frequency' value={form.frequency} onChange={handleChange} required>
+              <select name='frequency' value={form.frequency} onChange={handleChange} required disabled={isSubmitting}>
                 <option value=''>{t('common', 'selectFrequency')}</option>
                 {repeatTypes.map((f) => (
                   <option key={f.value} value={f.value}>
@@ -157,6 +166,7 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
                   required
                   placeholder={t('common', 'enterStartDate')}
                   autoComplete='off'
+                  disabled={isSubmitting}
                 />
               </div>
             </label>
@@ -171,6 +181,7 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
                   onChange={handleChange}
                   placeholder={t('common', 'enterEndDate')}
                   autoComplete='off'
+                  disabled={isSubmitting}
                 />
               </div>
             </label>
@@ -188,6 +199,7 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
                   required
                   placeholder={t('common', 'enterDayOfMonth')}
                   autoComplete='off'
+                  disabled={isSubmitting}
                 />
               </div>
             </label>
@@ -196,12 +208,12 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose }) => {
             <button type='submit' className={styles.submitButton} disabled={isSubmitting}>
               {isSubmitting ? t('common', 'saving') : t('common', 'add')}
             </button>
-            <button type='button' onClick={onClose} className={styles.cancelButton}>
+            <button type='button' onClick={onClose} className={styles.cancelButton} disabled={isSubmitting}>
               {t('common', 'cancel')}
             </button>
           </div>
         </form>
-        {submitError && <div className={styles.classificationError}>{t('common', 'cannotAddBill')}</div>}
+        {submitError && <div className={styles.classificationError}>{submitError}</div>}
       </div>
     </div>
   )

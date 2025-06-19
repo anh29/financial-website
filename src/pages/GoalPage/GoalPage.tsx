@@ -10,6 +10,7 @@ import { StatsRow } from '../../components/GoalPage/StatsRow'
 import { GoalCard } from '../../components/GoalPage/GoalCard'
 import { EmptyState } from '../../components/GoalPage/EmptyState'
 import { FloatingActionButton } from '../../components/common/FloatingActionButton/FloatingActionButton'
+import { LoadingSpinner } from '../../components/common/LoadingSpinner/LoadingSpinner'
 import CreateGoalModal from '../../components/GoalPage/CreateGoalModal'
 import { Goals } from '../../types/goals'
 import Log from '../../components/common/Log/Log'
@@ -18,7 +19,7 @@ import { formatCurrency, formatDate } from '../../utils/helpers'
 const goalIcons = [<FiHome />, <FiBook />, <FiGlobe />, <FiTarget />, <FiTrendingUp />]
 
 const GoalPage = () => {
-  const { goals, getGoals, addGoal, cancelGoal } = useGoal()
+  const { goals, isLoading, getGoals, addGoal, cancelGoal } = useGoal()
   const [activeTab, setActiveTab] = useState('active')
   const navigate = useNavigate()
   const [showConfetti, setShowConfetti] = useState(false)
@@ -112,34 +113,40 @@ const GoalPage = () => {
       <div className='goals-section'>
         <HeroBanner totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
         <StatusTabs activeTab={activeTab} onTabChange={setActiveTab} />
-        <StatsRow totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
 
-        {filteredGoals.length === 0 ? (
-          <EmptyState type={activeTab === 'cancelled' ? 'cancelled' : 'default'} />
+        {isLoading ? (
+          <LoadingSpinner size='large' />
         ) : (
-          <div className={`${styles.goalsGrid} goal-progress`}>
-            {filteredGoals.map((goal) => (
-              <GoalCard
-                key={goal.id}
-                goal={goal}
-                onEdit={() => handleEditGoal(goal.id)}
-                onDelete={() => handleDeleteGoal(goal.id)}
-              />
-            ))}
-          </div>
-        )}
+          <>
+            <StatsRow totalGoals={totalGoals} totalTarget={totalTarget} overallProgress={overallProgress} />
+            {filteredGoals.length === 0 ? (
+              <EmptyState type={activeTab === 'cancelled' ? 'cancelled' : 'default'} />
+            ) : (
+              <div className={`${styles.goalsGrid} goal-progress`}>
+                {filteredGoals.map((goal) => (
+                  <GoalCard
+                    key={goal.id}
+                    goal={goal}
+                    onEdit={() => handleEditGoal(goal.id)}
+                    onDelete={() => handleDeleteGoal(goal.id)}
+                  />
+                ))}
+              </div>
+            )}
 
-        {activeTab === 'active' && filteredGoals.length > 0 && (
-          <div className={styles.addContributionCommonWrapper}>
-            <button className={styles.addContributionBtnCommon} onClick={() => navigate('/budget')}>
-              <FiPlus /> Thêm đóng góp
-            </button>
-          </div>
-        )}
-      </div>
+            {activeTab === 'active' && filteredGoals.length > 0 && (
+              <div className={styles.addContributionCommonWrapper}>
+                <button className={styles.addContributionBtnCommon} onClick={() => navigate('/budget')}>
+                  <FiPlus /> Thêm đóng góp
+                </button>
+              </div>
+            )}
 
-      <div className='goal-actions'>
-        <FloatingActionButton onClick={() => setIsCreateModalOpen(true)} />
+            <div className='goal-actions'>
+              <FloatingActionButton onClick={() => setIsCreateModalOpen(true)} />
+            </div>
+          </>
+        )}
       </div>
 
       <CreateGoalModal
