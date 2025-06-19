@@ -1,8 +1,8 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
-  ],
-  "redirects": [
-    { "source": "/(.*)", "destination": "/", "statusCode": 302 }
+      {
+          "source": "/(.*)",
+          "destination": "/"
+      }
   ]
-} 
+}
