@@ -44,7 +44,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = (userData: User) => {
     try {
-      console.log('login', userData)
       // Validate user data before saving
       if (!userData || !userData.id || !userData.email) {
         throw new Error('Invalid user data')

@@ -30,6 +30,18 @@ const CreateGoalModal: React.FC<CreateGoalModalProps> = ({ isOpen, onClose, onSu
   const [isSaving, setIsSaving] = useState(false)
   const descriptionDebounceRef = useRef<NodeJS.Timeout | null>(null)
 
+  // Reset form when modal opens/closes
+  React.useEffect(() => {
+    if (!isOpen) {
+      setFormData(initialFormData)
+      setIsClassifying(false)
+      setClassificationError(null)
+      if (descriptionDebounceRef.current) {
+        clearTimeout(descriptionDebounceRef.current)
+      }
+    }
+  }, [isOpen])
+
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
 
@@ -38,7 +50,7 @@ const CreateGoalModal: React.FC<CreateGoalModalProps> = ({ isOpen, onClose, onSu
       [name]: value
     }))
 
-    // If the title field is changed, trigger classification
+    // If the description field is changed, trigger classification
     if (name === 'description') {
       if (descriptionDebounceRef.current) {
         clearTimeout(descriptionDebounceRef.current)
@@ -52,13 +64,18 @@ const CreateGoalModal: React.FC<CreateGoalModalProps> = ({ isOpen, onClose, onSu
           const { predictedCategory } = await classifyTransaction({
             description: value
           })
-
-          setFormData((prev) => ({
-            ...prev,
-            category: predictedCategory.key
-          }))
+          // Only update if the description hasn't changed during the API call
+          setFormData((prev) => {
+            if (prev.description === value) {
+              return {
+                ...prev,
+                category: predictedCategory.label
+              }
+            }
+            return prev
+          })
         } catch (error) {
-          setClassificationError('⚠ Classification failed')
+          setClassificationError('⚠ Phân loại thất bại')
           console.error('Classification error:', error)
         } finally {
           setIsClassifying(false)
@@ -100,17 +117,6 @@ const CreateGoalModal: React.FC<CreateGoalModalProps> = ({ isOpen, onClose, onSu
               placeholder='VD: Mua MacBook'
               required
             />
-            {isClassifying && (
-              <div className={styles.classifyingIndicator}>
-                <span className={styles.spinner}></span>
-                Đang phân loại...
-              </div>
-            )}
-            {classificationError && (
-              <div className={styles.errorText} role='alert'>
-                {classificationError}
-              </div>
-            )}
           </div>
 
           <div className={styles.formGroup}>
@@ -166,6 +172,7 @@ const CreateGoalModal: React.FC<CreateGoalModalProps> = ({ isOpen, onClose, onSu
             <div className={styles.formGroup}>
               <label htmlFor='category'>Danh mục</label>
               <select id='category' name='category' value={formData.category} onChange={handleChange} required>
+                <option value=''>Chọn danh mục</option>
                 {expenseCategories.map((category) => (
                   <option key={category.key} value={category.label}>
                     {category.label}
@@ -175,6 +182,22 @@ const CreateGoalModal: React.FC<CreateGoalModalProps> = ({ isOpen, onClose, onSu
                   Khác
                 </option>
               </select>
+              {isClassifying && (
+                <div className={styles.classifyingIndicator}>
+                  <span className={styles.spinner}></span>
+                  Đang phân loại danh mục...
+                </div>
+              )}
+              {classificationError && (
+                <div className={styles.errorText} role='alert'>
+                  {classificationError}
+                </div>
+              )}
+              {formData.category && !isClassifying && (
+                <div className={styles.categorySetIndicator}>
+                  ✓ Danh mục đã được tự động chọn
+                </div>
+              )}
             </div>
           </div>
 

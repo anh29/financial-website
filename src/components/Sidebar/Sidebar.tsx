@@ -23,7 +23,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const { t } = useLanguage()
 
   const handleLogout = () => {
-    localStorage.clear()
+    localStorage.removeItem('user')
+    localStorage.removeItem('isAuth')
     navigate('/signin')
   }
 

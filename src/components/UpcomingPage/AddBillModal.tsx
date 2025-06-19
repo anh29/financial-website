@@ -127,7 +127,6 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose, onSuccess 
             </label>
             <label className={styles.formLabel}>
               {t('common', 'category')}
-              {isClassifying ? <span className={styles.spinner} aria-label={t('common', 'classifying')} /> : null}
               <select name='category' value={form.category} onChange={handleChange} required disabled={isClassifying || isSubmitting}>
                 <option value=''>{t('common', 'selectCategory')}</option>
                 {expenseCategories.map((cat) => (
@@ -136,6 +135,7 @@ const AddBillModal: React.FC<AddBillModalProps> = ({ isOpen, onClose, onSuccess 
                   </option>
                 ))}
               </select>
+              {isClassifying ? <span>{t('common', 'classifying')}</span> : null}
               {classificationError && (
                 <div className={styles.classificationError}>{t('common', 'classificationFailed')}</div>
               )}

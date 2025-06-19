@@ -90,7 +90,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
           setCurrent((prev) => ({ ...prev, category: predictedCategory.key }))
         } catch (error) {
           console.error('Classification error:', error)
-          setCurrent((prev) => ({ ...prev, classificationError: '⚠ Classification failed' }))
+          setCurrent((prev) => ({ ...prev, classificationError: '⚠ Phân loại thất bại' }))
         } finally {
           setIsClassifying(false)
         }

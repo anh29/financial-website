@@ -13,7 +13,7 @@
 .addBillModalContainer .modalContent {
   background: #fff;
   border-radius: 22px;
-  box-shadow: 0 8px 40px rgba(80,112,255,0.18);
+  box-shadow: 0 8px 40px var(--primary-color);
   padding: 2.7rem 2.3rem 2.1rem 2.3rem;
   min-width: 340px;
   max-width: 95vw;
@@ -50,7 +50,7 @@
   font-weight: 600;
 }
 .addBillModalContainer .form input:focus, .form select:focus {
-  border: 1.5px solid #7b5cff;
+  border: 1.5px solid var(--primary-color);
 }
 .addBillModalContainer .actions {
   display: flex;
@@ -85,7 +85,7 @@
 .addBillModalContainer .modalTitle {
   font-size: 1.55rem;
   font-weight: 800;
-  color: #7b5cff;
+  color: var(--primary-color);
   margin-bottom: 1.1rem;
   text-align: left;
   letter-spacing: 0.01em;
@@ -106,7 +106,7 @@
 }
 .addBillModalContainer .closeButton:hover {
   color: #fff;
-  background: #7b5cff;
+  background: var(--primary-color);
 }
 .addBillModalContainer .inputWrapper {
   display: flex;
@@ -121,13 +121,13 @@
   margin-top: 0.18rem;
 }
 .addBillModalContainer .inputIcon {
-  color: #7b5cff;
+  color: var(--primary-color);
   font-size: 1.18rem;
   margin-right: 0.7rem;
 }
 .addBillModalContainer .submitButton {
   flex: 1 1 0;
-  background: linear-gradient(90deg, #7b5cff 0%, #4f8cff 100%);
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-color-blur) 100%);
   color: #fff;
   font-weight: 800;
   font-size: 1.13rem;
@@ -139,7 +139,7 @@
   box-shadow: 0 2px 8px rgba(80,112,255,0.08);
 }
 .addBillModalContainer .submitButton:hover {
-  background: linear-gradient(90deg, #4f8cff 0%, #7b5cff 100%);
+  background: linear-gradient(90deg, var(--primary-color-blur) 0%, var(--primary-color) 100%);
 }
 .addBillModalContainer .cancelButton {
   background: #f5f7fa;
@@ -160,7 +160,7 @@
 .addBillModalContainer .sectionHeader {
   font-size: 1.13rem;
   font-weight: 800;
-  color: #4f8cff;
+  color: var(--primary-color);
   background: #f7faff;
   padding: 0.7rem 1.1rem;
   border-radius: 10px;
