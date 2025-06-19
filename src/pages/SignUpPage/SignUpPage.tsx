@@ -42,7 +42,7 @@ const SignUpPage = () => {
         via_google: true
       })
       const userData: User = {
-        id: response.data.data[0].id,
+        id: response.data.data.id,
         email: email,
         name: name,
         username: name,
