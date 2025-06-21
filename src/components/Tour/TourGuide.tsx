@@ -4,6 +4,7 @@ import { createTourSteps } from '../../utils/tourSteps'
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { CustomTourContent } from './CustomTourContent'
+import { useIsMobile } from '../../utils/helpers'
 
 const TourController = ({ isTourActive }: { isTourActive: boolean }) => {
   const { setSteps, setIsOpen } = useTour()
@@ -26,28 +27,48 @@ const TourController = ({ isTourActive }: { isTourActive: boolean }) => {
 
 export const TourGuide = ({ children }: { children: React.ReactNode }) => {
   const [isTourActive, setIsTourActive] = useState(false)
+  const isMobile = useIsMobile()
   const location = useLocation()
 
-  const startTour = useCallback(() => setIsTourActive(true), [])
+  const startTour = useCallback(() => {
+    if (!isMobile) {
+      setIsTourActive(true)
+    }
+  }, [isMobile])
+
   const stopTour = useCallback(() => {
     setIsTourActive(false)
     localStorage.setItem('hasSeenTour', 'true')
   }, [])
+
   const setTourState = useCallback((state: boolean) => {
-    setIsTourActive(state)
-    if (!state) {
-      localStorage.setItem('hasSeenTour', 'true')
+    if (!isMobile) {
+      setIsTourActive(state)
+      if (!state) {
+        localStorage.setItem('hasSeenTour', 'true')
+      }
     }
-  }, [])
+  }, [isMobile])
 
   useEffect(() => {
+    // Skip tour on mobile devices
+    if (isMobile) {
+      localStorage.setItem('hasSeenTour', 'true')
+      return
+    }
+
     const hasSeenTour = localStorage.getItem('hasSeenTour')
     const path = location.pathname
     const isAuthOrCustomer = path === '/signin' || path === '/signup' || path.startsWith('/customer')
     if (!hasSeenTour && !isAuthOrCustomer) {
       setIsTourActive(true)
     }
-  }, [location.pathname])
+  }, [location.pathname, isMobile])
+
+  // If mobile, just render children without tour functionality
+  if (isMobile) {
+    return <>{children}</>
+  }
 
   return (
     <TourProvider

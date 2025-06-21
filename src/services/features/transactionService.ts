@@ -1,5 +1,5 @@
 import { Transaction } from '../../types/transaction'
-import { SERVER_URL } from '../../utils/constants'
+import { apiClient } from '../../config/apiClient'
 import { getUser } from '../../utils/userUtils'
 import { expenseCategories, incomeCategories } from '../../utils/categoryUtils'
 
@@ -7,50 +7,27 @@ export const fetchTransactionsByUser = async () => {
   const user = getUser()
   if (!user) throw new Error('User not found')
 
-  const response = await fetch(`${SERVER_URL}/crud/transactions/user/${user.id}`)
-  if (!response.ok) throw new Error('Failed to fetch transactions')
-
-  return await response.json()
+  const response = await apiClient.get(`/crud/transactions/user/${user.id}`)
+  return response.data
 }
 
 export const createTransaction = async (transaction: Omit<Transaction, 'id'>) => {
-  const response = await fetch(`${SERVER_URL}/crud/transactions`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(transaction)
-  })
-  if (!response.ok) throw new Error('Failed to create transaction')
-
-  return await response.json()
+  const response = await apiClient.post('/crud/transactions', transaction)
+  return response.data
 }
 
 export const updateTransaction = async (transaction: Transaction) => {
-  const response = await fetch(`${SERVER_URL}/crud/transactions/${transaction.id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(transaction)
-  })
-  if (!response.ok) throw new Error('Failed to update transaction')
-
-  return await response.json()
+  const response = await apiClient.put(`/crud/transactions/${transaction.id}`, transaction)
+  return response.data
 }
 
 export const updateTransactionById = async (updatedTransaction: Partial<Transaction>) => {
-  const response = await fetch(`${SERVER_URL}/crud/transactions`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(updatedTransaction)
-  })
-  if (!response.ok) throw new Error('Failed to update transaction')
-
-  return await response.json()
+  const response = await apiClient.put('/crud/transactions', updatedTransaction)
+  return response.data
 }
 
 export const deleteTransaction = async (id: string) => {
-  const response = await fetch(`${SERVER_URL}/crud/transactions/${id}`, {
-    method: 'DELETE'
-  })
-  if (!response.ok) throw new Error('Failed to delete transaction')
+  await apiClient.delete(`/crud/transactions/${id}`)
 }
 
 export const importTransactions = async (newTransactions: Transaction[]) => {
@@ -65,15 +42,8 @@ export const importTransactions = async (newTransactions: Transaction[]) => {
     userId: user.id
   }))
 
-  const response = await fetch(`${SERVER_URL}/crud/transactions`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(transactionsWithUser)
-  })
-
-  if (!response.ok) throw new Error('Failed to import transactions')
-
-  return await response.json()
+  const response = await apiClient.post('/crud/transactions', transactionsWithUser)
+  return response.data
 }
 
 export const classifyTransaction = async ({
@@ -81,48 +51,30 @@ export const classifyTransaction = async ({
 }: {
   description?: string
 }): Promise<{ predictedCategory: { label: string; key: string } }> => {
-  const response = await fetch(`${SERVER_URL}/marketplace/category`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ description })
-  })
-
-  if (!response.ok) throw new Error('Failed to classify category')
-
-  return await response.json()
+  const response = await apiClient.post('/marketplace/category', { description })
+  return response.data
 }
 
 export const predictUsageDuration = async (transaction: { amount: number; category: string }) => {
   const user = await getUser()
   if (!user) throw new Error('User not found')
 
-  const response = await fetch(`${SERVER_URL}/marketplace/predictUsageDuration`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...transaction, userId: user.id })
-  })
-
-  if (!response.ok) throw new Error('Failed to predict usage duration')
-
-  const { data } = await response.json()
-  return data
+  const response = await apiClient.post('/marketplace/predictUsageDuration', { ...transaction, userId: user.id })
+  return response.data.data
 }
 
 export const getExpensesTransactions = async () => {
   const user = await getUser()
   if (!user) throw new Error('User not found')
 
-  const response = await fetch(`${SERVER_URL}/marketplace/getExpensesTransactions/user/${user.id}`)
-  if (!response.ok) throw new Error('Failed to get expenses transactions')
-
-  return await response.json()
+  const response = await apiClient.get(`/marketplace/getExpensesTransactions/user/${user.id}`)
+  return response.data
 }
 
 export const getLatestTransactions = async () => {
   const user = await getUser()
   if (!user) throw new Error('User not found')
 
-  const response = await fetch(`${SERVER_URL}/marketplace/getLatestTransaction/user/${user.id}`)
-  if (!response.ok) throw new Error('Failed to fetch latest transactions')
-  return await response.json()
+  const response = await apiClient.get(`/marketplace/getLatestTransaction/user/${user.id}`)
+  return response.data
 }

@@ -102,6 +102,12 @@
   }
 }
 
+@media (max-width: 768px) {
+  .tourButton {
+    display: none;
+  }
+}
+
 .userProfile {
   display: flex;
   align-items: center;

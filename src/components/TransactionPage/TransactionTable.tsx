@@ -37,9 +37,14 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null)
   const [isModalOpen, setModalOpen] = useState(false)
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
+  
+  // Ensure arrays are not undefined
+  const safeTransactions = transactions || []
+  const safeUpdatedTransactions = updatedTransactions || []
+  
   const transactionMap = new Map<string, Transaction>()
-  transactions.forEach((tx) => transactionMap.set(tx.id, tx))
-  updatedTransactions.forEach((tx) => transactionMap.set(tx.id, tx)) // updated takes precedence
+  safeTransactions.forEach((tx) => transactionMap.set(tx.id, tx))
+  safeUpdatedTransactions.forEach((tx) => transactionMap.set(tx.id, tx)) // updated takes precedence
   const totalTransactions = Array.from(transactionMap.values())
   const grouped = groupByDate(totalTransactions)
   const { t } = useLanguage()
@@ -52,7 +57,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
     })
     setExpandedGroups(collapsed)
     // eslint-disable-next-line
-  }, [transactions.length, updatedTransactions.length, viewMode])
+  }, [safeTransactions.length, safeUpdatedTransactions.length, viewMode])
 
   const handleEditClick = (transaction: Transaction) => {
     setSelectedTransaction(transaction)
@@ -65,7 +70,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   }
 
   const handleTransactionUpdate = (updatedTransaction: Transaction) => {
-    const updatedTransactions = transactions.map((transaction) =>
+    const updatedTransactions = safeTransactions.map((transaction) =>
       transaction.id === updatedTransaction.id ? updatedTransaction : transaction
     )
     if (onTransactionUpdate) {
@@ -96,8 +101,8 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
 
   return (
     <div className={styles.tableWrapper}>
-      {Object.entries(grouped).map(([date, txs]) => {
-        const summary = getSummary(txs)
+      {Object.entries(grouped || {}).map(([date, txs]) => {
+        const summary = getSummary(txs || [])
         const expanded = expandedGroups[date] !== false // default expanded
         return (
           <div className={styles.groupCard} key={date}>
@@ -133,7 +138,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
             </div>
             <div className={styles.transactionList + ' ' + (expanded ? styles.show : styles.hide)}>
               {expanded &&
-                txs.map((transaction) => (
+                (txs || []).map((transaction) => (
                   <div className={styles.transactionCard} key={transaction.id}>
                     {(() => {
                       const info = getCategoryInfo(transaction.category)

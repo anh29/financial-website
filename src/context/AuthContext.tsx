@@ -30,6 +30,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           // If user data is invalid, clear storage
           localStorage.removeItem('user')
           localStorage.removeItem('isAuth')
+          localStorage.removeItem('token')
           setUser(null)
         }
       }
@@ -38,6 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.error('Error parsing stored user:', error)
       localStorage.removeItem('user')
       localStorage.removeItem('isAuth')
+      localStorage.removeItem('token')
       setUser(null)
     }
   }, [])
@@ -58,6 +60,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // Clear any potentially corrupted data
       localStorage.removeItem('user')
       localStorage.removeItem('isAuth')
+      localStorage.removeItem('token')
       setUser(null)
     }
   }
@@ -65,6 +68,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     localStorage.removeItem('user')
     localStorage.removeItem('isAuth')
+    localStorage.removeItem('token')
     setUser(null)
     navigate('/signin')
   }

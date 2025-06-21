@@ -41,6 +41,11 @@ const SignInPage: React.FC = () => {
         via_google: true
       })
 
+      // Debug logging for mobile
+      if (window.innerWidth <= 768) {
+        console.log('Google sign-in response:', response.data)
+      }
+
       const userData: User = {
         id: response.data.data.id,
         email: email,
@@ -51,9 +56,19 @@ const SignInPage: React.FC = () => {
         via_google: true
       }
 
+      // Store the authentication token if it exists in the response
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token)
+      } else if (response.data.data?.token) {
+        localStorage.setItem('token', response.data.data.token)
+      } else {
+        console.warn('No token found in Google sign-in response')
+      }
+
       setLogData({ message: response.data.message, status: 'success' })
       login(userData)
-    } catch {
+    } catch (error) {
+      console.error('Google sign-in error:', error)
       setLogData({ message: 'Lỗi khi lấy thông tin người dùng Google. Vui lòng thử lại.', status: 'error' })
     } finally {
       setLoading(false)
@@ -65,9 +80,25 @@ const SignInPage: React.FC = () => {
     setLoading(true)
     try {
       const response = await axios.post(SERVER_ENDPOINT.AUTH.SIGN_IN, formData)
+      
+      // Debug logging for mobile
+      if (window.innerWidth <= 768) {
+        console.log('Sign-in response:', response.data)
+      }
+      
+      // Store the authentication token if it exists in the response
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token)
+      } else if (response.data.data?.token) {
+        localStorage.setItem('token', response.data.data.token)
+      } else {
+        console.warn('No token found in sign-in response')
+      }
+      
       setLogData({ message: response.data.message, status: 'success' })
       login(response.data.data)
-    } catch {
+    } catch (error) {
+      console.error('Sign-in error:', error)
       setLogData({ message: 'Đã xảy ra lỗi.', status: 'error' })
     } finally {
       setLoading(false)

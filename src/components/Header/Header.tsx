@@ -5,15 +5,18 @@ import { useAuth } from '../../context/AuthContext'
 import { generateAvatar } from '../../utils/userUtils'
 import { FaQuestionCircle } from 'react-icons/fa'
 import { useTourControl } from '../../utils/tourContext'
-import { formatDate } from '../../utils/helpers'
+import { formatDate, useIsMobile } from '../../utils/helpers'
 
 export const Header = () => {
   const { t } = useLanguage()
   const { user } = useAuth()
   const { setTourState, isTourActive } = useTourControl()
+  const isMobile = useIsMobile()
 
   const handleTourToggle = () => {
-    setTourState(!isTourActive)
+    if (!isMobile) {
+      setTourState(!isTourActive)
+    }
   }
 
   return (
@@ -28,15 +31,17 @@ export const Header = () => {
         <div className={styles.languageSwitcher}>
           <LanguageSwitcher />
         </div>
-        <button
-          className={styles.tourButton}
-          onClick={handleTourToggle}
-          title={isTourActive ? t('common', 'tourOff') : t('common', 'tourOn')}
-          aria-label={isTourActive ? t('common', 'tourOff') : t('common', 'tourOn')}
-        >
-          <FaQuestionCircle />
-          <span className={styles.tourButtonText}>{isTourActive ? t('common', 'tourOff') : t('common', 'tourOn')}</span>
-        </button>
+        {!isMobile && (
+          <button
+            className={styles.tourButton}
+            onClick={handleTourToggle}
+            title={isTourActive ? t('common', 'tourOff') : t('common', 'tourOn')}
+            aria-label={isTourActive ? t('common', 'tourOff') : t('common', 'tourOn')}
+          >
+            <FaQuestionCircle />
+            <span className={styles.tourButtonText}>{isTourActive ? t('common', 'tourOff') : t('common', 'tourOn')}</span>
+          </button>
+        )}
         <div className={styles.userProfile}>
           {user && (
             <>

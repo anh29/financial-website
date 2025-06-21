@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+
 export function formatCurrency(amount: number, locale = 'vi-VN', currency = 'VND'): string {
   return amount ? amount.toLocaleString(locale, { style: 'currency', currency }) : '0 VND'
 }
@@ -21,4 +23,24 @@ export const getMonths = (startYear = 2023, endYear = 2026) => {
     }
   }
   return result
+}
+
+export const isMobileDevice = (): boolean => {
+  return window.innerWidth <= 768
+}
+
+export const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  return isMobile
 }

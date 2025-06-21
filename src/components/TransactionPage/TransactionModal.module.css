@@ -252,8 +252,10 @@
 
 @media (max-width: 768px) {
   .transactionModal .modalContent {
-    width: 95%;
+    min-width: 90%;
+    max-width: 100%;
     padding: 16px;
+    max-height: 85vh;
   }
 
   .transactionModal .transactionTable th,
@@ -263,16 +265,91 @@
   }
 
   .transactionModal .modalHeader h2 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
+  }
+
+  /* Hide table header on mobile */
+  .transactionModal .transactionTable thead {
+    display: none;
+  }
+
+  /* Transform table rows into cards */
+  .transactionModal .transactionTable,
+  .transactionModal .transactionTable tbody,
+  .transactionModal .transactionTable tr,
+  .transactionModal .transactionTable td {
+    display: block;
+  }
+
+  .transactionModal .transactionTable tr {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    padding: 16px;
+    position: relative;
+    background: #f9f9f9;
+  }
+
+  .transactionModal .transactionTable td {
+    padding: 8px 0;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Add labels before inputs */
+  .transactionModal .transactionTable td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.8rem;
+    color: #555;
+    text-transform: uppercase;
+  }
+  
+  .transactionModal .deleteButton {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+
+  .transactionModal .transactionTable td:last-child {
+    padding-top: 20px;
+    padding-bottom: 0;
+  }
+
+  .transactionModal input[type='date'],
+  .transactionModal input[type='number'],
+  .transactionModal input[type='text'],
+  .transactionModal select {
+    font-size: 1rem;
+    padding: 12px;
   }
 
   .transactionModal .modalFooter {
-    flex-direction: column;
-    gap: 8px;
+    flex-direction: row;
+    gap: 12px;
   }
 
   .transactionModal .modalFooter button {
     width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+  }
+  
+  .transactionModal .addButton {
+    width: 100%;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .transactionModal .modalContent {
+    padding: 12px;
+  }
+  .transactionModal .modalHeader h2 {
+    font-size: 1.2rem;
   }
 }
 

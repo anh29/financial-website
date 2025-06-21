@@ -50,6 +50,38 @@
   gap: 1.5rem;
 }
 
+.transactionPage .actionButton {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.transactionPage .actionButton:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.transactionPage .actionButton svg {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.transactionPage .actionButton span {
+  flex: 1;
+}
+
 .transactionPage .floatingActionModalWrapper {
   position: fixed;
   top: 0;
@@ -61,4 +93,194 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* OCR Processing Overlay */
+.processingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.processingContent {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 300px;
+  width: 90%;
+}
+
+.processingContent p {
+  margin-top: 1rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* OCR Result Notification */
+.ocrResult {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1500;
+  max-width: 350px;
+  width: calc(100vw - 40px);
+  animation: slideInRight 0.3s ease-out;
+}
+
+.ocrResult.success {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.ocrResult.error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.ocrResultContent {
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.ocrResultContent h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.ocrResultContent p {
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.closeOcrResult {
+  background: none;
+  border: 1px solid currentColor;
+  color: inherit;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.closeOcrResult:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .transactionPage {
+    padding: 1rem;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: #fafbfc;
+  }
+
+  .transactionPage .header {
+    text-align: left;
+    margin-bottom: 1.5rem;
+  }
+
+  .transactionPage .header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .transactionPage .header p {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .transactionPage .controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .transactionPage .buttonGroup {
+    justify-content: center;
+  }
+
+  .transactionPage .floatingActionModalContent {
+    margin: 1rem;
+    padding: 1.5rem;
+    min-width: auto;
+    width: calc(100% - 2rem);
+    max-width: 400px;
+  }
+
+  .transactionPage .actionButton {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  .ocrResult {
+    top: 10px;
+    right: 10px;
+    width: calc(100vw - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .transactionPage {
+    padding: 0.75rem;
+  }
+
+  .transactionPage .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .transactionPage .header p {
+    font-size: 0.9rem;
+  }
+
+  .transactionPage .floatingActionModalContent {
+    margin: 0.5rem;
+    padding: 1rem;
+    width: calc(100% - 1rem);
+  }
+
+  .transactionPage .actionButton {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .processingContent {
+    padding: 1.5rem;
+    max-width: 280px;
+  }
+
+  .ocrResult {
+    top: 5px;
+    right: 5px;
+    width: calc(100vw - 10px);
+  }
+
+  .ocrResultContent {
+    padding: 0.75rem;
+  }
 }

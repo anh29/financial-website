@@ -280,3 +280,221 @@
     padding: 0.5rem;
   }
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .tableWrapper {
+    gap: 1.5rem;
+  }
+
+  .tableWrapper .groupCard {
+    border-radius: 12px;
+    padding: 0 0 1rem 0;
+  }
+
+  .tableWrapper .groupHeader {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    padding: 1rem 1.2rem 0.8rem 1.2rem;
+    min-height: auto;
+  }
+
+  .tableWrapper .expandBtn {
+    width: 2.8rem;
+    height: 2.8rem;
+    margin-right: 0.8rem;
+  }
+
+  .tableWrapper .chevron {
+    font-size: 1.4rem;
+  }
+
+  .tableWrapper .groupDateWrapper {
+    gap: 0.5rem;
+  }
+
+  .tableWrapper .groupDate {
+    font-size: 1.1rem;
+    margin-right: 0.8rem;
+  }
+
+  .tableWrapper .groupCount {
+    padding: 0.15rem 0.8rem;
+    font-size: 0.9rem;
+    margin-right: 0.8rem;
+  }
+
+  .tableWrapper .groupCountIcon {
+    font-size: 1rem;
+    margin-right: 0.3rem;
+  }
+
+  .tableWrapper .groupIncome,
+  .tableWrapper .groupExpense {
+    font-size: 1rem;
+    margin-right: 0.6rem;
+  }
+
+  .tableWrapper .groupNetAmount {
+    font-size: 1.2rem;
+    margin-left: 0;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .tableWrapper .groupNetLabel {
+    font-size: 0.9rem;
+    margin-top: 0;
+    margin-left: 0.5rem;
+  }
+
+  .tableWrapper .transactionList {
+    padding: 0.8rem 1.2rem 0 1.2rem;
+    gap: 0.5rem;
+  }
+
+  .tableWrapper .transactionCard {
+    padding: 0.8rem 1rem;
+    gap: 0.8rem;
+  }
+
+  .tableWrapper .transactionIcon {
+    font-size: 1.4rem;
+    padding: 0.5rem;
+    margin-right: 0.8rem;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .tableWrapper .transactionTitle {
+    font-size: 1rem;
+  }
+
+  .tableWrapper .transactionTags {
+    gap: 0.3rem;
+  }
+
+  .tableWrapper .transactionTag {
+    padding: 0.12rem 0.5rem;
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+  }
+
+  .tableWrapper .transactionAccount {
+    font-size: 0.85rem;
+  }
+
+  .tableWrapper .transactionAmount {
+    font-size: 1rem;
+    margin-left: 0.8rem;
+    min-width: 90px;
+  }
+
+  .tableWrapper .editButton {
+    padding: 0.2rem;
+    margin-left: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .tableWrapper .amortizedInfo {
+    font-size: 0.9rem;
+    margin: 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .tableWrapper .groupHeader {
+    padding: 0.8rem 1rem 0.6rem 1rem;
+  }
+
+  .tableWrapper .expandBtn {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 0.6rem;
+  }
+
+  .tableWrapper .chevron {
+    font-size: 1.2rem;
+  }
+
+  .tableWrapper .groupDate {
+    font-size: 1rem;
+    margin-right: 0.6rem;
+  }
+
+  .tableWrapper .groupCount {
+    padding: 0.1rem 0.6rem;
+    font-size: 0.8rem;
+    margin-right: 0.6rem;
+  }
+
+  .tableWrapper .groupCountIcon {
+    font-size: 0.9rem;
+    margin-right: 0.2rem;
+  }
+
+  .tableWrapper .groupIncome,
+  .tableWrapper .groupExpense {
+    font-size: 0.9rem;
+    margin-right: 0.4rem;
+  }
+
+  .tableWrapper .groupNetAmount {
+    font-size: 1.1rem;
+  }
+
+  .tableWrapper .groupNetLabel {
+    font-size: 0.8rem;
+  }
+
+  .tableWrapper .transactionList {
+    padding: 0.6rem 1rem 0 1rem;
+  }
+
+  .tableWrapper .transactionCard {
+    padding: 0.6rem 0.8rem;
+    gap: 0.6rem;
+  }
+
+  .tableWrapper .transactionIcon {
+    font-size: 1.2rem;
+    padding: 0.4rem;
+    margin-right: 0.6rem;
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .tableWrapper .transactionTitle {
+    font-size: 0.9rem;
+  }
+
+  .tableWrapper .transactionTag {
+    padding: 0.1rem 0.4rem;
+    font-size: 0.8rem;
+    margin-right: 0.4rem;
+  }
+
+  .tableWrapper .transactionAccount {
+    font-size: 0.8rem;
+  }
+
+  .tableWrapper .transactionAmount {
+    font-size: 0.9rem;
+    margin-left: 0.6rem;
+    min-width: 80px;
+  }
+
+  .tableWrapper .editButton {
+    padding: 0.15rem;
+    margin-left: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  .tableWrapper .amortizedInfo {
+    font-size: 0.8rem;
+    margin: 6px 0;
+  }
+}
