@@ -68,7 +68,7 @@ const TransactionModal = ({
     updated[index] = { ...updated[index], [field]: parsed }
 
     if (field === 'type') {
-      updated[index].category = parsed === 'expense' ? expenseCategories[0].key : incomeCategories[0].key
+      updated[index].category = parsed === 'expense' ? expenseCategories[0].key : ''
     }
 
     setTransactions(updated)
@@ -104,7 +104,13 @@ const TransactionModal = ({
   }
 
   const validateTransactions = (): boolean => {
-    const invalidTransactions = transactions.filter((t) => !t.date || !t.description || !t.amount || !t.category)
+    const invalidTransactions = transactions.filter((t) => {
+      if (t.type === 'expense') {
+        return !t.date || !t.description || !t.amount || !t.category
+      } else {
+        return !t.date || !t.amount
+      }
+    })
 
     if (invalidTransactions.length > 0) {
       setError('Vui lòng điền đầy đủ thông tin cho mỗi giao dịch')
@@ -194,25 +200,35 @@ const TransactionModal = ({
                     </select>
                   </td>
                   <td>
-                    {transaction.isClassifying ? (
-                      <div className={styles.loadingSpinner}>
-                        <span className={styles.spinner}></span>
-                        {t('transaction', 'classifying')}...
-                      </div>
+                    {transaction.type === 'expense' ? (
+                      transaction.isClassifying ? (
+                        <div className={styles.loadingSpinner}>
+                          <span className={styles.spinner}></span>
+                          {t('transaction', 'classifying')}...
+                        </div>
+                      ) : (
+                        <select
+                          value={transaction.category}
+                          onChange={(e) => handleInputChange(index, 'category', e)}
+                          aria-label={t('transaction', 'transaction_category')}
+                        >
+                          {(transaction.type === 'expense' ? expenseCategories : incomeCategories).map((category) => (
+                            <option key={category.key} value={category.key}>
+                              {category.label}
+                            </option>
+                          ))}
+                        </select>
+                      )
                     ) : (
-                      <select
+                      <input
+                        type='text'
                         value={transaction.category}
                         onChange={(e) => handleInputChange(index, 'category', e)}
+                        placeholder={t('transaction', 'enter_category')}
                         aria-label={t('transaction', 'transaction_category')}
-                      >
-                        {(transaction.type === 'expense' ? expenseCategories : incomeCategories).map((category) => (
-                          <option key={category.key} value={category.key}>
-                            {category.label}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     )}
-                    {transaction.classificationError && (
+                    {transaction.classificationError && transaction.type === 'expense' && (
                       <div className={styles.errorText} role='alert'>
                         ⚠ {t('transaction', 'classification_error')}
                       </div>

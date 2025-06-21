@@ -586,7 +586,8 @@ export const translations = {
     addTransaction: 'Thêm Giao Dịch',
     classifying: 'Đang phân loại...',
     uploadBill: 'Tải Hóa Đơn',
-    processingOCR: 'Đang xử lý OCR & Phân loại...'
+    processingOCR: 'Đang xử lý OCR & Phân loại...',
+    enter_category: 'Nhập danh mục'
   },
   customer: {
     features: 'Tính năng',

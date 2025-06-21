@@ -22,7 +22,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
     const allCategories = [...expenseCategories, ...incomeCategories]
     const categoryKey =
       allCategories.find((cat) => cat.label === transaction.category)?.key ||
-      (transaction.type === 'expense' ? expenseCategories[0].key : incomeCategories[0].key)
+      (transaction.type === 'expense' ? expenseCategories[0].key : '')
     return { ...transaction, category: categoryKey }
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -38,7 +38,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
     const allCategories = [...expenseCategories, ...incomeCategories]
     const categoryKey =
       allCategories.find((cat) => cat.label === transaction.category)?.key ||
-      (transaction.type === 'expense' ? expenseCategories[0].key : incomeCategories[0].key)
+      (transaction.type === 'expense' ? expenseCategories[0].key : '')
     setCurrent({ ...transaction, category: categoryKey })
   }, [transaction])
 
@@ -193,16 +193,25 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ transaction
         </label>
         <label>
           {t('common', 'category')}:
-          {isClassifying ? (
+          {isClassifying && current.type === 'expense' ? (
             <span className={styles.loadingSpinner}>{t('common', 'classifying')}</span>
-          ) : (
+          ) : current.type === 'expense' ? (
             <select name='category' value={current.category} onChange={handleChange} disabled={isSubmitting}>
-              {(current.type === 'expense' ? expenseCategories : incomeCategories).map((cat) => (
+              {expenseCategories.map((cat) => (
                 <option key={cat.key} value={cat.key}>
                   {cat.label}
                 </option>
               ))}
             </select>
+          ) : (
+            <input
+              type='text'
+              name='category'
+              value={current.category}
+              onChange={handleChange}
+              disabled={isSubmitting}
+              placeholder={t('transaction', 'enter_category')}
+            />
           )}
         </label>
         <label>

@@ -81,4 +81,5 @@ export type TranslationKey =
   | 'modal.confirm'
   | 'loadingSpinner.loading'
   | 'loadingSpinner.processing'
-  | 'loadingSpinner.saving' 
+  | 'loadingSpinner.saving'
+  | 'enter_category' 
