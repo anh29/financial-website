@@ -35,7 +35,14 @@ const ExpensesPage: React.FC = () => {
   const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear()) // Current year
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
   const [showDayModal, setShowDayModal] = useState(false)
-  const { expenses: expensesData, fetchExpenses, isLoading } = useExpenses()
+  const { expenses: expensesData, fetchExpenses, isLoading, fetchMonthlyCategoryExpenses, monthlyCategoryExpenses } = useExpenses()
+
+  useEffect(() => {
+    if (!monthlyCategoryExpenses || monthlyCategoryExpenses.length === 0) {
+      fetchMonthlyCategoryExpenses()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
   useEffect(() => {
     fetchExpenses()
@@ -306,7 +313,7 @@ const ExpensesPage: React.FC = () => {
       id: 'analytics',
       label: 'Phân tích',
       icon: faChartLine,
-      content: <AnalyticsDashboard {...analyticsData} />
+      content: <AnalyticsDashboard monthlyCategoryExpenses={monthlyCategoryExpenses} />
     },
     {
       id: 'list',

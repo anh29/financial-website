@@ -12,3 +12,13 @@ export interface Transaction {
   isClassifying?: boolean
   classificationError?: string
 }
+
+export interface MonthlyCategoryExpenses {
+  month: string
+  totalIncome: number
+  totalSpent: number
+  categories: {
+    category: string
+    amount: number
+  }[]
+}

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { Transaction } from '../../types/transaction'
+import { MonthlyCategoryExpenses, Transaction } from '../../types/transaction'
 import {
   fetchTransactionsByUser,
   createTransaction,
@@ -7,19 +7,22 @@ import {
   deleteTransaction as deleteTransactionAPI,
   importTransactions,
   getLatestTransactions,
-  getExpensesTransactions
+  getExpensesTransactions,
+  getMonthlyCategoryExpenses
 } from '../../services/features/transactionService'
 
 interface TransactionState {
   transactions: Transaction[]
   isLoading: boolean
   error: string | null
+  monthlyCategoryExpenses: MonthlyCategoryExpenses[]
 }
 
 const initialState: TransactionState = {
   transactions: [],
   isLoading: false,
-  error: null
+  error: null,
+  monthlyCategoryExpenses: []
 }
 
 export const fetchTransactionsAsync = createAsyncThunk(
@@ -106,6 +109,18 @@ export const getExpensesTransactionsAsync = createAsyncThunk(
   }
 )
 
+export const getMonthlyCategoryExpensesAsync = createAsyncThunk(
+  'transactions/getMonthlyCategoryExpenses',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await getMonthlyCategoryExpenses()
+      return data
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể lấy chi tiêu theo tháng')
+    }
+  }
+)
+
 const transactionSlice = createSlice({
   name: 'transactions',
   initialState,
@@ -183,7 +198,19 @@ const transactionSlice = createSlice({
         state.isLoading = false
         state.error = action.payload as string
       })
-  }
+      .addCase(getMonthlyCategoryExpensesAsync.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(getMonthlyCategoryExpensesAsync.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.monthlyCategoryExpenses = action.payload
+      })
+      .addCase(getMonthlyCategoryExpensesAsync.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload as string
+      })
+    }
 })
 
 export const { setTransactions, addTransaction, updateTransaction, deleteTransaction, setLoading, setError } =

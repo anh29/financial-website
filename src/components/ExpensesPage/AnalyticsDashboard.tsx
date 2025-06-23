@@ -1,407 +1,314 @@
-import React from 'react'
-import styles from './AnalyticsDashboard.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChartLine, faChartBar, faChartPie, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
-import { Line, Bar, Radar } from 'react-chartjs-2'
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  RadialLinearScale,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-  ChartOptions,
-  TooltipItem
-} from 'chart.js'
+import { useState } from 'react'
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import type { PieLabelRenderProps } from 'recharts/types/polar/Pie'
+import type { MonthlyCategoryExpenses } from '../../types/transaction'
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  RadialLinearScale,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-)
-
-// Define the prop types for all analytics/chart/table data
-interface AnalyticsDashboardProps {
-  radarLabels: string[]
-  radarValues: number[]
-  highest: {
-    category: string
-    amount: number
-  }
-  lowest: {
-    category: string
-    amount: number
-  }
-  weeklySpendingData: {
-    labels: string[]
-    datasets: {
-      label: string
-      data: number[]
-    }[]
-  }
-  weeklySpendingSummary: {
-    total: number
-    average: number
-    highest: number
-    lowest: number
-  }
-  trendsData: {
-    labels: string[]
-    datasets: {
-      label: string
-      data: number[]
-    }[]
-  }
-  periodComparison: {
-    current: number
-    previous: number
-    change: number
-  }
+const categoryColors = {
+  'Giải trí': '#8b5cf6',
+  'Giáo dục': '#06b6d4',
+  'Mua sắm': '#f59e0b',
+  'Ăn uống': '#10b981',
+  'Di chuyển': '#ef4444'
 }
 
-const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
-  radarLabels,
-  radarValues,
-  highest,
-  lowest,
-  weeklySpendingData,
-  weeklySpendingSummary,
-  trendsData,
-  periodComparison
-}) => {
-  // Helper function to calculate variance
-  function calculateVariance(data: number[]): number {
-    const mean = data.reduce((sum, val) => sum + val, 0) / data.length
-    const squaredDiffs = data.map((val) => Math.pow(val - mean, 2))
-    return squaredDiffs.reduce((sum, val) => sum + val, 0) / data.length
+const formatCurrency = (amount: number) => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+    maximumFractionDigits: 0
+  }).format(amount)
+}
+
+const formatMonthVN = (monthStr: string) => {
+  const date = new Date(monthStr + '-01')
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
+  return `Tháng ${month}, ${year}`
+}
+
+const ICONS = [
+  <span role="img" aria-label="income">💵</span>,
+  <span role="img" aria-label="expense">💸</span>,
+  <span role="img" aria-label="saving">💰</span>
+]
+
+const ARROW = (diff: number) =>
+  diff > 0 ? <span style={{ color: '#16a34a', marginLeft: 4 }}>▲</span> :
+  diff < 0 ? <span style={{ color: '#dc2626', marginLeft: 4 }}>▼</span> : <span style={{ marginLeft: 4 }}>→</span>
+
+export default function AnalyticsDashboard({ monthlyCategoryExpenses }: { monthlyCategoryExpenses: MonthlyCategoryExpenses[] }) {
+  const [currentIndex, setCurrentIndex] = useState(monthlyCategoryExpenses.length - 1)
+  const currentMonth = monthlyCategoryExpenses[currentIndex]
+  const prevMonth = monthlyCategoryExpenses[currentIndex - 1]
+
+  const handleNext = () => {
+    if (currentIndex < monthlyCategoryExpenses.length - 1) setCurrentIndex((i) => i + 1)
   }
 
-  // Helper function to determine trend direction
-  function calculateTrendDirection(data: number[], averageMonthly: number): 'up' | 'down' | 'stable' {
-    const firstHalf = data.slice(0, 6).reduce((sum, val) => sum + val, 0) / 6
-    const secondHalf = data.slice(6).reduce((sum, val) => sum + val, 0) / 6
-    const difference = secondHalf - firstHalf
-    if (Math.abs(difference) < averageMonthly * 0.05) return 'stable'
-    return difference > 0 ? 'up' : 'down'
+  const handlePrev = () => {
+    if (currentIndex > 0) setCurrentIndex((i) => i - 1)
   }
 
-  // Calculate yearly metrics
-  const totalSpending = trendsData.datasets[0].data.reduce((sum, val) => sum + val, 0)
-  const averageMonthly = totalSpending / 12
-  const highestMonth = trendsData.labels[trendsData.datasets[0].data.indexOf(Math.max(...trendsData.datasets[0].data))]
-  const lowestMonth = trendsData.labels[trendsData.datasets[0].data.indexOf(Math.min(...trendsData.datasets[0].data))]
-  const monthlyVariance = calculateVariance(trendsData.datasets[0].data)
-  const trendDirection = calculateTrendDirection(trendsData.datasets[0].data, averageMonthly)
+  const percentage = (amount: number) => ((amount / currentMonth.totalSpent) * 100).toFixed(1)
 
-  const yearlySummary = {
-    totalSpending,
-    averageMonthly,
-    highestMonth,
-    lowestMonth,
-    monthlyVariance,
-    trendDirection
+  const changeArrow = (current: number, prev: number) => {
+    if (prev == null) return '-'
+    const diff = current - prev
+    return (
+      <span>
+        {ARROW(diff)}
+        <span style={{ color: diff > 0 ? '#16a34a' : diff < 0 ? '#dc2626' : '#64748b', marginLeft: 4 }}>
+          {formatCurrency(Math.abs(diff))}
+        </span>
+      </span>
+    )
   }
 
-  // Common chart options with enhanced tooltips
-  const commonOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-      mode: 'index' as const,
-      intersect: false
-    },
-    plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: {
-          padding: 20,
-          font: {
-            size: 12,
-            weight: 'normal' as const
-          }
-        }
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        titleColor: '#2d3748',
-        bodyColor: '#4a5568',
-        borderColor: '#e2e8f0',
-        borderWidth: 1,
-        padding: 12,
-        boxPadding: 6,
-        usePointStyle: true
-      }
-    }
-  }
+  // Custom label for Pie chart
+  const renderCustomizedLabel = (props: PieLabelRenderProps) => {
+    const RADIAN = Math.PI / 180;
+    // Coerce all to numbers for arithmetic
+    const cx = Number(props.cx ?? 0);
+    const cy = Number(props.cy ?? 0);
+    const midAngle = Number(props.midAngle ?? 0);
+    const innerRadius = Number(props.innerRadius ?? 0);
+    const outerRadius = Number(props.outerRadius ?? 0);
+    const percent = Number(props.percent ?? 0);
+    const name = props.name ?? '';
+    const radius = innerRadius + (outerRadius - innerRadius) * 1.2;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    return (
+      <text
+        x={x}
+        y={y}
+        fill={categoryColors[name as keyof typeof categoryColors] || '#64748b'}
+        textAnchor={x > cx ? 'start' : 'end'}
+        dominantBaseline="central"
+        fontSize={15}
+        fontWeight={600}
+      >
+        {`${name}: ${(percent * 100).toFixed(1)}%`}
+      </text>
+    );
+  };
 
-  // Enhanced chart-specific options
-  const radarOptions: ChartOptions<'radar'> = {
-    ...commonOptions,
-    scales: {
-      r: {
-        beginAtZero: true,
-        ticks: {
-          stepSize: 20,
-          callback: function (value) {
-            return value + '%'
-          }
-        }
-      }
-    },
-    plugins: {
-      ...commonOptions.plugins,
-      tooltip: {
-        ...commonOptions.plugins.tooltip,
-        callbacks: {
-          label: function (tooltipItem: TooltipItem<'radar'>) {
-            const value = tooltipItem.raw as number
-            return `${tooltipItem.dataset.label}: ${value.toFixed(1)}%`
-          }
-        }
-      }
-    }
-  }
-
-  const barOptions: ChartOptions<'bar'> = {
-    ...commonOptions,
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          callback: function (value) {
-            return value.toLocaleString('vi-VN') + 'đ'
-          }
-        }
-      }
-    },
-    plugins: {
-      ...commonOptions.plugins,
-      tooltip: {
-        ...commonOptions.plugins.tooltip,
-        callbacks: {
-          label: function (tooltipItem: TooltipItem<'bar'>) {
-            const value = tooltipItem.parsed.y
-            return `${tooltipItem.dataset.label}: ${value.toLocaleString('vi-VN')}đ`
-          }
-        }
-      }
-    }
-  }
-
-  const lineOptions: ChartOptions<'line'> = {
-    ...commonOptions,
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Số tiền',
-          font: {
-            weight: 'bold'
-          }
-        },
-        ticks: {
-          callback: function (value) {
-            return value.toLocaleString('vi-VN') + 'đ'
-          }
-        }
-      },
-      x: {
-        title: {
-          display: true,
-          text: 'Tháng',
-          font: {
-            weight: 'bold'
-          }
-        }
-      }
-    },
-    plugins: {
-      ...commonOptions.plugins,
-      tooltip: {
-        ...commonOptions.plugins.tooltip,
-        callbacks: {
-          label: function (tooltipItem: TooltipItem<'line'>) {
-            const value = tooltipItem.parsed.y
-            return `${tooltipItem.dataset.label}: ${value.toLocaleString('vi-VN')}đ`
-          }
-        }
-      }
-    }
-  }
-
-  // Spending Distribution Chart (Radar)
-  const radarData = {
-    labels: radarLabels,
-    datasets: [
-      {
-        label: 'Phân bổ chi tiêu',
-        data: radarValues,
-        backgroundColor: 'rgba(26, 188, 156, 0.2)',
-        borderColor: '#1abc9c',
-        borderWidth: 2,
-        pointBackgroundColor: '#1abc9c',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#1abc9c'
-      }
-    ]
-  }
-
-  // Weekly Spending Chart (Bar)
-  const barData = {
-    ...weeklySpendingData,
-    datasets: [
-      {
-        ...weeklySpendingData.datasets[0],
-        backgroundColor: 'rgba(52, 152, 219, 0.6)',
-        borderColor: '#3498db',
-        borderWidth: 2,
-        borderRadius: 4,
-        barThickness: 20
-      }
-    ]
-  }
-
-  // Trends Chart (Line)
-  const lineData = {
-    ...trendsData,
-    datasets: [
-      {
-        ...trendsData.datasets[0],
-        fill: true,
-        backgroundColor: 'rgba(26, 188, 156, 0.1)',
-        borderColor: '#1abc9c',
-        tension: 0.4,
-        pointRadius: 4,
-        pointHoverRadius: 6
-      }
-    ]
+  // Responsive styles
+  const cardStyle = {
+    background: '#fff',
+    padding: 16,
+    borderRadius: 12,
+    boxShadow: '0 1px 4px #e2e8f0',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    minWidth: 0,
+    transition: 'box-shadow 0.2s',
+    cursor: 'pointer'
   }
 
   return (
-    <div className={styles.analyticsDashboard}>
-      <div className={styles.analyticsGrid}>
-        {/* Spending Distribution Section */}
-        <div className={styles.analyticsCard}>
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>
-              <FontAwesomeIcon icon={faChartPie} />
-              <h3>Phân bổ chi tiêu</h3>
-            </div>
-          </div>
-          <div className={styles.chartContainer}>
-            <Radar data={radarData} options={radarOptions} />
-          </div>
-          <div className={styles.cardInsights}>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Cao nhất:</span>
-              <span className={styles.insightValue}>
-                {highest.category} ({highest?.amount?.toLocaleString()} VND)
-              </span>
-            </div>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Thấp nhất:</span>
-              <span className={styles.insightValue}>
-                {lowest.category} ({lowest.amount.toLocaleString()} VND)
-              </span>
-            </div>
-          </div>
-        </div>
+    <div style={{
+      maxWidth: 900,
+      margin: '0 auto',
+      padding: '24px 8px',
+      fontFamily: 'Inter, Arial, sans-serif'
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+        flexWrap: 'wrap'
+      }}>
+        <button
+          onClick={handlePrev}
+          disabled={currentIndex === 0}
+          style={{
+            padding: '8px 16px',
+            borderRadius: 8,
+            border: 'none',
+            background: currentIndex === 0 ? '#e5e7eb' : '#1abc9c',
+            color: currentIndex === 0 ? '#94a3b8' : '#fff',
+            fontWeight: 600,
+            cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
+            transition: 'background 0.2s'
+          }}
+        >
+          ⬅️ Tháng trước
+        </button>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 700,
+          color: '#0f172a',
+          margin: 0,
+          textAlign: 'center',
+          flex: 1
+        }}>
+          {formatMonthVN(currentMonth.month)}
+        </h2>
+        <button
+          onClick={handleNext}
+          disabled={currentIndex === monthlyCategoryExpenses.length - 1}
+          style={{
+            padding: '8px 16px',
+            borderRadius: 8,
+            border: 'none',
+            background: currentIndex === monthlyCategoryExpenses.length - 1 ? '#e5e7eb' : '#1abc9c',
+            color: currentIndex === monthlyCategoryExpenses.length - 1 ? '#94a3b8' : '#fff',
+            fontWeight: 600,
+            cursor: currentIndex === monthlyCategoryExpenses.length - 1 ? 'not-allowed' : 'pointer',
+            transition: 'background 0.2s'
+          }}
+        >
+          Tháng sau ➡️
+        </button>
+      </div>
 
-        {/* Weekly Spending Section */}
-        <div className={styles.analyticsCard}>
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>
-              <FontAwesomeIcon icon={faChartBar} />
-              <h3>Chi tiêu hàng tuần</h3>
-            </div>
-          </div>
-          <div className={styles.chartContainer}>
-            <Bar data={barData} options={barOptions} />
-          </div>
-          <div className={styles.cardInsights}>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Ngày chi tiêu cao nhất:</span>
-              <span className={styles.insightValue}>{weeklySpendingSummary.highest.toLocaleString()} VND</span>
-            </div>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Trung bình hàng ngày:</span>
-              <span className={styles.insightValue}>{weeklySpendingSummary.average.toLocaleString()} VND</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Spending Trends Section - Full Width */}
-        <div className={`${styles.analyticsCard} ${styles.fullWidth}`}>
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>
-              <FontAwesomeIcon icon={faChartLine} />
-              <h3>Xu hướng chi tiêu hàng năm</h3>
-              <div className={styles.trendIndicator}>
-                <FontAwesomeIcon
-                  icon={yearlySummary.trendDirection === 'up' ? faArrowUp : faArrowDown}
-                  className={yearlySummary.trendDirection === 'up' ? styles.negative : styles.positive}
-                />
-                <span className={yearlySummary.trendDirection === 'up' ? styles.negative : styles.positive}>
-                  {yearlySummary.trendDirection === 'up' ? 'Xu hướng tăng' : 'Xu hướng giảm'}
-                </span>
+      {/* Summary Cards */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+        gap: 16,
+        marginTop: 16
+      }}>
+        {['Thu nhập', 'Chi tiêu', 'Tiết kiệm'].map((label, idx) => {
+          const value = [
+            currentMonth.totalIncome,
+            currentMonth.totalSpent,
+            currentMonth.totalIncome - currentMonth.totalSpent
+          ][idx]
+          const prev =
+            prevMonth &&
+            [prevMonth.totalIncome, prevMonth.totalSpent, prevMonth.totalIncome - prevMonth.totalSpent][idx]
+          const isPositive = idx !== 1
+          return (
+            <div
+              key={label}
+              style={{
+                ...cardStyle,
+                borderLeft: `6px solid ${isPositive ? '#10b981' : '#ef4444'}`,
+                boxShadow: '0 2px 8px #e0e7ef',
+                minHeight: 100
+              }}
+            >
+              <div style={{ fontSize: '1.1rem', color: '#64748b', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
+                {ICONS[idx]} {label}
+              </div>
+              <div
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 700,
+                  color: isPositive ? '#16a34a' : '#dc2626'
+                }}
+              >
+                {formatCurrency(value)}
+              </div>
+              <div style={{ fontSize: '0.95rem', color: '#64748b', marginTop: 4 }}>
+                {changeArrow(value, prev)}
               </div>
             </div>
-          </div>
-          <div className={styles.chartContainer}>
-            <Line data={lineData} options={lineOptions} />
-          </div>
-          <div className={styles.cardInsights}>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Tổng chi tiêu hàng năm:</span>
-              <span className={styles.insightValue}>{yearlySummary.totalSpending.toLocaleString()} VND</span>
-            </div>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Chi tiêu trung bình hàng tháng:</span>
-              <span className={styles.insightValue}>{yearlySummary.averageMonthly.toLocaleString()} VND</span>
-            </div>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Tháng chi tiêu cao nhất:</span>
-              <span className={styles.insightValue}>{yearlySummary.highestMonth}</span>
-            </div>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Tháng chi tiêu thấp nhất:</span>
-              <span className={styles.insightValue}>{yearlySummary.lowestMonth}</span>
-            </div>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Độ biến động hàng tháng:</span>
-              <span className={styles.insightValue}>
-                {Math.sqrt(yearlySummary.monthlyVariance).toLocaleString()} VND
-              </span>
-            </div>
-            <div className={styles.insight}>
-              <span className={styles.insightLabel}>Thay đổi so với năm trước:</span>
-              <span
-                className={`${styles.insightValue} ${periodComparison.change >= 0 ? styles.negative : styles.positive}`}
-              >
-                {periodComparison.change >= 0 ? '↑' : '↓'} {Math.abs(periodComparison.change).toLocaleString()} %
-              </span>
-            </div>
-          </div>
-        </div>
+          )
+        })}
+      </div>
+
+      {/* Pie Chart */}
+      <div style={{ height: 340, marginTop: 36, background: '#f9fafb', borderRadius: 16, padding: 16 }}>
+        <ResponsiveContainer width='100%' height='100%'>
+          <PieChart>
+            <Pie
+              data={currentMonth.categories.map((c: any) => ({ name: c.category, value: c.amount }))}
+              cx='50%'
+              cy='50%'
+              innerRadius={70}
+              outerRadius={110}
+              dataKey='value'
+              label={renderCustomizedLabel}
+              isAnimationActive={true}
+            >
+              {currentMonth.categories.map((entry: any, index: any) => (
+                <Cell key={`cell-${index}`} fill={categoryColors[entry.category as keyof typeof categoryColors] || '#94a3b8'} />
+              ))}
+            </Pie>
+            <Tooltip formatter={(v: any) => formatCurrency(v)} />
+            <Legend verticalAlign='bottom' height={36} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Category Breakdown */}
+      <div style={{
+        marginTop: 32,
+        background: '#fff',
+        borderRadius: 12,
+        padding: 20,
+        boxShadow: '0 1px 4px #e2e8f0'
+      }}>
+        <h3 style={{ fontWeight: 700, fontSize: '1.15rem', marginBottom: 12, color: '#0f172a' }}>
+          Phân tích chi tiêu theo danh mục
+        </h3>
+        {currentMonth.categories.length === 0 ? (
+          <p style={{ color: '#9ca3af' }}>Chưa có dữ liệu cho tháng này</p>
+        ) : (
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {currentMonth.categories.map((cat: any) => {
+              const percent = percentage(cat.amount)
+              return (
+                <li
+                  key={cat.category}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '10px 0',
+                    borderBottom: '1px solid #e5e7eb',
+                    gap: 12
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{
+                      width: 14,
+                      height: 14,
+                      borderRadius: '50%',
+                      background: categoryColors[cat.category as keyof typeof categoryColors] || '#94a3b8',
+                      display: 'inline-block'
+                    }} />
+                    <span style={{ fontWeight: 600, color: '#0f172a', minWidth: 80 }}>{cat.category}</span>
+                    <span style={{
+                      background: '#f1f5f9',
+                      color: '#334155',
+                      borderRadius: 8,
+                      padding: '2px 8px',
+                      fontSize: '0.85rem',
+                      marginLeft: 8
+                    }}>{percent}%</span>
+                  </div>
+                  <div style={{ flex: 1, margin: '0 12px' }}>
+                    <div style={{
+                      background: '#e5e7eb',
+                      borderRadius: 8,
+                      height: 8,
+                      width: '100%'
+                    }}>
+                      <div style={{
+                        width: `${percent}%`,
+                        background: categoryColors[cat.category as keyof typeof categoryColors] || '#94a3b8',
+                        height: '100%',
+                        borderRadius: 8,
+                        transition: 'width 0.3s'
+                      }} />
+                    </div>
+                  </div>
+                  <div style={{ fontWeight: 600, color: '#0f172a', minWidth: 110, textAlign: 'right' }}>
+                    {formatCurrency(cat.amount)}
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </div>
     </div>
   )
 }
-
-export default AnalyticsDashboard

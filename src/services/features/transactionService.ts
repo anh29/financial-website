@@ -78,3 +78,11 @@ export const getLatestTransactions = async () => {
   const response = await apiClient.get(`/marketplace/getLatestTransaction/user/${user.id}`)
   return response.data
 }
+
+export const getMonthlyCategoryExpenses = async () => {
+  const user = await getUser()
+  if (!user) throw new Error('User not found')
+
+  const response = await apiClient.get(`/marketplace/getMonthlyCategoryExpenses?userId=${user.id}`)
+  return response.data
+}
