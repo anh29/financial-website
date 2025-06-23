@@ -14,11 +14,6 @@ export const useTransactions = () => {
   const dispatch = useAppDispatch()
   const { transactions, isLoading, error } = useAppSelector((state) => state.transactions)
 
-  // Debug logging for mobile
-  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-    console.log('useTransactions state:', { transactions, isLoading, error })
-  }
-
   const fetchTransactions = useCallback(async () => {
     try {
       await dispatch(fetchTransactionsAsync()).unwrap()

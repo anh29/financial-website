@@ -15,16 +15,6 @@ apiClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     
-    // Debug logging for mobile
-    if (window.innerWidth <= 768) {
-      console.log('API Request:', {
-        url: config.url,
-        method: config.method,
-        hasToken: !!token,
-        headers: config.headers
-      });
-    }
-    
     return config;
   },
   (error) => {
@@ -53,11 +43,6 @@ apiClient.interceptors.response.use(
       if (!error.config._retry) {
         error.config._retry = true;
         delete error.config.headers.Authorization;
-        
-        // Debug logging for mobile
-        if (window.innerWidth <= 768) {
-          console.log('Retrying request without authentication:', error.config.url);
-        }
         
         return apiClient.request(error.config);
       } else {

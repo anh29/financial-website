@@ -41,11 +41,6 @@ const SignInPage: React.FC = () => {
         via_google: true
       })
 
-      // Debug logging for mobile
-      if (window.innerWidth <= 768) {
-        console.log('Google sign-in response:', response.data)
-      }
-
       const userData: User = {
         id: response.data.data.id,
         email: email,
@@ -80,11 +75,6 @@ const SignInPage: React.FC = () => {
     setLoading(true)
     try {
       const response = await axios.post(SERVER_ENDPOINT.AUTH.SIGN_IN, formData)
-      
-      // Debug logging for mobile
-      if (window.innerWidth <= 768) {
-        console.log('Sign-in response:', response.data)
-      }
       
       // Store the authentication token if it exists in the response
       if (response.data.token) {

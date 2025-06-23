@@ -40,7 +40,6 @@ export const PhotoCapture: React.FC<PhotoCaptureProps> = ({ onPhotoCapture, onCl
       }
     } catch (err) {
       console.error('Error accessing camera:', err)
-      setError('Không thể truy cập camera. Vui lòng kiểm tra quyền truy cập.')
     } finally {
       setIsLoading(false)
     }
@@ -53,33 +52,33 @@ export const PhotoCapture: React.FC<PhotoCaptureProps> = ({ onPhotoCapture, onCl
     }
   }, [stream])
 
-  const capturePhoto = useCallback(() => {
-    if (videoRef.current && canvasRef.current) {
-      const video = videoRef.current
-      const canvas = canvasRef.current
-      const context = canvas.getContext('2d')
+  // const capturePhoto = useCallback(() => {
+  //   if (videoRef.current && canvasRef.current) {
+  //     const video = videoRef.current
+  //     const canvas = canvasRef.current
+  //     const context = canvas.getContext('2d')
 
-      if (context) {
-        // Set canvas dimensions to match video
-        canvas.width = video.videoWidth
-        canvas.height = video.videoHeight
+  //     if (context) {
+  //       // Set canvas dimensions to match video
+  //       canvas.width = video.videoWidth
+  //       canvas.height = video.videoHeight
 
-        // Draw video frame to canvas
-        context.drawImage(video, 0, 0, canvas.width, canvas.height)
+  //       // Draw video frame to canvas
+  //       context.drawImage(video, 0, 0, canvas.width, canvas.height)
 
-        // Convert to blob
-        canvas.toBlob((blob) => {
-          if (blob) {
-            const file = new File([blob], `receipt_${Date.now()}.jpg`, {
-              type: 'image/jpeg'
-            })
-            setCapturedImage(URL.createObjectURL(blob))
-            onPhotoCapture(file)
-          }
-        }, 'image/jpeg', 0.8)
-      }
-    }
-  }, [onPhotoCapture])
+  //       // Convert to blob
+  //       canvas.toBlob((blob) => {
+  //         if (blob) {
+  //           const file = new File([blob], `receipt_${Date.now()}.jpg`, {
+  //             type: 'image/jpeg'
+  //           })
+  //           setCapturedImage(URL.createObjectURL(blob))
+  //           onPhotoCapture(file)
+  //         }
+  //       }, 'image/jpeg', 0.8)
+  //     }
+  //   }
+  // }, [onPhotoCapture])
 
   const retakePhoto = useCallback(() => {
     setCapturedImage(null)
@@ -182,14 +181,14 @@ export const PhotoCapture: React.FC<PhotoCaptureProps> = ({ onPhotoCapture, onCl
             <span>Chọn ảnh</span>
           </label>
           
-          <button 
+          {/* <button 
             className={styles.captureButton} 
             onClick={capturePhoto}
             disabled={!stream || isLoading}
           >
             <FaCamera />
             <span>Chụp ảnh</span>
-          </button>
+          </button> */}
         </div>
 
         <div className={styles.instructions}>
