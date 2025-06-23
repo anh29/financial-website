@@ -5,7 +5,8 @@ import {
   createBudgetAsync,
   updateBudgetAsync,
   fetchHistoricalExpendituresAsync,
-  fetchRemainingBudgetAsync
+  fetchRemainingBudgetAsync,
+  suggestSmartBudgetAsync
 } from '../../store/slices/budgetSlice'
 import { Budget, BudgetAllocation } from '../../types/budgets'
 import {
@@ -16,7 +17,7 @@ import {
 
 export const useBudgets = () => {
   const dispatch = useAppDispatch()
-  const { budgets, income, pastBudgets, isLoading, error, remainingBudget } = useAppSelector((state) => state.budgets)
+  const { budgets, income, pastBudgets, isLoading, error, remainingBudget, suggestedBudget } = useAppSelector((state) => state.budgets)
 
   const fetchBudgets = useCallback(async () => {
     try {
@@ -101,6 +102,14 @@ export const useBudgets = () => {
     [dispatch]
   )
 
+  const suggestSmartBudgetHandler = useCallback(async () => {
+    try {
+      await dispatch(suggestSmartBudgetAsync()).unwrap()
+    } catch (error) {
+      console.error('Không thể lấy ngân sách thông minh:', error)
+    }
+  }, [dispatch])
+
   return {
     budgets,
     income,
@@ -115,6 +124,8 @@ export const useBudgets = () => {
     saveMonthlyBudgetAllocationHandler,
     fetchMonthlyBudgetAllocations,
     getRemainingBudgetHandler,
-    remainingBudget
+    remainingBudget,
+    suggestSmartBudgetHandler,
+    suggestedBudget
   }
 }

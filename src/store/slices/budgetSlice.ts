@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { Budget, HistoryBudgets, RemainingBudget } from '../../types/budgets'
+import { Budget, HistoryBudgets, RemainingBudget, SuggestedBudget } from '../../types/budgets'
 import { findById } from '../utils/common'
 import {
   fetchBudgetsByUser,
   createBudget,
   updateBudget,
   getHistoricalExpenditures,
-  getRemainingBudget
+  getRemainingBudget,
+  suggestSmartBudget
 } from '../../services/features/budgetService'
 
 interface BudgetState {
@@ -16,6 +17,7 @@ interface BudgetState {
   isLoading: boolean
   error: string | null
   remainingBudget: RemainingBudget | null
+  suggestedBudget: SuggestedBudget | null
 }
 
 const initialState: BudgetState = {
@@ -24,7 +26,8 @@ const initialState: BudgetState = {
   pastBudgets: [],
   isLoading: false,
   error: null,
-  remainingBudget: null
+  remainingBudget: null,
+  suggestedBudget: null
 }
 
 // Async thunks
@@ -83,6 +86,18 @@ export const fetchRemainingBudgetAsync = createAsyncThunk(
       return response.data
     } catch (error) {
       return rejectWithValue(error instanceof Error ? error.message : 'Không thể lấy ngân sách còn lại')
+    }
+  }
+)
+
+export const suggestSmartBudgetAsync = createAsyncThunk(
+  'budgets/suggestSmartBudget',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await suggestSmartBudget()
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Không thể lấy ngân sách thông minh')
     }
   }
 )
@@ -175,6 +190,16 @@ const budgetSlice = createSlice({
       })
       .addCase(fetchRemainingBudgetAsync.rejected, (state, action) => {
         state.isLoading = false
+        state.error = action.payload as string
+      })
+      // Suggest Smart Budget
+      .addCase(suggestSmartBudgetAsync.pending, (state) => {
+        state.error = null
+      })
+      .addCase(suggestSmartBudgetAsync.fulfilled, (state, action) => {
+        state.suggestedBudget = action.payload
+      })
+      .addCase(suggestSmartBudgetAsync.rejected, (state, action) => {
         state.error = action.payload as string
       })
   }

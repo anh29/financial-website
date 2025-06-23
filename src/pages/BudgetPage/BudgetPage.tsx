@@ -24,7 +24,9 @@ const BudgetPage = () => {
     fetchMonthlyBudgetAllocations,
     saveMonthlyBudgetAllocationHandler,
     getRemainingBudgetHandler,
-    remainingBudget
+    remainingBudget,
+    suggestSmartBudgetHandler,
+    suggestedBudget
   } = useBudgets()
 
   useEffect(() => {
@@ -138,6 +140,8 @@ const BudgetPage = () => {
                 handleSaveBudget={(newAllocation: BudgetAllocation[]) => handleSaveAllocationBudget(newAllocation)}
                 isBudgetSaved={isBudgetSaved}
                 remainingBudget={remainingBudget}
+                suggestedBudget={suggestedBudget}
+                handleSuggestSmartBudget={suggestSmartBudgetHandler}
               />
             </div>
           )}

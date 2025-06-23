@@ -1,4 +1,4 @@
-import { Budget, BudgetAllocation, HistoryBudgets, MonthlyBudget, RemainingBudget } from '../../types/budgets'
+import { Budget, BudgetAllocation, HistoryBudgets, MonthlyBudget, RemainingBudget, SuggestedBudget } from '../../types/budgets'
 import { SERVER_URL } from '../../utils/constants'
 import { getUser } from '../../utils/userUtils'
 
@@ -180,6 +180,15 @@ export const getRemainingBudget = async (month: string): Promise<{ message: stri
   if (!user) throw new Error('Không tìm thấy người dùng')
 
   const response = await fetch(`${SERVER_URL}/marketplace/getRemainingBudget/user/${user.id}/month/${month}`)
+
+  return handleResponse(response)
+}
+
+export const suggestSmartBudget = async (): Promise<{ message: string; data: SuggestedBudget }> => {
+  const user = getUser()
+  if (!user) throw new Error('Không tìm thấy người dùng')
+
+  const response = await fetch(`${SERVER_URL}/budget/suggest/${user.id}`)
 
   return handleResponse(response)
 }

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { BudgetAllocation, RemainingBudget } from '../../types/budgets'
+import { BudgetAllocation, RemainingBudget, SuggestedBudget } from '../../types/budgets'
 import styles from './SetupTab.module.css'
 import RemainingBudgetAllocation from './RemainingBudgetAllocation'
 import Confetti from 'react-confetti'
 import Log from '../common/Log/Log'
+import { Modal } from '../common/Modal/Modal'
 import { createMonthlyBudget } from '../../services/features/budgetService'
 import { formatCurrency } from '../../utils/helpers'
 
@@ -21,6 +22,8 @@ interface SetupTabProps {
   handleSavingsChange: (value: number) => void
   remainingMonthlyBudget: number
   remainingBudget: RemainingBudget | null
+  suggestedBudget: SuggestedBudget | null
+  handleSuggestSmartBudget: () => void
 }
 
 const SetupTab: React.FC<SetupTabProps> = ({
@@ -29,12 +32,13 @@ const SetupTab: React.FC<SetupTabProps> = ({
   remaining,
   budgetAllocations,
   suggestedCategories,
-  handleMonthlyBudgetChange,
   monthlyBudget,
   handleSaveBudget,
   isBudgetSaved,
   remainingMonthlyBudget,
-  remainingBudget
+  remainingBudget,
+  suggestedBudget,
+  handleSuggestSmartBudget
 }) => {
   const [animatedIndex, setAnimatedIndex] = useState<number | null>(null)
   const [allocations, setAllocations] = useState<BudgetAllocation[]>([])
@@ -42,6 +46,10 @@ const SetupTab: React.FC<SetupTabProps> = ({
   const [showConfetti, setShowConfetti] = useState(false)
   const [log, setLog] = useState<{ message: string; status: 'success' | 'error' } | null>(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [suggestionApplied, setSuggestionApplied] = useState(false)
+  const [isSuggesting, setIsSuggesting] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [pendingSave, setPendingSave] = useState<BudgetAllocation[] | null>(null)
 
   useEffect(() => {
     if (remainingBudget && remainingBudget.remainingBudget <= 0) {
@@ -51,21 +59,6 @@ const SetupTab: React.FC<SetupTabProps> = ({
       return () => clearTimeout(timer)
     }
   }, [remainingBudget])
-
-  const handleSaveMonthlyBudget = async () => {
-    try {
-      const currentMonth = new Date().toISOString().slice(0, 7)
-      await createMonthlyBudget([
-        {
-          month: currentMonth,
-          amount: monthlyBudget
-        }
-      ])
-      setLog({ message: 'Đã lưu ngân sách tháng thành công!', status: 'success' })
-    } catch {
-      setLog({ message: 'Không thể lưu ngân sách tháng!', status: 'error' })
-    }
-  }
 
   const handleAdd = (description?: string) => {
     const newAllocation: BudgetAllocation = {
@@ -90,13 +83,54 @@ const SetupTab: React.FC<SetupTabProps> = ({
     setAllocations(updated)
   }
 
-  const handleSave = async () => {
+  const handleApplySuggestion = () => {
+    if (suggestedBudget) {
+      const newAllocations = suggestedBudget.categories.map((cat) => ({
+        monthly_budget_id: '',
+        description: cat.category,
+        amount: cat.amount
+      }))
+      setAllocations(newAllocations)
+      setPendingSave([...newAllocations])
+      setShowConfirmModal(true)
+      setShowCategoryManagement(false)
+      setLog({ message: 'Đã áp dụng gợi ý phân bổ!', status: 'success' })
+    }
+  }
+
+  const handleSuggestClick = async () => {
+    setIsSuggesting(true)
     try {
-      setIsSaving(true)
+      await handleSuggestSmartBudget()
+    } finally {
+      setIsSuggesting(false)
+    }
+  }
+
+  const computedMonthlyBudget = allocations.reduce((sum, a) => sum + (a.amount || 0), 0)
+
+  const handleSaveClick = () => {
+    setPendingSave([...allocations])
+    setShowConfirmModal(true)
+  }
+
+  const handleConfirmSave = async () => {
+    setIsSaving(true)
+    try {
+      const currentMonth = new Date().toISOString().slice(0, 7)
+      await createMonthlyBudget([
+        {
+          month: currentMonth,
+          amount: computedMonthlyBudget
+        }
+      ])
       await handleSaveBudget(allocations)
       setAllocations([])
+      setLog({ message: 'Đã lưu ngân sách và phân bổ thành công!', status: 'success' })
+      setShowConfirmModal(false)
+      setSuggestionApplied(false)
     } catch (error) {
-      console.error('Error saving budget:', error)
+      setLog({ message: 'Lỗi khi lưu ngân sách!', status: 'error' })
     } finally {
       setIsSaving(false)
     }
@@ -184,7 +218,7 @@ const SetupTab: React.FC<SetupTabProps> = ({
         <div className={styles.infoStatus} style={{ color: remaining < 0 ? '#e74c3c' : '#2ecc71' }}>
           {remaining < 0
             ? `⚠ Thiếu: ${formatCurrency(Math.abs(remaining))}`
-            : `🟢 Còn lại: ${formatCurrency(remaining)}`}
+            : `🟢 Còn lại: ${formatCurrency(totalBudget - totalAllocated)}`}
         </div>
       </div>
       <div className={styles.divider} />
@@ -197,20 +231,15 @@ const SetupTab: React.FC<SetupTabProps> = ({
             <h2 className={styles.cardTitle}>Phân bổ ngân sách tháng này</h2>
           </div>
           <div className={styles.inlineInputGroup}>
-            <label className={styles.label} htmlFor='monthlyBudgetInput'>
-              Ngân sách tháng:
-            </label>
+            <label className={styles.label}>Ngân sách tháng (tự động):</label>
             <div className={styles.inputWithIcon}>
               <input
-                id='monthlyBudgetInput'
                 type='number'
                 className={styles.totalInput}
-                value={monthlyBudget}
-                onChange={(e) => handleMonthlyBudgetChange(Number(e.target.value))}
+                value={computedMonthlyBudget}
+                readOnly
+                style={{ background: '#f3f4f6', color: '#374151', fontWeight: 600 }}
               />
-              <button className={styles.saveIconButton} onClick={handleSaveMonthlyBudget} title='Lưu ngân sách tháng'>
-                💾
-              </button>
             </div>
           </div>
         </div>
@@ -248,6 +277,56 @@ const SetupTab: React.FC<SetupTabProps> = ({
         )}
       </div>
 
+      {/* Gợi ý phân bổ thông minh */}
+      {!suggestedBudget && (
+        <div className={styles.cardSection} style={{ textAlign: 'center' }}>
+          <button className={styles.saveButton} onClick={handleSuggestClick} disabled={isSuggesting}>
+            {isSuggesting ? '⏳ Đang gợi ý...' : '✨ Gợi ý phân bổ thông minh'}
+          </button>
+        </div>
+      )}
+
+      {/* Nếu có suggestedBudget, hiển thị card gợi ý */}
+      {suggestedBudget && !suggestionApplied && (
+        <div className={styles.cardSection} style={{ background: '#f8fafc', border: '1px solid #e0e7ef' }}>
+          <h3 className={styles.sectionTitle}>✨ Gợi ý phân bổ ngân sách</h3>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {suggestedBudget.categories.map((cat) => (
+              <li key={cat.category} style={{ marginBottom: 8, display: 'flex', justifyContent: 'space-between' }}>
+                <span>{cat.category}</span>
+                <span style={{ fontWeight: 600 }}>{formatCurrency(cat.amount)}</span>
+              </li>
+            ))}
+          </ul>
+          {suggestedBudget.reasoning && (
+            <div style={{ fontStyle: 'italic', color: '#6b7280', margin: '12px 0' }}>{suggestedBudget.reasoning}</div>
+          )}
+          <button className={styles.saveButton} onClick={handleApplySuggestion}>
+            Áp dụng gợi ý
+          </button>
+        </div>
+      )}
+
+      {/* Nếu đã áp dụng gợi ý, hiển thị allocations chỉ đọc, cho phép chỉnh sửa lại nếu muốn */}
+      {suggestionApplied && (
+        <div className={styles.cardSection}>
+          <h3 className={styles.sectionTitle}>📊 Phân bổ theo gợi ý</h3>
+          <div className={styles.allocationList}>
+            {allocations.map((item, index) => renderAllocationCard(item, index, true))}
+          </div>
+          <div className={styles.buttonGroup}>
+            <button
+              className={`${styles.saveButton} ${isSaving ? styles.saving : ''}`}
+              onClick={handleSaveClick}
+              disabled={isSaving}
+            >
+              {isSaving ? '⏳ Đang lưu...' : '💾 Lưu ngân sách'}
+            </button>
+          </div>
+          {isBudgetSaved && <p className={styles.saveConfirmation}>✅ Ngân sách đã được lưu thành công!</p>}
+        </div>
+      )}
+
       {/* Section 2: Previous Month's Remaining Budget Allocation */}
       {remainingBudget && remainingBudget.remainingBudget > 0 && (
         <div className={styles.cardSection}>
@@ -269,57 +348,141 @@ const SetupTab: React.FC<SetupTabProps> = ({
         </div>
       )}
 
-      {/* Collapsible Category Management Section */}
-      <div className={styles.cardSection}>
-        <button className={styles.collapseToggle} onClick={() => setShowCategoryManagement((prev) => !prev)}>
-          {showCategoryManagement ? 'Ẩn quản lý danh mục ▲' : 'Quản lý danh mục ▼'}
-        </button>
-        {showCategoryManagement && (
-          <div className={styles.categoryManagement}>
-            {/* Tạo mới danh mục */}
-            <h3 className={styles.sectionTitle}>➕ Tạo mới danh mục</h3>
-            <div className={styles.list}>
-              {allocations.map((item, index) => renderAllocationCard(item, index, true))}
+      {/* Collapsible Category Management Section - chỉ hiển thị nếu chưa áp dụng gợi ý */}
+      {!suggestionApplied && (
+        <div className={styles.cardSection}>
+          <button className={styles.collapseToggle} onClick={() => setShowCategoryManagement((prev) => !prev)}>
+            {showCategoryManagement ? 'Ẩn quản lý danh mục ▲' : 'Quản lý danh mục ▼'}
+          </button>
+          {showCategoryManagement && (
+            <div className={styles.categoryManagement}>
+              {/* Tạo mới danh mục */}
+              <h3 className={styles.sectionTitle}>➕ Tạo mới danh mục</h3>
+              <div className={styles.list}>
+                {allocations.map((item, index) => renderAllocationCard(item, index, true))}
+              </div>
+              <div className={styles.buttonGroup}>
+                <button className={styles.addButton} onClick={() => handleAdd()}>
+                  + Thêm danh mục
+                </button>
+                <button
+                  className={`${styles.saveButton} ${isSaving ? styles.saving : ''}`}
+                  onClick={handleSaveClick}
+                  disabled={isSaving}
+                >
+                  {isSaving ? '⏳ Đang lưu...' : '💾 Lưu ngân sách'}
+                </button>
+              </div>
+              {isBudgetSaved && <p className={styles.saveConfirmation}>✅ Ngân sách đã được lưu thành công!</p>}
+
+              {/* Gợi ý danh mục */}
+              <div className={styles.subSection}>
+                <h3 className={styles.subSectionTitle}>✨ Gợi ý danh mục</h3>
+                <div className={styles.suggestionList}>
+                  {suggestedCategories.map((cat) => (
+                    <button
+                      key={cat}
+                      className={styles.suggestionButton}
+                      onClick={() => handleAdd(cat)}
+                      title='Nhấn để thêm nhanh'
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Phân bổ danh mục theo tháng */}
+              <h3 className={styles.sectionTitle}>📊 Phân bổ danh mục theo tháng</h3>
+              <div className={styles.allocationList}>
+                {budgetAllocations && budgetAllocations.map((item, index) => renderAllocationCard(item, index, false))}
+              </div>
             </div>
-            <div className={styles.buttonGroup}>
-              <button className={styles.addButton} onClick={() => handleAdd()}>
-                + Thêm danh mục
+          )}
+        </div>
+      )}
+
+      {/* Modal xác nhận lưu ngân sách và phân bổ */}
+      {showConfirmModal && pendingSave && (
+        <Modal
+          isOpen={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          title='📋 Xác nhận ngân sách tháng'
+          footer={
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button
+                style={{
+                  padding: '8px 20px',
+                  background: '#f1f5f9',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: 8,
+                  fontWeight: 500,
+                  color: '#334155',
+                  cursor: 'pointer'
+                }}
+                onClick={() => setShowConfirmModal(false)}
+              >
+                Huỷ
               </button>
               <button
-                className={`${styles.saveButton} ${isSaving ? styles.saving : ''}`}
-                onClick={handleSave}
-                disabled={isSaving}
+                style={{
+                  padding: '8px 20px',
+                  background: 'var(--primary-color)',
+                  border: 'none',
+                  borderRadius: 8,
+                  color: '#fff',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+                onClick={handleConfirmSave}
               >
-                {isSaving ? '⏳ Đang lưu...' : '💾 Lưu ngân sách'}
+                ✅ Xác nhận & Lưu
               </button>
             </div>
-            {isBudgetSaved && <p className={styles.saveConfirmation}>✅ Ngân sách đã được lưu thành công!</p>}
-
-            {/* Gợi ý danh mục */}
-            <div className={styles.subSection}>
-              <h3 className={styles.subSectionTitle}>✨ Gợi ý danh mục</h3>
-              <div className={styles.suggestionList}>
-                {suggestedCategories.map((cat) => (
-                  <button
-                    key={cat}
-                    className={styles.suggestionButton}
-                    onClick={() => handleAdd(cat)}
-                    title='Nhấn để thêm nhanh'
-                  >
-                    {cat}
-                  </button>
-                ))}
+          }
+        >
+          <div style={{ padding: '8px 4px', fontSize: '0.95rem' }}>
+            <div style={{ marginBottom: 20 }}>
+              <p style={{ margin: 0, fontSize: '0.9rem', color: '#64748b' }}>Tổng ngân sách tháng</p>
+              <div style={{ fontSize: '1.4rem', fontWeight: '700', color: '#10b981' }}>
+                {formatCurrency(computedMonthlyBudget)}
               </div>
             </div>
 
-            {/* Phân bổ danh mục theo tháng */}
-            <h3 className={styles.sectionTitle}>📊 Phân bổ danh mục theo tháng</h3>
-            <div className={styles.allocationList}>
-              {budgetAllocations && budgetAllocations.map((item, index) => renderAllocationCard(item, index, false))}
+            <div style={{ marginBottom: 8 }}>
+              <p style={{ margin: 0, fontSize: '0.9rem', color: '#64748b' }}>Chi tiết phân bổ</p>
+            </div>
+
+            <div
+              style={{
+                background: '#f9fafb',
+                border: '1px solid #e2e8f0',
+                borderRadius: 10,
+                padding: '12px 16px',
+                maxHeight: 300,
+                overflowY: 'auto'
+              }}
+            >
+              {pendingSave.map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    padding: '6px 0',
+                    borderBottom: index !== pendingSave.length - 1 ? '1px dashed #e5e7eb' : 'none',
+                    fontSize: '0.95rem',
+                    color: '#1e293b'
+                  }}
+                >
+                  <span>{item.description}</span>
+                  <span style={{ fontWeight: 600 }}>{formatCurrency(item.amount)}</span>
+                </div>
+              ))}
             </div>
           </div>
-        )}
-      </div>
+        </Modal>
+      )}
     </div>
   )
 }

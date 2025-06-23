@@ -33,3 +33,11 @@ export interface HistoryBudgets {
   allocations: BudgetAllocation[]
   spent: Record<string, number>
 }
+
+export interface SuggestedBudget {
+  categories: {
+    category: string
+    amount: number
+  }[]
+  reasoning: string
+}
