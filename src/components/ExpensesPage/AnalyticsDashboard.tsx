@@ -37,6 +37,26 @@ const ARROW = (diff: number) =>
   diff < 0 ? <span style={{ color: '#dc2626', marginLeft: 4 }}>▼</span> : <span style={{ marginLeft: 4 }}>→</span>
 
 export default function AnalyticsDashboard({ monthlyCategoryExpenses }: { monthlyCategoryExpenses: MonthlyCategoryExpenses[] }) {
+  // Handle empty data
+  if (!monthlyCategoryExpenses || monthlyCategoryExpenses.length === 0) {
+    return (
+      <div style={{
+        maxWidth: 600,
+        margin: '60px auto',
+        padding: '32px 16px',
+        background: '#fff',
+        borderRadius: 12,
+        boxShadow: '0 1px 4px #e2e8f0',
+        textAlign: 'center',
+        color: '#64748b',
+        fontFamily: 'Inter, Arial, sans-serif',
+      }}>
+        <h2 style={{ fontWeight: 700, color: '#0f172a', marginBottom: 12 }}>Chưa có dữ liệu phân tích</h2>
+        <p>Hãy thêm giao dịch để xem phân tích chi tiêu của bạn.</p>
+      </div>
+    );
+  }
+
   const [currentIndex, setCurrentIndex] = useState(monthlyCategoryExpenses.length - 1)
   const currentMonth = monthlyCategoryExpenses[currentIndex]
   const prevMonth = monthlyCategoryExpenses[currentIndex - 1]
