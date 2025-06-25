@@ -1,6 +1,7 @@
 import { apiClient } from '../../config/apiClient'
 import { Transaction } from '../../types/transaction'
 import { expenseCategories } from '../../utils/categoryUtils'
+import { getUser } from '../../utils/userUtils'
 import { classifyTransaction } from './transactionService'
 
 export interface OCRResult {
@@ -50,7 +51,7 @@ export const processReceiptImage = async (imageFile: File): Promise<OCRResult> =
               description,
               source: result.ocr_type || 'OCR',
               type: 'expense',
-              category: predictedCategory.key,
+              category: predictedCategory.label,
               id: `temp-${Date.now()}-${Math.random()}`,
               is_amortized: false
             }
@@ -61,7 +62,7 @@ export const processReceiptImage = async (imageFile: File): Promise<OCRResult> =
               description,
               source: result.ocr_type || 'OCR',
               type: 'expense',
-              category: expenseCategories[0].key,
+              category: expenseCategories[0].label,
               classificationError: '⚠ Failed to classify',
               id: `temp-${Date.now()}-${Math.random()}`,
               is_amortized: false
@@ -84,7 +85,7 @@ export const processReceiptImage = async (imageFile: File): Promise<OCRResult> =
             description: `Receipt from ${merchant}`,
             source: result.ocr_type || 'OCR',
             type: 'expense',
-            category: predictedCategory.key,
+            category: predictedCategory.label,
             id: `temp-${Date.now()}-${Math.random()}`,
             is_amortized: false
           })
@@ -95,7 +96,7 @@ export const processReceiptImage = async (imageFile: File): Promise<OCRResult> =
             description: `Receipt from ${merchant}`,
             source: result.ocr_type || 'OCR',
             type: 'expense',
-            category: expenseCategories[0].key,
+            category: expenseCategories[0].label,
             id: `temp-${Date.now()}-${Math.random()}`,
             is_amortized: false
           })
@@ -130,17 +131,14 @@ export const processReceiptImage = async (imageFile: File): Promise<OCRResult> =
 
 export const createTransactionFromOCR = async (ocrData: any): Promise<Transaction> => {
   try {
+    const user = getUser()
     const transactionData = {
-      amount: ocrData.amount || 0,
-      description: ocrData.description || 'Giao dịch từ biên lai',
-      category: ocrData.category || 'other',
-      type: 'expense',
-      date: ocrData.date || new Date().toISOString(),
+      ...ocrData,
       source: ocrData.merchant || 'Receipt OCR',
-      is_amortized: false
+      is_amortized: false,
+      userId: user?.id
     }
-
-    const response = await apiClient.post('/crud/transactions', transactionData)
+    const response = await apiClient.post('/crud/transactions', [transactionData])
     return response.data
   } catch (error) {
     console.error('Error creating transaction from OCR:', error)
@@ -150,24 +148,15 @@ export const createTransactionFromOCR = async (ocrData: any): Promise<Transactio
 
 export const createTransactionsFromOCR = async (transactions: Transaction[]): Promise<Transaction[]> => {
   try {
-    const createdTransactions: Transaction[] = []
-    
-    for (const transaction of transactions) {
-      const transactionData = {
-        amount: transaction.amount,
-        description: transaction.description,
-        category: transaction.category,
-        type: transaction.type,
-        date: transaction.date,
+    const user = getUser()
+    const transactionData = transactions.map(transaction => ({
+        ...transaction,
         source: transaction.source || 'OCR',
-        is_amortized: false
-      }
-
-      const response = await apiClient.post('/crud/transactions', transactionData)
-      createdTransactions.push(response.data)
-    }
-
-    return createdTransactions
+        is_amortized: false,
+        userId: user?.id
+      }))
+    const response = await apiClient.post('/crud/transactions', transactionData)
+    return response.data
   } catch (error) {
     console.error('Error creating transactions from OCR:', error)
     throw new Error('Không thể tạo giao dịch từ dữ liệu OCR')

@@ -44,7 +44,7 @@ const TransactionModal = ({
         id: '', // Assign a unique ID
         date: new Date().toISOString().split('T')[0],
         amount: 0,
-        category: expenseCategories[0].key,
+        category: expenseCategories[0].label,
         description: '',
         source: 'manual',
         type: 'expense',
