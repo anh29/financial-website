@@ -1,5 +1,5 @@
 import { FiTrash2, FiCalendar } from 'react-icons/fi'
-import { MdBolt, MdStar, MdEmojiEvents } from 'react-icons/md'
+import { MdBolt, MdStar, MdEmojiEvents, MdDeleteSweep } from 'react-icons/md'
 import styles from './GoalCard.module.css'
 import { formatCurrency, formatDate } from '../../utils/helpers'
 
@@ -26,6 +26,8 @@ export const GoalCard = ({ goal, onDelete }: GoalCardProps) => {
   const showStar = percent > 80
   const isOverdue = goal.overdue
   const isCompleted = goal.status === 'completed'
+  const isCancelled = goal.status === 'cancelled'
+  const isActive = goal.status === 'active'
 
   // Circular progress bar values
   const radius = 90
@@ -50,14 +52,10 @@ export const GoalCard = ({ goal, onDelete }: GoalCardProps) => {
           {goal.category && <span className={styles.categoryBadge}>{goal.category}</span>}
         </div>
         <div className={styles.goalCardActions}>
-          <span className={styles.statusBadge + ' ' + (isCompleted ? styles.completed : '')}>
-            {isCompleted ? (
-              'Hoàn thành'
-            ) : (
-              <>
-                <MdBolt style={{ color: '#1976d2' }} /> Đang thực hiện
-              </>
-            )}
+          <span className={styles.statusBadge + ' ' + (isCompleted && styles.completed) + ' ' + (isCancelled && styles.cancelled)}>
+            {isCompleted && 'Hoàn thành'}
+            {isCancelled && <><MdDeleteSweep style={{ color: '#e74c3c' }} /> Đã hủy</>}
+            {isActive && <><MdBolt style={{ color: '#1976d2' }} /> Đang thực hiện</>}
           </span>
           {!isCompleted && (
             <>

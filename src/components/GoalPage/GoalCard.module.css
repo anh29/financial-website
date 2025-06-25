@@ -465,9 +465,16 @@
   white-space: nowrap;
 }
 .goalCardContainer .statusBadge.completed {
-  color: #1976d2;
-  background: linear-gradient(90deg, #e3f0fa 0%, #eaf6fb 100%);
-  border: 1.5px solid #b2d6f3;
+  color: #ffb300;
+  background: linear-gradient(90deg, #faf0e6 0%, #f5e6c8 100%);
+  border: 1.5px solid #b2d6f3;  
+  font-weight: 700;
+}
+
+.goalCardContainer .statusBadge.cancelled {
+  color: var(--color-medium);
+  background: linear-gradient(90deg, #f7f0f0 0%, #fbe3e2 100%);
+  border: 1.5px solid #f5b7b1;
   font-weight: 700;
 }
 
